@@ -2,10 +2,10 @@
 
 # Folder structure:
 
-VocabJoy
-|___Mobile
-|    |__...
-|    
-|___Backend
-    |_...
+    VocabJoy
+    |___Mobile
+    |    |__...
+    |    
+    |___Backend
+        |_...
     
