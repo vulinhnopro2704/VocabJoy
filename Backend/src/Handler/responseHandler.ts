@@ -6,16 +6,16 @@ const responseWithData = (
     statusCode: number,
     data: object,
     message: string,
-    isOk: boolean
-) => res.status(statusCode).json({ isOk, data, message, statusCode });
+    success: boolean
+) => res.status(statusCode).json({success, data, message, statusCode });
  
 
 const responseNoData = (
     res: Response,
     statusCode: number,
     message: string,
-    isOk: boolean
-) => res.status(statusCode).json({ isOk, message, statusCode });
+    success: boolean
+) => res.status(statusCode).json({ success, message, statusCode });
 
 export const success = (
     res: Response,
@@ -44,3 +44,12 @@ export const badRequest = (res: Response, message: string) =>
 export const error = (res: Response, error: Error) =>
     responseWithData(res, HttpStatusCodes.REQUEST_TIMEOUT, error, "Error in server!", false);
 
+const responseHandle = {
+    error,
+    badRequest,
+    notFound,
+    unauthorize,
+    created,
+    success
+}
+export default responseHandle
