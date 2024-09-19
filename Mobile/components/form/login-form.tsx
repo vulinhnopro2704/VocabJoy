@@ -10,22 +10,34 @@ import { Formik } from "formik";
 import { validationSchema } from "@/schemas/login";
 import Toast from "react-native-toast-message";
 import { Colors } from "@/constants/Colors";
+import { useLoginMutation } from "@/lib/features/api/apiSlice";
 
 export default function LoginForm() {
+	const [login, { isLoading, error }] = useLoginMutation();
+
 	return (
 		<>
 			<Formik
 				initialValues={{ email: "", password: "" }}
 				validationSchema={validationSchema}
-				onSubmit={(values) => {
-					// Hiển thị thông báo với giá trị
-					Toast.show({
-						text1: "Thông tin đăng nhập",
-						text2: `Email: ${values.email}\nMật khẩu: ${values.password}`,
-						position: "top",
-					});
-					console.log(values); // In ra console để kiểm tra
-					alert(values.email + " " + values.password); // Hiển thị thông báo
+				onSubmit={async (values) => {
+					try {
+						const result = await login(values).unwrap(); // Gọi API
+						Toast.show({
+							text1: "Đăng nhập thành công",
+							text2: `Welcome, ${result.name}`, // Giả sử API trả về tên người dùng
+							position: "top",
+						});
+						console.log(result); // In ra kết quả
+						alert("Đăng nhập thành công");
+					} catch (err) {
+						const errorMessage = (err as Error).message; // Type assertion
+						Toast.show({
+							text1: "Đăng nhập thất bại",
+							text2: errorMessage, // Hiển thị thông báo lỗi
+							position: "top",
+						});
+					}
 				}}
 			>
 				{({
@@ -64,9 +76,20 @@ export default function LoginForm() {
 						<TouchableOpacity
 							style={styles.button}
 							onPress={() => handleSubmit()}
+							disabled={isLoading} // Disable button when loading
 						>
 							<Text style={styles.buttonText}>Đăng Nhập</Text>
 						</TouchableOpacity>
+						{error && (
+							<Text style={styles.errorText}>
+								{error && (
+									<Text style={styles.errorText}>
+										{(error as { message?: string })
+											.message || "An error occurred."}
+									</Text>
+								)}{" "}
+							</Text>
+						)}
 					</View>
 				)}
 			</Formik>
@@ -86,11 +109,10 @@ const styles = StyleSheet.create({
 		borderColor: "#EDF1F3",
 		borderWidth: 2,
 		borderRadius: 12,
-		marginBottom: 20,
 	},
 	errorText: {
+		marginTop: 8,
 		color: "red",
-		marginBottom: 8,
 	},
 	button: {
 		paddingVertical: 15,
@@ -99,12 +121,14 @@ const styles = StyleSheet.create({
 		backgroundColor: Colors.primary,
 		borderRadius: 12,
 		alignItems: "center",
+		marginTop: 20,
 	},
 	labelText: {
 		fontSize: 14,
 		fontWeight: "500",
 		color: "#141718",
 		marginBottom: 8,
+		marginTop: 20,
 	},
 	buttonText: {
 		fontSize: 16,

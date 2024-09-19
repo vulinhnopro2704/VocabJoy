@@ -13,4 +13,5 @@ export const signupSchema = Yup.object().shape({
 		.oneOf([Yup.ref("password")], "Mật khẩu xác nhận không khớp") // Kiểm tra xem confirm_password có giống password không
 		.min(6, "Mật khẩu phải có ít nhất 6 ký tự")
 		.required("Bạn cần xác nhận lại mật khẩu"),
+	date: Yup.date().required("Ngày sinh là bắt buộc"),
 });
