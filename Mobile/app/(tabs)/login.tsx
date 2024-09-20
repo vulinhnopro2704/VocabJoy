@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 		marginTop: 60,
 		alignItems: "center",
 		justifyContent: "center",
-		paddingBottom: 80, // Thêm khoảng cách dưới cùng
+		paddingBottom: 80,
 	},
 	logoContainer: {
 		marginBottom: 20,

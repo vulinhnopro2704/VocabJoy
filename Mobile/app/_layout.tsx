@@ -4,7 +4,6 @@ import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
-import "../global.css";
 
 import StoreProvider from "./StoreProvider";
 
@@ -12,7 +11,6 @@ function checkIfUserIsLoggedIn() {
 	return false;
 }
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -29,6 +27,7 @@ export default function RootLayout() {
 
 	const [loaded] = useFonts({
 		SpaceMono: require("../assets/fonts/SpaceMono-Regular.ttf"),
+		Inter: require("../assets/fonts/Inter-VariableFont_opsz,wght.ttf"),
 	});
 
 	useEffect(() => {
