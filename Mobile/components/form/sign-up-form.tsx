@@ -9,6 +9,7 @@ import React from "react";
 import { Formik } from "formik";
 import Toast from "react-native-toast-message";
 import { signupSchema } from "@/schemas/sign-up";
+import { Colors } from "@/constants/Colors";
 
 export default function SignUpForm() {
 	return (
@@ -52,6 +53,9 @@ export default function SignUpForm() {
 						onBlur={handleBlur("name")}
 						value={values.name}
 					/>
+					{errors.name && (
+						<Text style={styles.errorText}>{errors.name}</Text>
+					)}
 
 					<Text style={styles.labelText}>Email</Text>
 					<TextInput
@@ -61,6 +65,9 @@ export default function SignUpForm() {
 						onBlur={handleBlur("email")}
 						value={values.email}
 					/>
+					{errors.email && (
+						<Text style={styles.errorText}>{errors.email}</Text>
+					)}
 
 					<Text style={styles.labelText}>Họ và tên</Text>
 					<TextInput
@@ -70,6 +77,11 @@ export default function SignUpForm() {
 						onBlur={handleBlur("phone_number")}
 						value={values.phone_number}
 					/>
+					{errors.phone_number && (
+						<Text style={styles.errorText}>
+							{errors.phone_number}
+						</Text>
+					)}
 
 					<Text style={styles.labelText}>Mật khẩu</Text>
 					<TextInput
@@ -80,8 +92,11 @@ export default function SignUpForm() {
 						onBlur={handleBlur("password")}
 						value={values.password}
 					/>
+					{errors.confirm_password && (
+						<Text style={styles.errorText}>{errors.password}</Text>
+					)}
 
-					<Text style={styles.labelText}>Mật khẩu</Text>
+					<Text style={styles.labelText}>Nhập lại mật khẩu</Text>
 					<TextInput
 						style={styles.input}
 						placeholder="Nhập lại mật khẩu của bạn"
@@ -90,6 +105,11 @@ export default function SignUpForm() {
 						onBlur={handleBlur("confirm_password")}
 						value={values.confirm_password}
 					/>
+					{errors.confirm_password && (
+						<Text style={styles.errorText}>
+							{errors.confirm_password}
+						</Text>
+					)}
 
 					<TouchableOpacity
 						style={styles.button}
@@ -125,7 +145,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		paddingHorizontal: 16,
 		height: 50,
-		backgroundColor: "#007AFF", // Màu primary
+		backgroundColor: Colors.primary,
 		borderRadius: 12,
 		alignItems: "center",
 	},

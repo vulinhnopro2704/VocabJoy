@@ -9,6 +9,7 @@ import React from "react";
 import { Formik } from "formik";
 import { validationSchema } from "@/schemas/login";
 import Toast from "react-native-toast-message";
+import { Colors } from "@/constants/Colors";
 
 export default function LoginForm() {
 	return (
@@ -95,7 +96,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 15,
 		paddingHorizontal: 16,
 		height: 50,
-		backgroundColor: "#007AFF", // Màu primary
+		backgroundColor: Colors.primary,
 		borderRadius: 12,
 		alignItems: "center",
 	},
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "500",
 		color: "#141718",
-		marginBottom: 8, // Khoảng cách giữa nhãn và ô nhập
+		marginBottom: 8,
 	},
 	buttonText: {
 		fontSize: 16,
