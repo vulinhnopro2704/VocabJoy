@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
 	SafeAreaView,
 	ScrollView,
@@ -121,6 +121,6 @@ const styles = StyleSheet.create({
 		top: "20%",
 		right: "20%",
 	},
-});
 
+})
 export default Login;

@@ -5,13 +5,25 @@ import {
 	StyleSheet,
 	TextInput,
 } from "react-native";
-import React from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import Toast from "react-native-toast-message";
 import { signupSchema } from "@/schemas/sign-up";
 import { Colors } from "@/constants/Colors";
+import { useSignUpMutation } from "@/lib/features/api/apiSlice";
+import { User } from "@/data_types/auth";
+import { date } from "yup";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 export default function SignUpForm() {
+	const [signUp, { isLoading, error }] = useSignUpMutation();
+	const handleSubmit = async (values: User) => {
+		try {
+			await signUp(values).unwrap();
+		} catch (err) {
+			alert("Sign up failed: " + err);
+		}
+	};
 	return (
 		<Formik
 			initialValues={{
@@ -20,30 +32,27 @@ export default function SignUpForm() {
 				name: "",
 				phone_number: "",
 				confirm_password: "",
+				date: new Date(),
 			}}
 			validationSchema={signupSchema}
-			onSubmit={(values) => {
+			onSubmit={(values: User) => {
 				// Hiển thị thông báo với giá trị
 				Toast.show({
 					text1: "Thông tin đăng ký",
-					text2: `Email: ${values.email}\nMật khẩu: ${values.password}`,
+					text2: `Email: ${values.email}`,
 					position: "top",
 				});
-				console.log(values); // In ra console để kiểm tra
-				alert(
-					values.name +
-						" " +
-						values.phone_number +
-						" " +
-						values.email +
-						" " +
-						values.password +
-						" " +
-						values.confirm_password
-				); // Hiển thị thông báo
+				handleSubmit(values);
 			}}
 		>
-			{({ handleChange, handleBlur, handleSubmit, values, errors }) => (
+			{({
+				handleChange,
+				handleBlur,
+				handleSubmit,
+				setFieldValue,
+				values,
+				errors,
+			}) => (
 				<View style={styles.container}>
 					<Text style={styles.labelText}>Họ và tên</Text>
 					<TextInput
@@ -69,7 +78,7 @@ export default function SignUpForm() {
 						<Text style={styles.errorText}>{errors.email}</Text>
 					)}
 
-					<Text style={styles.labelText}>Họ và tên</Text>
+					<Text style={styles.labelText}>Số Điện Thoại</Text>
 					<TextInput
 						style={styles.input}
 						placeholder="Nhập số điện thoại của bạn"
@@ -83,6 +92,23 @@ export default function SignUpForm() {
 						</Text>
 					)}
 
+					<Text style={styles.labelText}>Ngày Sinh</Text>
+					<View style={styles.datePicker}>
+						<DateTimePicker
+							style={styles.datePicker}
+							value={values.date}
+							mode="date"
+							display="default"
+							onChange={(event, selectedDate) => {
+								setFieldValue(
+									"date",
+									selectedDate || values.date
+								);
+							}}
+							minimumDate={new Date(1900, 0, 1)}
+							maximumDate={new Date()}
+						/>
+					</View>
 					<Text style={styles.labelText}>Mật khẩu</Text>
 					<TextInput
 						style={styles.input}
@@ -114,9 +140,16 @@ export default function SignUpForm() {
 					<TouchableOpacity
 						style={styles.button}
 						onPress={() => handleSubmit()}
+						disabled={isLoading}
 					>
 						<Text style={styles.buttonText}>Đăng ký</Text>
 					</TouchableOpacity>
+					{error && (
+						<Text style={styles.errorText}>
+							{(error as { data: { message?: string } }).data
+								?.message || "An error occurred."}
+						</Text>
+					)}
 				</View>
 			)}
 		</Formik>
@@ -135,13 +168,13 @@ const styles = StyleSheet.create({
 		borderColor: "#EDF1F3",
 		borderWidth: 2,
 		borderRadius: 12,
-		marginBottom: 20,
 	},
 	errorText: {
 		color: "red",
 		marginBottom: 8,
 	},
 	button: {
+		marginTop: 20,
 		paddingVertical: 15,
 		paddingHorizontal: 16,
 		height: 50,
@@ -153,11 +186,15 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		fontWeight: "500",
 		color: "#141718",
-		marginBottom: 8, // Khoảng cách giữa nhãn và ô nhập
+		marginBottom: 8,
+		marginTop: 20,
 	},
 	buttonText: {
 		fontSize: 16,
 		fontWeight: "bold",
 		color: "white",
+	},
+	datePicker: {
+		width: "100%",
 	},
 });
