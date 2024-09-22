@@ -4,6 +4,7 @@ import { createNewUser, getUserByEmail } from "../Services/Auth-service";
 import { generateToken } from "../Helper/jwtToken";
 import { comparePassword } from "../Helper/hashPassword";
 import user from "../Interface/User";
+import bcrypt from "bcryptjs";
 
 export const login = async (req: Request, res: Response) => {
 	console.log("Call login");
@@ -15,8 +16,9 @@ export const login = async (req: Request, res: Response) => {
 		return responseHandle.badRequest(res, "username or password is null");
 	}
 	try {
+		console.log(email, password);
 		const user = await getUserByEmail(email);
-		if (!user || !comparePassword(password, user.account.password)) {
+		if (!user || !(await bcrypt.compare(password, user.account.password))) {
 			return responseHandle.notFound(res, "User Not Found");
 		} else {
 			const token: string = generateToken({
@@ -36,15 +38,14 @@ export const login = async (req: Request, res: Response) => {
 
 export const signUp = async (req: Request, res: Response) => {
 	console.log("Call Sign up");
-	const { name, password, date, email, phone_number} = req.body as {
+	const { name, password, date, email, phone_number } = req.body as {
 		name: string;
 		password: string;
 		date: Date;
 		email: string;
 		phone_number: string;
-
 	};
-	if (!name || !password || !date || !email|| !phone_number) {
+	if (!name || !password || !date || !email || !phone_number) {
 		return responseHandle.badRequest(res, "K du du lieu");
 	}
 	const newUser: user = {
@@ -61,6 +62,6 @@ export const signUp = async (req: Request, res: Response) => {
 		if (!user) return responseHandle.badRequest(res, "Cannnot Create User");
 		else return responseHandle.success(res, user, "Create user success");
 	} catch (error) {
-		return responseHandle.badRequest(res, "Cant create User"+error);
+		return responseHandle.badRequest(res, "Cant create User" + error);
 	}
 };

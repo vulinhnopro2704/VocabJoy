@@ -22,15 +22,6 @@ export default function TabLayout() {
 					),
 				}}
 			/>
-			<Tabs.Screen
-				name="posts"
-				options={{
-					title: "Posts",
-					tabBarIcon: ({ color, focused }) => (
-						<TabBarIcon name="list" color={color} />
-					),
-				}}
-			/>
 		</Tabs>
 	);
 }

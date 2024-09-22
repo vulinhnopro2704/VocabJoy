@@ -11,6 +11,7 @@ import { validationSchema } from "@/schemas/login";
 import Toast from "react-native-toast-message";
 import { Colors } from "@/constants/Colors";
 import { useLoginMutation } from "@/lib/features/api/apiSlice";
+import { isSuccessfullStatus } from "@/utils/utils";
 
 export default function LoginForm() {
 	const [login, { isLoading, error }] = useLoginMutation();
@@ -22,14 +23,19 @@ export default function LoginForm() {
 				validationSchema={validationSchema}
 				onSubmit={async (values) => {
 					try {
-						const result = await login(values).unwrap(); // Gọi API
-						Toast.show({
-							text1: "Đăng nhập thành công",
-							text2: `Welcome, ${result.name}`, // Giả sử API trả về tên người dùng
-							position: "top",
-						});
+						const result = await login(values).unwrap(); // Gọi API'
 						console.log(result); // In ra kết quả
-						alert("Đăng nhập thành công");
+						if (isSuccessfullStatus(result.status)) {
+							Toast.show({
+								text1: "Đăng nhập thành công",
+								text2: `Welcome, ${result.name}`, // Giả sử API trả về tên người dùng
+								position: "top",
+							});
+							console.log(result); // In ra kết quả
+							alert("Đăng nhập thành công");
+						} else {
+							alert(result.message); // Hiển thị thông báo lỗi
+						}
 					} catch (err) {
 						const errorMessage = (err as Error).message; // Type assertion
 						Toast.show({
