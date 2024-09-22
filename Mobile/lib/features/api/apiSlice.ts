@@ -1,10 +1,10 @@
-import { backendUrl } from "@/constants/backend";
+import { BACKEND_URL } from "@/constants/backend";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export const apiSlice = createApi({
 	reducerPath: "api",
 	baseQuery: fetchBaseQuery({
-		baseUrl: backendUrl,
+		baseUrl: BACKEND_URL,
 	}),
 	endpoints: (builder) => ({
 		login: builder.mutation({
