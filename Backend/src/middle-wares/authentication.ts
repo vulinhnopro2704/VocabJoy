@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import responseHandle from "../Handler/responseHandler";
-import { verifiToken } from "../Helper/jwtToken";
+import responseHandle from "../handlers/response-handler";
+import { verifiToken } from "../helpers/jwt-token";
 
 
 

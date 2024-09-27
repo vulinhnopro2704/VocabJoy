@@ -1,7 +1,7 @@
 import express, { Request, Response, Application } from "express";
 import dotenv from "dotenv";
-import { main_route } from "./Routes";
-import { connectDb } from "./Config/database";
+import { main_route } from "./routes";
+import { connectDb } from "./config/database";
 import morgan from "morgan";
 import cors from "cors";
 

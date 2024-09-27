@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
-import StoreProvider from "./StoreProvider";
+import StoreProvider from "./store-provider";
 
 function checkIfUserIsLoggedIn() {
 	return false;
