@@ -22,6 +22,6 @@ const lessonUserSchema = new Schema<lessonUser>({
         default:0
     }
 });
-const LessonUser = mongoose.model('lessonuser', lessonUserSchema);
+const LessonUser = mongoose.model('lessonUser', lessonUserSchema);
 
 module.exports = LessonUser;
