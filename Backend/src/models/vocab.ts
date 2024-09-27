@@ -2,7 +2,7 @@ import { Model, Models, Schema } from "mongoose";
 
 interface vocab{
     name:string,
-    pronounciation:string,
+    pronunciation:string,
     type: string,
     image_link:string,
     meaning:string,
@@ -15,7 +15,7 @@ const vocabSchema: Schema<vocab> =  new Schema({
         type:String,
         required:true
     },
-    pronounciation:{
+    pronunciation:{
         type:String,
         required:true
     },
