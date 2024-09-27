@@ -13,11 +13,6 @@ interface user {
       otp: string;
       otpExp: Date;
     },
-    lesson:{
-        lesson: Types.ObjectId,
-        number_of_world:number
-    }[]
-    ,
     vocabulary: {
       vocabulary: Types.ObjectId
       count: number
@@ -66,15 +61,7 @@ interface user {
           ],
           default: [],
     },
-    lesson:{
-        type:[
-            {
-                lesson:{ type:Types.ObjectId, ref:"lesson" } ,
-                number_of_world: { type:Number, default:0 }
-            }
-        ],
-        default:[]
-    }
+   
   });
 
 const User:Model<user> = model<user>('user',userSchema)
