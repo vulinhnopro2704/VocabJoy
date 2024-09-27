@@ -9,8 +9,8 @@ import React from "react";
 import { Formik } from "formik";
 import { validationSchema } from "@/schemas/login";
 import Toast from "react-native-toast-message";
-import { Colors } from "@/constants/Colors";
-import { useLoginMutation } from "@/lib/features/api/apiSlice";
+import { Colors } from "@/constants/colors";
+import { useLoginMutation } from "@/lib/features/api/api-slice";
 import { isSuccessfullStatus } from "@/utils/utils";
 
 export default function LoginForm() {

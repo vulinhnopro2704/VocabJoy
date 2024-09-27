@@ -1,6 +1,6 @@
 import { View, Image, StyleSheet, SafeAreaView, Text } from "react-native";
 import React from "react";
-import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/colors";
 
 export default function LogoWithName() {
 	return (

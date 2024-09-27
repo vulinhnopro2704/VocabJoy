@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./features/counter/counterSlice";
-import { apiSlice } from "./features/api/apiSlice";
+import counterReducer from "./features/counter/counter-slice";
+import { apiSlice } from "./features/api/api-slice";
 
 export const makeStore = () => {
 	return configureStore({
