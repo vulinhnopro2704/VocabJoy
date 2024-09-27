@@ -16,10 +16,9 @@ app.set("port", process.env.PORT || 3000);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("combined"));
-// Cấu hình CORS
 app.use(
 	cors({
-		origin: "http://localhost:8081", // Thay thế bằng URL của frontend của bạn
+		origin: "http://localhost:8081",
 		methods: ["GET", "POST", "PUT", "DELETE"],
 		allowedHeaders: ["Content-Type", "Authorization"],
 	})
