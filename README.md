@@ -39,17 +39,17 @@ mobile/
 │   │   ├── login-form.tsx
 │   │   └── sign-up-form.tsx
 │   └── navigation/
-│       └── TabBarIcon.tsx
+│       └── tab-bar-icon.tsx
 ├── constants/                                #Some constants use for all project
-│   └── Colors.ts
+│   └── colors.ts
 ├── lib/                                        #Redux, API, Redux Slice
 │   ├── features/
 │   │   ├── api/
-│   │   │   └── apiSlice.ts
+│   │   │   └── api-slice.ts
 │   │   ├── counter/
-│   │   │   └── counterSlice.ts
+│   │   │   └── counter-slice.ts
 │   │   └── todos/
-│   │       └── todosSlice.ts
+│   │       └── todos-slice.ts
 │   ├── hook.ts
 │   └── store.ts
 ├── schemas/                                #Schema for Validation

@@ -9,9 +9,9 @@ import React, { useState } from "react";
 import { Formik } from "formik";
 import Toast from "react-native-toast-message";
 import { signupSchema } from "@/schemas/sign-up";
-import { Colors } from "@/constants/Colors";
-import { useSignUpMutation } from "@/lib/features/api/apiSlice";
-import { User } from "@/data_types/auth";
+import { Colors } from "@/constants/colors";
+import { useSignUpMutation } from "@/lib/features/api/api-slice";
+import { User } from "@/data-types/auth";
 import { date } from "yup";
 import DateTimePicker from "@react-native-community/datetimepicker";
 

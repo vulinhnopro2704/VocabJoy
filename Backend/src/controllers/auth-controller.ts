@@ -1,9 +1,9 @@
 import { Request, Response } from "express";
-import responseHandle from "../Handler/responseHandler";
-import { createNewUser, getUserByEmail } from "../Services/Auth-service";
-import { generateToken } from "../Helper/jwtToken";
-import { comparePassword } from "../Helper/hashPassword";
-import user from "../Interface/User";
+import responseHandle from "../handlers/response-handler";
+import { createNewUser, getUserByEmail } from "../services/auth-service";
+import { generateToken } from "../helpers/jwt-token";
+import { comparePassword } from "../helpers/hash-password";
+import user from "../interface/user";
 import bcrypt from "bcryptjs";
 
 export const login = async (req: Request, res: Response) => {
