@@ -1,6 +1,6 @@
 import { hashPassword } from "../Helper/hashPassword";
 import user from "../Interface/User";
-import User from "../Models/Users-model";
+import User from "../Models/User";
 
 export const getUserByEmail = async (email: string) => {
 	try {
