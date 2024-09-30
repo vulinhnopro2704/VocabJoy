@@ -1,12 +1,12 @@
-import  { useState } from "react";
+import { useState } from "react";
 import {
 	SafeAreaView,
 	ScrollView,
 	Text,
-	TouchableOpacity,
 	StyleSheet,
 	Image,
 	View,
+	Pressable,
 } from "react-native";
 import LogoWithName from "@/components/logo-with-name";
 import LoginForm from "@/components/form/login-form";
@@ -18,7 +18,7 @@ const Login = () => {
 		<SafeAreaView style={styles.container}>
 			<ScrollView contentContainerStyle={styles.scrollContainer}>
 				<Image
-					source={require("../../assets/images/Pattern.png")}
+					source={require("../assets/images/Pattern.png")}
 					style={styles.pattern}
 					resizeMode="cover"
 				/>
@@ -27,7 +27,7 @@ const Login = () => {
 				</SafeAreaView>
 
 				<View style={styles.buttonContainer}>
-					<TouchableOpacity
+					<Pressable
 						style={[
 							styles.button,
 							isLogin
@@ -37,8 +37,8 @@ const Login = () => {
 						onPress={() => setIsLogin(true)}
 					>
 						<Text style={styles.buttonText}>Đăng Nhập</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
+					</Pressable>
+					<Pressable
 						style={[
 							styles.button,
 							!isLogin
@@ -48,7 +48,7 @@ const Login = () => {
 						onPress={() => setIsLogin(false)}
 					>
 						<Text style={styles.buttonText}>Đăng Ký</Text>
-					</TouchableOpacity>
+					</Pressable>
 				</View>
 
 				<View style={styles.formContainer}>
@@ -121,6 +121,5 @@ const styles = StyleSheet.create({
 		top: "20%",
 		right: "20%",
 	},
-
-})
+});
 export default Login;

@@ -1,10 +1,4 @@
-import {
-	View,
-	Text,
-	TouchableOpacity,
-	StyleSheet,
-	TextInput,
-} from "react-native";
+import { View, Text, Pressable, StyleSheet, TextInput } from "react-native";
 import React, { useState } from "react";
 import { Formik } from "formik";
 import Toast from "react-native-toast-message";
@@ -137,13 +131,13 @@ export default function SignUpForm() {
 						</Text>
 					)}
 
-					<TouchableOpacity
+					<Pressable
 						style={styles.button}
 						onPress={() => handleSubmit()}
 						disabled={isLoading}
 					>
 						<Text style={styles.buttonText}>Đăng ký</Text>
-					</TouchableOpacity>
+					</Pressable>
 					{error && (
 						<Text style={styles.errorText}>
 							{(error as { data: { message?: string } }).data
