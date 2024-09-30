@@ -1,5 +1,5 @@
 import { Stack } from "expo-router";
-import { string } from "yup";
+import React from "react";
 
 export default function NotFoundScreen() {
 	return (

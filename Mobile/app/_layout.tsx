@@ -6,6 +6,8 @@ import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
 import StoreProvider from "./store-provider";
+import Header from "@/components/header";
+import { RootStackParamList } from "../navigation";
 
 function checkIfUserIsLoggedIn() {
 	return false;
@@ -42,7 +44,18 @@ export default function RootLayout() {
 
 	return (
 		<StoreProvider>
-			<Stack>
+			<Stack
+				screenOptions={{
+					header: () => <Header />,
+					headerStyle: {
+						backgroundColor: "#fff",
+					},
+					headerTintColor: "#ccc",
+					headerTitleStyle: {
+						fontWeight: "bold",
+					},
+				}}
+			>
 				{isLoggedIn ? (
 					<Stack.Screen
 						name="(tabs)/login.tsx"
@@ -51,10 +64,11 @@ export default function RootLayout() {
 				) : (
 					<Stack.Screen
 						name="(tabs)"
-						options={{ headerShown: false }}
+						options={{ headerShown: true }}
 					/>
 				)}
 				<Stack.Screen name="+not-found" />
+				<Stack.Screen name="profile-screen" />
 			</Stack>
 			<Toast />
 		</StoreProvider>

@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, Pressable } from "react-native";
 
 type ButtonProps = {
 	content: string;
@@ -19,7 +19,7 @@ const Button = ({
 	textClassName,
 }: ButtonProps) => {
 	return (
-		<TouchableOpacity
+		<Pressable
 			style={[styles.button, styleButton]}
 			className={"flex-grow" + buttonClassName}
 			onPress={onPress}
@@ -30,7 +30,7 @@ const Button = ({
 			>
 				{content}
 			</Text>
-		</TouchableOpacity>
+		</Pressable>
 	);
 };
 
