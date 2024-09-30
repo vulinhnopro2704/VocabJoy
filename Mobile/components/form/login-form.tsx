@@ -1,10 +1,4 @@
-import {
-	View,
-	Text,
-	TextInput,
-	TouchableOpacity,
-	StyleSheet,
-} from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
 import React from "react";
 import { Formik } from "formik";
 import { validationSchema } from "@/schemas/login";
@@ -79,13 +73,13 @@ export default function LoginForm() {
 								{errors.password}
 							</Text>
 						)}
-						<TouchableOpacity
+						<Pressable
 							style={styles.button}
 							onPress={() => handleSubmit()}
 							disabled={isLoading} // Disable button when loading
 						>
 							<Text style={styles.buttonText}>Đăng Nhập</Text>
-						</TouchableOpacity>
+						</Pressable>
 						{error && (
 							<Text style={styles.errorText}>
 								{error && (

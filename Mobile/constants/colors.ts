@@ -1,4 +1,5 @@
 export const Colors = {
+	primary_background: "#f0f4f8",
 	primary: "#007AFF",
 	primary_text: "#4D81E7",
 	gray_600: "#6C7278",
@@ -9,4 +10,16 @@ export const Colors = {
 	red: "#F64F59",
 	purple: "#C471ED",
 	blue: "#12C2E9",
+
+	// Box-shadow colors
+	primary_shadow: "#005BB5",
+	primary_text_shadow: "#3A5FA1",
+	gray_600_shadow: "#545A60",
+	gray_500_shadow: "#8A949A",
+	gray_400_shadow: "#C7D0D3",
+	gray_300_shadow: "#DDE0E3",
+	dark_text_shadow: "#1A1B36",
+	red_shadow: "#C43D4A",
+	purple_shadow: "#9B5AB8",
+	blue_shadow: "#0E9CB3",
 };
