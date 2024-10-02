@@ -24,12 +24,12 @@ export default function HomeScreen() {
 				<View style={styles.note}>
 					<Notebook color={"#fff"} />
 				</View>
-				<Text style={styles.noteText}>Sổ tay đã có 3658 từ</Text>
+				<Text style={styles.noteText}>Sổ tay đã có 272 từ</Text>
 			</View>
 			<HomeChart />
 			<View style={styles.centerColumn}>
 				<Text style={[{ fontSize: 18 }, styles.centerText]}>
-					Chuẩn bị ôn tập: 34 từ
+					Chuẩn bị ôn tập: 20 từ
 				</Text>
 				<Pressable style={styles.button}>
 					<Text

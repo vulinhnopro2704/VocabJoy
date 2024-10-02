@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { StyleSheet, View, Text, ActivityIndicator } from "react-native";
+import {
+	StyleSheet,
+	View,
+	Text,
+	ActivityIndicator,
+	Button,
+} from "react-native";
+import { useRouter } from "expo-router";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
+import { logoutUser, removeToken } from "@/lib/features/auth/auth-slice";
 
 type ProfileData = {
 	name: string;
@@ -12,6 +21,9 @@ type ProfileData = {
 const ProfileScreen = () => {
 	const [userData, setUserData] = useState<ProfileData>();
 	const [loading, setLoading] = useState(true);
+	const router = useRouter();
+	const dispatch = useAppDispatch();
+	const { token } = useAppSelector((state) => state.auth);
 
 	useEffect(() => {
 		// Simulate an API call with a timeout
@@ -30,6 +42,17 @@ const ProfileScreen = () => {
 			setLoading(false);
 		}, 1000); // Simulate a 1-second delay
 	}, []);
+
+	useEffect(() => {
+		if (!token) {
+			router.replace("/"); // Navigate to the root of the application when token is cleared
+		}
+	}, [token]);
+
+	const handleLogout = async () => {
+		// Clear user token and navigate to login screen
+		dispatch(logoutUser());
+	};
 
 	if (loading) {
 		return (
@@ -72,6 +95,8 @@ const ProfileScreen = () => {
 					<Text style={styles.value}>Count: {vocabItem.count}</Text>
 				</View>
 			))}
+
+			<Button title="Logout" onPress={handleLogout} />
 		</View>
 	);
 };
