@@ -12,9 +12,7 @@ import {
 import { Colors } from "@/constants/colors";
 import HomeChart from "@/components/home-chart";
 
-type Props = {};
-
-export default function Home({}: Props) {
+export default function HomeScreen() {
 	return (
 		<SafeAreaView style={styles.container}>
 			<Image
