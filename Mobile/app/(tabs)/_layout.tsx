@@ -22,13 +22,14 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+
 			<Tabs.Screen
-				name="home"
+				name="lesson"
 				options={{
-					title: "Home",
+					title: "Lesson",
 					tabBarIcon: ({ color, focused }) => (
 						<TabBarIcon
-							name={focused ? "home" : "home-outline"}
+							name={focused ? "book" : "book-outline"}
 							color={color}
 						/>
 					),
