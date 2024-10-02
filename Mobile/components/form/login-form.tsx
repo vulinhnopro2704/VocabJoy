@@ -26,14 +26,7 @@ interface ApiLoginResponse {
 export default function LoginForm() {
 	const [login, { isLoading, error }] = useLoginMutation();
 	const dispatch = useAppDispatch();
-	const { token } = useAppSelector((state) => state.auth);
 	const route = useRouter();
-
-	useEffect(() => {
-		if (token) {
-			route.replace("/(tabs)/home-screen");
-		}
-	}, [token]);
 
 	return (
 		<>

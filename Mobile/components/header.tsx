@@ -3,21 +3,26 @@ import React from "react";
 import { ArrowLeft } from "lucide-react-native";
 import { useNavigation, NavigationProp } from "@react-navigation/native";
 import { RootStackParamList } from "../navigation";
+import { useRouter } from "expo-router";
 
 export default function Header() {
-	const navigation = useNavigation<NavigationProp<RootStackParamList>>();
+	const router = useRouter();
 
 	return (
 		<View style={styles.header}>
 			<Pressable
 				style={styles.backButton}
-				onPress={() => navigation.goBack()}
+				onPress={() => {
+					if (router.canGoBack()) {
+						router.back();
+					}
+				}}
 			>
 				<ArrowLeft color="#000" size={24} />
 			</Pressable>
 			<Text style={styles.title}>VocabJoy</Text>
 			<Pressable
-				onPress={() => navigation.navigate("profile-screen")}
+				onPress={() => router.push("/(tabs)/profile-screen")}
 				style={styles.avatar}
 			>
 				<Image
