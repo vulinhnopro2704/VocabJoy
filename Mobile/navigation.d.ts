@@ -1,4 +1,3 @@
-// navigation.d.ts
 import { StackScreenProps } from "@react-navigation/stack";
 
 declare global {
@@ -8,13 +7,28 @@ declare global {
 }
 
 export type RootStackParamList = {
-	"profile-screen": undefined;
-	"(tabs)": undefined;
-	"+not-found": undefined;
-	"(tabs)/login.tsx": undefined;
+	"(tabs)/profile-screen": undefined;
+	"(tabs)/home-screen": undefined;
+	"(tabs)/lesson-screen": undefined;
+	"login-screen": undefined;
 };
 
 export type ProfileScreenProps = StackScreenProps<
 	RootStackParamList,
-	"profile-screen"
+	"(tabs)/profile-screen"
+>;
+
+export type HomeScreenProps = StackScreenProps<
+	RootStackParamList,
+	"(tabs)/home-screen"
+>;
+
+export type LessonScreenProps = StackScreenProps<
+	RootStackParamList,
+	"(tabs)/lesson-screen"
+>;
+
+export type LoginScreenProps = StackScreenProps<
+	RootStackParamList,
+	"login-screen"
 >;
