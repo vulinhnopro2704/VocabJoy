@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
 	SafeAreaView,
 	ScrollView,
@@ -11,9 +11,20 @@ import {
 import LogoWithName from "@/components/logo-with-name";
 import LoginForm from "@/components/form/login-form";
 import SignUpForm from "@/components/form/sign-up-form";
+import { useRouter } from "expo-router";
+import { useAppSelector } from "@/lib/hook";
 
-const Login = () => {
+const LoginScreen = () => {
 	const [isLogin, setIsLogin] = useState(true);
+	const { token } = useAppSelector((state) => state.auth);
+	const route = useRouter();
+
+	useEffect(() => {
+		if (token) {
+			route.replace("/(tabs)/home-screen");
+		}
+	}, [token]);
+
 	return (
 		<SafeAreaView style={styles.container}>
 			<ScrollView contentContainerStyle={styles.scrollContainer}>
@@ -122,4 +133,4 @@ const styles = StyleSheet.create({
 		right: "20%",
 	},
 });
-export default Login;
+export default LoginScreen;

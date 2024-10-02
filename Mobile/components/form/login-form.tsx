@@ -1,14 +1,39 @@
 import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
-import React from "react";
+import React, { useEffect } from "react";
 import { Formik } from "formik";
 import { validationSchema } from "@/schemas/login";
 import Toast from "react-native-toast-message";
 import { Colors } from "@/constants/colors";
 import { useLoginMutation } from "@/lib/features/api/api-slice";
 import { isSuccessfullStatus } from "@/utils/utils";
+import { useAppDispatch, useAppSelector } from "@/lib/hook";
+import { loginUser } from "@/lib/features/auth/auth-slice";
+import { useRouter } from "expo-router";
+
+// Define the structure of the data object
+interface Data {
+	token: string;
+}
+
+// Define the structure of the entire response
+interface ApiLoginResponse {
+	success: boolean;
+	data: Data;
+	message: string;
+	statusCode: number;
+}
 
 export default function LoginForm() {
 	const [login, { isLoading, error }] = useLoginMutation();
+	const dispatch = useAppDispatch();
+	const { token } = useAppSelector((state) => state.auth);
+	const route = useRouter();
+
+	useEffect(() => {
+		if (token) {
+			route.replace("/(tabs)/home-screen");
+		}
+	}, [token]);
 
 	return (
 		<>
@@ -17,16 +42,17 @@ export default function LoginForm() {
 				validationSchema={validationSchema}
 				onSubmit={async (values) => {
 					try {
-						const result = await login(values).unwrap(); // Gọi API'
+						const result: ApiLoginResponse = await login(
+							values
+						).unwrap(); // Gọi API'
 						console.log(result); // In ra kết quả
-						if (isSuccessfullStatus(result.status)) {
+						if (isSuccessfullStatus(result.statusCode)) {
+							dispatch(loginUser(result.data.token));
 							Toast.show({
 								text1: "Đăng nhập thành công",
-								text2: `Welcome, ${result.name}`, // Giả sử API trả về tên người dùng
 								position: "top",
 							});
-							console.log(result); // In ra kết quả
-							alert("Đăng nhập thành công");
+							route.replace("/(tabs)/home-screen");
 						} else {
 							alert(result.message); // Hiển thị thông báo lỗi
 						}

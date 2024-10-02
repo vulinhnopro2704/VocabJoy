@@ -1,13 +1,12 @@
 import { useFonts } from "expo-font";
-import { Stack } from "expo-router";
 import * as SplashScreen from "expo-splash-screen";
 import { useEffect, useState } from "react";
 import "react-native-reanimated";
 import Toast from "react-native-toast-message";
 
 import StoreProvider from "./store-provider";
+import { Stack } from "expo-router";
 import Header from "@/components/header";
-import { RootStackParamList } from "../navigation";
 
 function checkIfUserIsLoggedIn() {
 	return false;
@@ -50,25 +49,14 @@ export default function RootLayout() {
 					headerStyle: {
 						backgroundColor: "#fff",
 					},
-					headerTintColor: "#ccc",
+					headerTintColor: "#fff",
 					headerTitleStyle: {
 						fontWeight: "bold",
 					},
 				}}
+				initialRouteName="index"
 			>
-				{isLoggedIn ? (
-					<Stack.Screen
-						name="(tabs)/login.tsx"
-						options={{ headerShown: false }}
-					/>
-				) : (
-					<Stack.Screen
-						name="(tabs)"
-						options={{ headerShown: true }}
-					/>
-				)}
-				<Stack.Screen name="+not-found" />
-				<Stack.Screen name="profile-screen" />
+				<Stack.Screen options={{ headerShown: false }} name="index" />
 			</Stack>
 			<Toast />
 		</StoreProvider>
