@@ -32,19 +32,21 @@ app.use(
 
 
 
+
+
 app.use("/api", main_route);
 
 app.get("/", (req: Request, res: Response) => {
-	res.send("Learn English");
+    res.send("Learn English");
 });
-app.use("/api", main_route);
 
 app.use((req: Request, res: Response,next:NextFunction) => {
 	next(new HttpException(404,"Api not found"))
   });
 app.use(errorHandler)
 
+
 const port: number = app.get("port");
 app.listen(port, () => {
-	console.log(`Server is Ruuning at http://192.168.1.100:${port}`);
+	console.log(`Server is Ruuning at http://localhost:${port}`);
 });
