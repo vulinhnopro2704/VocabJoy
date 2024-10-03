@@ -29,9 +29,7 @@ app.get("/", (req: Request, res: Response) => {
 	res.send("Learn English");
 });
 
-app.use("/api", main_route);
-
 const port: number = app.get("port");
 app.listen(port, () => {
-	console.log(`Server is Ruuning at http://192.168.1.100:${port}`);
+	console.log(`Server is Ruuning at http://localhost:${port}`);
 });

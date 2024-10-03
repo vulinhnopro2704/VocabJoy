@@ -34,7 +34,10 @@ interface user {
       unique: true,
     },
     account: {
-      password: { type: String, required: true },
+      password: {
+        type: String,
+        required: true
+      },
       otp: {
         type: String,
         default: null,
