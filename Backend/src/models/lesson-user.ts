@@ -1,4 +1,4 @@
-import mongoose, { Schema, Types } from "mongoose";
+import mongoose, { Model, model, Schema, Types } from "mongoose";
 interface lessonUser {
     userId: mongoose.Types.ObjectId,
     lessonId: mongoose.Types.ObjectId,
@@ -22,6 +22,6 @@ const lessonUserSchema = new Schema<lessonUser>({
         default:0
     }
 });
-const LessonUser = mongoose.model('lessonUser', lessonUserSchema);
+const LessonUser:Model<lessonUser> = model('lessonUser', lessonUserSchema);
 
 module.exports = LessonUser;

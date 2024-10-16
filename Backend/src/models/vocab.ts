@@ -1,25 +1,28 @@
-import { Model, Models, Schema } from "mongoose";
+import { Model, model, Schema } from "mongoose";
 
-interface vocab{
+interface Vocab{
     name:string,
     pronunciation:string,
     type: string,
     image_link:string,
     meaning:string,
     description:string,
+    audio:string
 }
 
 
-const vocabSchema: Schema<vocab> =  new Schema({
+const vocabSchema: Schema<Vocab> =  new Schema({
     name:{
         type:String,
-        required:true
+        required:true,
+        unique:true
     },
     pronunciation:{
         type:String,
-        required:true
+     
     },
     type: {
+        type:String,
         enum:["VERB","NOUN","ADJECTIVE","ADVERB"],
         required:true
     },
@@ -30,11 +33,14 @@ const vocabSchema: Schema<vocab> =  new Schema({
     description:{
         type:String,
         required:true
+    },
+    audio:{
+        type:String
     }
 
 })
 
 
-const Vocab:Model<vocab> = new Model("vocabulary",vocabSchema)
+const Vocab:Model<Vocab> = model("vocabulary",vocabSchema)
 
 export default Vocab
