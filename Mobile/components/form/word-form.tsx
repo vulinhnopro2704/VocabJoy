@@ -17,12 +17,10 @@ export const Word: React.FC<{ vocab: Vocab }>  = ({vocab})=>{
     const [saveVocabForUser,{ error: errorSaveVocabUser, isLoading: loadingSaveVocabUser }] = useSaveVocabForUserMutation();
 
     const playSound = async()=>{
-        console.log('Loading Sound');
         const { sound } = await Audio.Sound.createAsync(
           { uri:vocab.audio},
         );
         Sound =sound
-        console.log('Playing Sound');
         await sound.playAsync();
       }
     const saveVocab = async()=>{
@@ -32,29 +30,29 @@ export const Word: React.FC<{ vocab: Vocab }>  = ({vocab})=>{
             if(!vocabFind)
             {
             const newVocab = await saveVocabulary(vocab).unwrap()
-            console.log(newVocab)
+         
             vocabId = newVocab.data._id
             }
             else 
             vocabId = vocabFind.data._id
       
-            const result = await saveVocabForUser({vocabId,userId}).unwrap()
+            const result = await saveVocabForUser({vocabId,userId:userId.data._id}).unwrap()
 
             if(result)
                 Toast.show({
-                    text1: "Save Vocabulary Successful",
+                    text1: "Lưu Từ Thành Công",
                     position: "top",
                 });  
             
         } catch (error:any) {
             if(error.data.message == "Tu da ton tai")
                 Toast.show({
-                    text1: "Save Vocabulary Successful",
+                    text1: "Lưu Từ Thành Công",
                     position: "top",
                 });  
             else
                 Toast.show({
-                    text1: "Cannot Save Vocabulary",
+                    text1: "Không thể lưu từ",
                     position: "top",
                 });  
         }
