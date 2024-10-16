@@ -14,7 +14,7 @@ interface user {
       otpExp: Date;
     },
     vocabulary: {
-      vocabulary: Types.ObjectId
+      vocab: String
       count: number
     }[]
   }

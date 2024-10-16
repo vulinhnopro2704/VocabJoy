@@ -21,7 +21,7 @@ export const success = (
     res: Response,
     data: object | Array<object>,
     message: string
-) => responseWithData(res, HttpStatusCodes.ACCEPTED, data, message, true);
+) => responseWithData(res, HttpStatusCodes.OK, data, message, true);
 
 export const created = (
     res: Response,

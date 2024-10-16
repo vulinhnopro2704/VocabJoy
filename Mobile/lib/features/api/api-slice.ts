@@ -39,8 +39,45 @@ export const apiSlice = createApi({
 				body: userData,
 			}),
 		}),
-		// Add other endpoints here
+		saveVocabulary: builder.mutation({
+			query:(newVocab)=>({
+				url:"/vocabulary/create-vocabulary",
+				method:"POST",
+				body:newVocab
+
+		})
+		}),
+		saveVocabForUser: builder.mutation({
+			query:({userId,vocabId})=>({
+				url:`/user/save-word-for-user`,
+				method:"POST",
+				body:{userId,vocabId}
+		}),
+		}),
+		getVocabulary: builder.query({
+			query:(word)=>({
+				url:`/vocabulary/find-vocabulary?word=${word}`,
+		}),
+		}),
+		getUserId: builder.query({
+			query:()=>({
+				url:`/user/get-user-id`,
+		}),
+		}),
+		translateToVie: builder.query({
+			query:(word)=>({
+				url:`/vocabulary/get-mean?word=${word}`
+			})
+		})
 	}),
 });
 
-export const { useLoginMutation, useSignUpMutation } = apiSlice;
+export const {
+	useLoginMutation,
+	useSignUpMutation ,
+	useSaveVocabularyMutation,
+	useGetVocabularyQuery,
+	useGetUserIdQuery,
+	useSaveVocabForUserMutation,
+	useTranslateToVieQuery
+} = apiSlice;
