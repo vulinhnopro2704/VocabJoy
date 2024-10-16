@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
 import counterReducer from "./features/counter/counter-slice";
 import { apiSlice } from "./features/api/api-slice";
+import { wordApi } from "./features/api/api-search_word";
 import authReducer, { loadToken } from "./features/auth/auth-slice";
 
 export const makeStore = () => {
@@ -8,10 +9,13 @@ export const makeStore = () => {
 		reducer: {
 			counter: counterReducer,
 			[apiSlice.reducerPath]: apiSlice.reducer,
+			[wordApi.reducerPath]: wordApi.reducer,
 			auth: authReducer,
 		},
 		middleware: (getDefaultMiddleware) =>
-			getDefaultMiddleware().concat(apiSlice.middleware),
+			getDefaultMiddleware()
+			.concat(apiSlice.middleware)
+			.concat(wordApi.middleware),
 	});
 
 	// Load token when app starts

@@ -1,4 +1,4 @@
-import { Model, Schema, Types } from "mongoose";
+import { model, Model, Schema, Types } from "mongoose";
 
 
 
@@ -27,7 +27,7 @@ const lessonSchema:Schema<lesson> = new Schema({
 
 
 
-const Lesson:Model<lesson> = new Model("lesson",lessonSchema)
+const Lesson:Model<lesson> = model("lesson",lessonSchema)
 
 
 export default Lesson
