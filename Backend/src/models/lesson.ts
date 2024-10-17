@@ -35,6 +35,6 @@ const lessonSchema:Schema<lesson> = new Schema({
     }],
 })
 
-const Lesson:Model<lesson> = model("lesson",lessonSchema)
+const Lesson:Model<lesson> = model<lesson>('lesson',lessonSchema)
 
 export default Lesson

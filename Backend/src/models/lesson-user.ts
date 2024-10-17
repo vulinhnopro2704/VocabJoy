@@ -1,4 +1,4 @@
-import mongoose, { Model, model, Schema, Types } from "mongoose";
+import mongoose, { Model, model, Schema } from "mongoose";
 interface lessonUser {
     userId: mongoose.Types.ObjectId,
     lessonId: mongoose.Types.ObjectId,
@@ -10,7 +10,7 @@ const lessonUserSchema = new Schema<lessonUser>({
     userId: {
         type: Schema.Types.ObjectId, 
         required: true,
-        ref: 'user' 
+        ref: 'user'
     },
     lessonId: {
         type: Schema.Types.ObjectId,
@@ -24,4 +24,4 @@ const lessonUserSchema = new Schema<lessonUser>({
 });
 const LessonUser:Model<lessonUser> = model('lessonUser', lessonUserSchema);
 
-module.exports = LessonUser;
+export default LessonUser
