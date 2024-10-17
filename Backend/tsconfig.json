@@ -5,8 +5,8 @@
 		"esModuleInterop": true
 	},
 	"include": [
-		"./src/**/*.ts" // Include all TypeScript files in the src directory
-, "src/controllers/userController.ts"	],
+		"./src/**/*.ts", // Include all TypeScript files in the src directory
+],
 	"exclude": [
 		"node_modules" // Exclude node_modules
 	]
