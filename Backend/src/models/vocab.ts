@@ -1,4 +1,4 @@
-import { Model, Models, Schema } from "mongoose";
+import mongoose, { model, Model, Models, Schema } from "mongoose";
 
 interface vocab{
     name:string,
@@ -20,6 +20,7 @@ const vocabSchema: Schema<vocab> =  new Schema({
         required:true
     },
     type: {
+        type: String,
         enum:["VERB","NOUN","ADJECTIVE","ADVERB"],
         required:true
     },
@@ -35,6 +36,6 @@ const vocabSchema: Schema<vocab> =  new Schema({
 })
 
 
-const Vocab:Model<vocab> = new Model("vocabulary",vocabSchema)
+const Vocab = mongoose.model('vocab', vocabSchema);
 
 export default Vocab

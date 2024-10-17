@@ -10,7 +10,7 @@ const lessonUserSchema = new Schema<lessonUser>({
     userId: {
         type: Schema.Types.ObjectId, 
         required: true,
-        ref: 'user' 
+        ref: 'user'
     },
     lessonId: {
         type: Schema.Types.ObjectId,
@@ -24,4 +24,4 @@ const lessonUserSchema = new Schema<lessonUser>({
 });
 const LessonUser = mongoose.model('lessonUser', lessonUserSchema);
 
-module.exports = LessonUser;
+export default LessonUser
