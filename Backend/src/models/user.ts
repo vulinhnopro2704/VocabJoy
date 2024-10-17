@@ -14,7 +14,7 @@ interface user {
       otpExp: Date;
     },
     vocabulary: {
-      vocabulary: Types.ObjectId
+      vocab: Types.ObjectId
       count: number
     }[]
   }
@@ -59,9 +59,8 @@ interface user {
               count: { type: Number, default: 0 },
             },
           ],
-          default: [],
-    },
-   
+          default: [],          
+        },
   });
 
 const User:Model<user> = model<user>('user',userSchema)

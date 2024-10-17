@@ -4,6 +4,8 @@ import { main_route } from "./routes";
 import { connectDb } from "./config/database";
 import morgan from "morgan";
 import cors from "cors";
+import user_router from "../src/routes/user";
+import vocab_router from "../src/routes/vocab";
 
 //chay database mongoose
 connectDb();
@@ -25,13 +27,16 @@ app.use(
 );
 
 app.use("/api", main_route);
+
 app.get("/", (req: Request, res: Response) => {
 	res.send("Learn English");
 });
+
+
 
 app.use("/api", main_route);
 
 const port: number = app.get("port");
 app.listen(port, () => {
-	console.log(`Server is Ruuning at http://192.168.1.100:${port}`);
+	console.log(`Server is Ruuning at http://localhost:${port}`);
 });
