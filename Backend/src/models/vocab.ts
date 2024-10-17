@@ -1,4 +1,4 @@
-import { Model, model, Schema } from "mongoose";
+import mongoose, { Model, model, Schema } from "mongoose";
 
 interface Vocab{
     name:string,
@@ -19,7 +19,7 @@ const vocabSchema: Schema<Vocab> =  new Schema({
     },
     pronunciation:{
         type:String,
-     
+
     },
     type: {
         type:String,
