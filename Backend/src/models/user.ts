@@ -60,8 +60,7 @@ interface user {
             },
           ],
           default: [],
-    },
-   
+        },
   });
 
 const User:Model<user> = model<user>('user',userSchema)
