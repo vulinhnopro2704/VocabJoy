@@ -12,8 +12,8 @@ export const generateToken = (data:string | Object):string=>{
     } catch (error) {
         throw new Error("Loi tao token: "+error)
     }
-
 }
+
 export const verifiToken =(token:string):string | jwt.JwtPayload=>{
     try {
         return jwt.verify(token,jwt_Sceret)
