@@ -6,8 +6,6 @@ import morgan from "morgan";
 import cors from "cors";
 import { errorHandler } from "./handlers/error-handler";
 import { HttpException } from "./handlers/http_exception-handler";
-import user_router from "../src/routes/user-route";
-import vocab_router from "../src/routes/vocab";
 
 //chay database mongoose
 connectDb();

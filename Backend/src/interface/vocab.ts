@@ -1,4 +1,3 @@
-
 export default interface vocab{
     name:string,
     pronunciation:string,

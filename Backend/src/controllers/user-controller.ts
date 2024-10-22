@@ -3,17 +3,9 @@ import responseHandle from "../handlers/response-handler";
 import { getAllUserService, getUserByIdService, saveWordForUserService } from "../services/user-service"
 import { HttpException } from "../handlers/http_exception-handler"
 import {jwtDecode} from "jwt-decode"
-import User from "../models/user"
+import User from "../models/user";
 import Vocab from "../models/vocab";
 
-export const getAllUser = async (req,res) => {
-    try{
-        const user = await User.find().select("name email phone vocabulary");
-        return responseHandle.success(res, user, "All User");
-    }catch(err){
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
 
 export const getAllUserController= async(req:Request,res:Response,next:NextFunction)=>{
     try {
@@ -72,6 +64,16 @@ export const getIdByTokenController = async (req:Request,res:Response,next:NextF
         
     } catch (error) {
         next(error)
+    }
+
+}
+
+export const getAllUser =  async (req,res) => {
+    try{
+        const user = await User.find().select("name email phone vocabulary");
+        return responseHandle.success(res, user, "All User");
+    }catch(err){
+        return responseHandle.badRequest(res, "Failed");
     }
 }
 
@@ -136,9 +138,10 @@ export const getDiaryUser = async(req,res) => {
     }
 }
 
-export const addVocabToUserDiary = async(req,res) => {
+export const addVocabToUserDiary =  async(req,res) => {
     try{
         const user = await User.findById(req.params.userId);
+        const vocab = await Vocab.findById(req.params.vocabId);
         if(!user) {
             return responseHandle.notFound(res, "Can't find user");
         }

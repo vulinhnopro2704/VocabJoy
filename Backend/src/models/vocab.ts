@@ -1,4 +1,4 @@
-import mongoose, { Model, model, Schema } from "mongoose";
+import  { Model, model, Schema } from "mongoose";
 
 interface Vocab{
     name:string,
