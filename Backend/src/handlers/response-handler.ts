@@ -1,6 +1,7 @@
 import HttpStatusCodes from "http-status-codes";
 import { Response } from "express";
 
+
 const responseWithData = (
     res: Response,
     statusCode: number,
@@ -8,7 +9,6 @@ const responseWithData = (
     message: string,
     success: boolean
 ) => res.status(statusCode).json({success, data, message, statusCode });
- 
 
 const responseNoData = (
     res: Response,

@@ -1,10 +1,10 @@
 import mongoose, { Model, model, Schema } from "mongoose";
+
 interface lessonUser {
     userId: mongoose.Types.ObjectId,
     lessonId: mongoose.Types.ObjectId,
     number_of_world:Number
 }
-
 
 const lessonUserSchema = new Schema<lessonUser>({
     userId: {
@@ -22,6 +22,7 @@ const lessonUserSchema = new Schema<lessonUser>({
         default:0
     }
 });
+
 const LessonUser:Model<lessonUser> = model('lessonUser', lessonUserSchema);
 
 export default LessonUser

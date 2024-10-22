@@ -1,6 +1,4 @@
 import { Schema,Model,model, Types } from "mongoose";
-import { type } from "os";
-
 
 interface user {
     isDeleted: boolean
