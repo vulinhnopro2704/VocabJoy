@@ -1,4 +1,3 @@
-import Header from "@/components/header";
 import React from "react";
 import { Notebook } from "lucide-react-native";
 import {
@@ -8,11 +7,29 @@ import {
 	StyleSheet,
 	SafeAreaView,
 	Image,
+	ActivityIndicator,
 } from "react-native";
 import { Colors } from "@/constants/colors";
 import HomeChart from "@/components/home-chart";
+import { useGetUserVocabsHomeQuery } from "@/lib/features/api/api-user-slice";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
 export default function HomeScreen() {
+	const userId = useSelector((state: RootState) => state.auth.userId);
+	const { data, isLoading, isError, error } = useGetUserVocabsHomeQuery(
+		userId!
+	);
+	if (isLoading) {
+		return (
+			<View style={styles.container}>
+				<ActivityIndicator size="large" color="#0000ff" />
+			</View>
+		);
+	}
+	if (isError) {
+		return <Text>Error: {error + ""}</Text>;
+	}
 	return (
 		<SafeAreaView style={styles.container}>
 			<Image
@@ -24,12 +41,14 @@ export default function HomeScreen() {
 				<View style={styles.note}>
 					<Notebook color={"#fff"} />
 				</View>
-				<Text style={styles.noteText}>Sổ tay đã có 272 từ</Text>
+				<Text style={styles.noteText}>
+					Sổ tay đã có {data?.data.total} từ
+				</Text>
 			</View>
-			<HomeChart />
+			<HomeChart data={data?.data.levels} />
 			<View style={styles.centerColumn}>
 				<Text style={[{ fontSize: 18 }, styles.centerText]}>
-					Chuẩn bị ôn tập: 20 từ
+					Chuẩn bị ôn tập: {data?.data.practice} từ
 				</Text>
 				<Pressable style={styles.button}>
 					<Text
@@ -51,7 +70,7 @@ const styles = StyleSheet.create({
 	container: {
 		marginTop: 50,
 		flex: 1,
-		gap: 60,
+		gap: 50,
 		flexDirection: "column",
 		alignItems: "center",
 		padding: 20,
@@ -89,11 +108,21 @@ const styles = StyleSheet.create({
 		paddingVertical: 14,
 		paddingHorizontal: 50,
 		textAlign: "center",
-		backgroundColor: Colors.gray_500,
+		backgroundColor: Colors.gray_400,
 		borderRadius: 25,
 		fontSize: 18,
 		overflow: "hidden",
 		fontWeight: "500",
+		borderColor: Colors.primary,
+		borderWidth: 2,
+		shadowColor: Colors.primary_shadow,
+		shadowOffset: {
+			width: 0,
+			height: 4,
+		},
+		shadowOpacity: 0.3,
+		shadowRadius: 5,
+		elevation: 6,
 	},
 	button: {
 		backgroundColor: Colors.primary,
