@@ -1,51 +1,27 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import {
 	StyleSheet,
 	View,
 	Text,
-	ActivityIndicator,
-	Button,
+	TouchableOpacity,
+	ScrollView,
+	Pressable,
 } from "react-native";
 import { useRouter } from "expo-router";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
-import { logoutUser, removeToken } from "@/lib/features/auth/auth-slice";
-
-type ProfileData = {
-	name: string;
-	email: string;
-	phone: string;
-	date: Date;
-	vocabulary: { vocab: string; count: number }[];
-};
+import { logoutUser } from "@/lib/features/auth/auth-slice";
+import { RootState } from "@/lib/store";
+import { Colors } from "@/constants/colors";
 
 const ProfileScreen = () => {
-	const [userData, setUserData] = useState<ProfileData>();
-	const [loading, setLoading] = useState(true);
 	const router = useRouter();
 	const dispatch = useAppDispatch();
 	const { token } = useAppSelector((state) => state.auth);
-
-	useEffect(() => {
-		// Simulate an API call with a timeout
-		setTimeout(() => {
-			const mockData = {
-				name: "Johny",
-				email: "Johny123@gmail.com",
-				phone: "0979533045",
-				date: new Date(),
-				vocabulary: [
-					{ vocab: "1234567890abcdef12345678", count: 10 },
-					{ vocab: "abcdef1234567890abcdef12", count: 5 },
-				],
-			};
-			setUserData(mockData);
-			setLoading(false);
-		}, 1000); // Simulate a 1-second delay
-	}, []);
+	const user = useAppSelector((state: RootState) => state.user);
 
 	useEffect(() => {
 		if (!token) {
-			router.replace("/"); // Navigate to the root of the application when token is cleared
+			router.replace("/");
 		}
 	}, [token]);
 
@@ -54,68 +30,101 @@ const ProfileScreen = () => {
 		dispatch(logoutUser());
 	};
 
-	if (loading) {
+	if (!user) {
 		return (
 			<View style={styles.container}>
-				<ActivityIndicator size="large" color="#0000ff" />
-			</View>
-		);
-	}
-
-	if (!userData) {
-		return (
-			<View style={styles.container}>
-				<Text>No user data available</Text>
+				<Text style={styles.noDataText}>No user data available</Text>
 			</View>
 		);
 	}
 
 	return (
-		<View style={styles.container}>
-			<Text style={styles.label}>Name:</Text>
-			<Text style={styles.value}>{userData.name}</Text>
+		<ScrollView contentContainerStyle={styles.container}>
+			<View style={styles.profileSection}>
+				<Text style={styles.label}>Name:</Text>
+				<Text style={styles.value}>{user.name}</Text>
+			</View>
 
-			<Text style={styles.label}>Email:</Text>
-			<Text style={styles.value}>{userData.email}</Text>
+			<View style={styles.profileSection}>
+				<Text style={styles.label}>Email:</Text>
+				<Text style={styles.value}>{user.email}</Text>
+			</View>
 
-			<Text style={styles.label}>Phone:</Text>
-			<Text style={styles.value}>{userData.phone}</Text>
+			<View style={styles.profileSection}>
+				<Text style={styles.label}>Phone:</Text>
+				<Text style={styles.value}>{user.phone}</Text>
+			</View>
 
-			<Text style={styles.label}>Date:</Text>
-			<Text style={styles.value}>
-				{new Date(userData.date).toLocaleDateString()}
-			</Text>
+			<View style={styles.profileSection}>
+				<Text style={styles.label}>Date:</Text>
+				<Text style={styles.value}>
+					{new Date(user.date).toLocaleDateString()}
+				</Text>
+			</View>
 
-			<Text style={styles.label}>Vocabulary:</Text>
-			{userData.vocabulary.map((vocabItem, index) => (
-				<View key={index} style={styles.vocabItem}>
-					<Text style={styles.value}>
-						Vocab ID: {vocabItem.vocab}
-					</Text>
-					<Text style={styles.value}>Count: {vocabItem.count}</Text>
-				</View>
-			))}
-
-			<Button title="Logout" onPress={handleLogout} />
-		</View>
+			<Pressable style={styles.button} onPress={handleLogout}>
+				<Text style={styles.buttonText}>Logout</Text>
+			</Pressable>
+		</ScrollView>
 	);
 };
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+		flexGrow: 1,
 		padding: 20,
+		backgroundColor: "#f8f9fa",
+	},
+	profileSection: {
+		marginBottom: 20,
+		padding: 15,
 		backgroundColor: "#fff",
+		borderRadius: 10,
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.1,
+		shadowRadius: 3.84,
+		elevation: 2,
 	},
 	label: {
 		fontWeight: "bold",
-		marginTop: 10,
+		fontSize: 16,
+		color: "#333",
+		marginBottom: 5,
 	},
 	value: {
-		marginBottom: 10,
+		fontSize: 16,
+		color: "#555",
 	},
-	vocabItem: {
-		marginBottom: 10,
+	noDataText: {
+		fontSize: 18,
+		color: "#999",
+		textAlign: "center",
+		marginTop: 20,
+	},
+	button: {
+		marginTop: 30,
+		backgroundColor: Colors.primary,
+		paddingVertical: 15,
+		paddingHorizontal: 20,
+		borderRadius: 25,
+		alignItems: "center",
+		shadowColor: "#000",
+		shadowOffset: {
+			width: 0,
+			height: 2,
+		},
+		shadowOpacity: 0.25,
+		shadowRadius: 3.84,
+		elevation: 5,
+	},
+	buttonText: {
+		color: "#fff",
+		fontWeight: "bold",
+		fontSize: 16,
 	},
 });
 

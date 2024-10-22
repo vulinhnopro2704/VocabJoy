@@ -1,21 +1,29 @@
 import { configureStore } from "@reduxjs/toolkit";
-import counterReducer from "./features/counter/counter-slice";
+import userReducer from "./features/auth/user-slice";
 import { apiSlice } from "./features/api/api-slice";
 import { wordApi } from "./features/api/api-search_word";
 import authReducer, { loadToken } from "./features/auth/auth-slice";
+import { apiLessonSlice } from "./features/api/api-lesson-slice";
+import { apiUserSlice } from "./features/api/api-user-slice";
 
 export const makeStore = () => {
 	const store = configureStore({
 		reducer: {
-			counter: counterReducer,
+			user: userReducer,
 			[apiSlice.reducerPath]: apiSlice.reducer,
+			[apiUserSlice.reducerPath]: apiUserSlice.reducer,
 			[wordApi.reducerPath]: wordApi.reducer,
+			[apiLessonSlice.reducerPath]: apiLessonSlice.reducer,
 			auth: authReducer,
 		},
 		middleware: (getDefaultMiddleware) =>
 			getDefaultMiddleware()
-			.concat(apiSlice.middleware)
-			.concat(wordApi.middleware),
+				.concat(
+					apiSlice.middleware,
+					apiLessonSlice.middleware,
+					apiUserSlice.middleware
+				)
+				.concat(wordApi.middleware),
 	});
 
 	// Load token when app starts
