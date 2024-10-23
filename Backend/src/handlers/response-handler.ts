@@ -1,6 +1,7 @@
 import HttpStatusCodes from "http-status-codes";
 import { Response } from "express";
 
+
 const responseWithData = (
     res: Response,
     statusCode: number,
@@ -8,7 +9,6 @@ const responseWithData = (
     message: string,
     success: boolean
 ) => res.status(statusCode).json({success, data, message, statusCode });
- 
 
 const responseNoData = (
     res: Response,
@@ -21,7 +21,7 @@ export const success = (
     res: Response,
     data: object | Array<object>,
     message: string
-) => responseWithData(res, HttpStatusCodes.ACCEPTED, data, message, true);
+) => responseWithData(res, HttpStatusCodes.OK, data, message, true);
 
 export const created = (
     res: Response,
@@ -52,4 +52,4 @@ const responseHandle = {
     created,
     success
 }
-export default responseHandle
+export default responseHandle       

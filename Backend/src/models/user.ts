@@ -1,6 +1,4 @@
 import { Schema,Model,model, Types } from "mongoose";
-import { type } from "os";
-
 
 interface user {
     isDeleted: boolean
@@ -14,7 +12,7 @@ interface user {
       otpExp: Date;
     },
     vocabulary: {
-      vocabulary: Types.ObjectId
+      vocab: String
       count: number
     }[]
   }
@@ -34,7 +32,10 @@ interface user {
       unique: true,
     },
     account: {
-      password: { type: String, required: true },
+      password: {
+        type: String,
+        required: true
+      },
       otp: {
         type: String,
         default: null,
@@ -60,8 +61,7 @@ interface user {
             },
           ],
           default: [],
-    },
-   
+        },
   });
 
 const User:Model<user> = model<user>('user',userSchema)

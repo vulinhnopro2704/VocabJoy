@@ -7,6 +7,8 @@ import {
 	Image,
 	View,
 	Pressable,
+	KeyboardAvoidingView,
+	Platform,
 } from "react-native";
 import LogoWithName from "@/components/logo-with-name";
 import LoginForm from "@/components/form/login-form";
@@ -26,7 +28,12 @@ const LoginScreen = () => {
 	}, [token]);
 
 	return (
+		<KeyboardAvoidingView
+		behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+		style={styles.container}
+	  >
 		<SafeAreaView style={styles.container}>
+			
 			<ScrollView contentContainerStyle={styles.scrollContainer}>
 				<Image
 					source={require("../assets/images/Pattern.png")}
@@ -67,6 +74,7 @@ const LoginScreen = () => {
 				</View>
 			</ScrollView>
 		</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

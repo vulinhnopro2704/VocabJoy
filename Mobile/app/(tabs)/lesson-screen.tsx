@@ -1,90 +1,40 @@
-import { StyleSheet, FlatList, View } from "react-native";
+import {
+	StyleSheet,
+	FlatList,
+	View,
+	Text,
+	ActivityIndicator,
+} from "react-native";
 import React from "react";
 import LessonCard from "@/components/lesson-card";
-
-const lessons = [
-	{
-		title: "Lesson 1",
-		description: "Introduction to React Native",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 2",
-		description: "Understanding Components",
-		hasOpenBefore: false,
-	},
-	{
-		title: "Lesson 3",
-		description: "State and Props",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 4",
-		description: "Styling in React Native",
-		hasOpenBefore: false,
-	},
-	{
-		title: "Lesson 5",
-		description: "Handling User Input",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 6",
-		description: "Navigation in React Native",
-		hasOpenBefore: false,
-	},
-	{
-		title: "Lesson 7",
-		description: "Networking and API Calls",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 8",
-		description: "Using Redux for State Management",
-		hasOpenBefore: false,
-	},
-	{
-		title: "Lesson 9",
-		description: "Animations in React Native",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 10",
-		description: "Testing React Native Apps",
-		hasOpenBefore: false,
-	},
-	{
-		title: "Lesson 11",
-		description: "Deploying React Native Apps",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 12",
-		description: "Performance Optimization",
-		hasOpenBefore: false,
-	},
-	{
-		title: "Lesson 13",
-		description: "Using Native Modules",
-		hasOpenBefore: true,
-	},
-	{
-		title: "Lesson 14",
-		description: "Accessibility in React Native",
-		hasOpenBefore: false,
-	},
-];
+import {
+	Lesson,
+	useGetAllLessonsQuery,
+} from "@/lib/features/api/api-lesson-slice";
 
 export default function LessonScreen() {
+	const { data: response, error, isLoading } = useGetAllLessonsQuery();
+	if (isLoading) {
+		return (
+			<View style={styles.container}>
+				<ActivityIndicator size="large" color="#0000ff" />
+			</View>
+		);
+	}
+	if (error) {
+		return <Text>Error: {error + ""}</Text>;
+	}
 	return (
 		<FlatList
-			data={lessons}
+			data={response?.data}
 			keyExtractor={(item, index) => index.toString()}
-			renderItem={({ item }) => (
+			renderItem={({ item, index }) => (
 				<LessonCard
-					title={item.title}
+					title={item.name}
 					description={item.description}
-					hasOpenBefore={item.hasOpenBefore}
+					image={item.image}
+					key={index}
+					hasOpenBefore={false}
 				/>
 			)}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
@@ -96,6 +46,7 @@ export default function LessonScreen() {
 const styles = StyleSheet.create({
 	container: {
 		padding: 20,
+		flexGrow: 1,
 	},
 	separator: {
 		height: 10,

@@ -4,7 +4,7 @@ import User from "../models/user";
 
 export const getUserByEmail = async (email: string) => {
 	try {
-		return await User.findOne({ email: email }).select("-isDeleted -_id");
+		return await User.findOne({ email: email }).select("-isDeleted");
 	} catch (error) {
 		throw new Error("fail to get user" + error);
 	}

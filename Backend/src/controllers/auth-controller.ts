@@ -2,7 +2,6 @@ import { Request, Response } from "express";
 import responseHandle from "../handlers/response-handler";
 import { createNewUser, getUserByEmail } from "../services/auth-service";
 import { generateToken } from "../helpers/jwt-token";
-import { comparePassword } from "../helpers/hash-password";
 import user from "../interface/user";
 import bcrypt from "bcryptjs";
 
@@ -23,7 +22,7 @@ export const login = async (req: Request, res: Response) => {
 		} else {
 			const token: string = generateToken({
 				name: user.name,
-				email: email,
+				userId :user._id,
 			});
 			return responseHandle.success(
 				res,
