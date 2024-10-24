@@ -12,9 +12,11 @@ import { Toast } from "react-native-toast-message/lib/src/Toast";
 import LoadingIcon from "../loadingicon";
 import { Vocab } from "@/data-types/vocabulary";
 import { playSound } from "@/utils/play-sound";
+import { useState } from "react";
 
 export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
-	var Sound: Audio.Sound;
+	const [sound, setSound] = useState<Audio.Sound>();
+
 	const [saveVocabulary, { error: errorSave, isLoading: loadingSave }] =
 		useSaveVocabularyMutation();
 	const {
@@ -34,7 +36,14 @@ export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
 	] = useSaveVocabForUserMutation();
 
 	const handlePlaySound = async () => {
-		Sound = await playSound(vocab.audio!);
+		if(vocab.audio){
+		const { sound } = await Audio.Sound.createAsync(
+			{ uri:vocab.audio},
+		  );
+		await sound.setRateAsync(1, true);
+		setSound(sound)
+		await sound.playAsync()
+	}
 	};
 
 	const saveVocab = async () => {
@@ -43,7 +52,6 @@ export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
 			var vocabId;
 			if (!vocabFind) {
 				const newVocab = await saveVocabulary(vocab).unwrap();
-
 				vocabId = newVocab.data._id;
 			} else vocabId = vocabFind.data._id;
 
@@ -80,7 +88,7 @@ export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
 				<Text style={{ color: "red", fontSize: 16 }}>US</Text>
 				<TouchableOpacity
 					onPress={() => {
-						if (vocab.audio) handlePlaySound();
+						 handlePlaySound();
 					}}
 				>
 					<View style={styles.button}>

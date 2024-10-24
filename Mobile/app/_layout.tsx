@@ -44,6 +44,7 @@ export default function RootLayout() {
 	return (
 		<StoreProvider>
 			<Stack
+			
 				screenOptions={{
 					header: () => <Header />,
 					headerStyle: {
@@ -59,6 +60,10 @@ export default function RootLayout() {
 				<Stack.Screen options={{ headerShown: false }} name="index" />
 				<Stack.Screen
 					name="test-screen"
+					options={{ headerShown: false }}
+				/>
+				<Stack.Screen
+					name="study-screen"
 					options={{ headerShown: false }}
 				/>
 			</Stack>

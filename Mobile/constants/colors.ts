@@ -10,7 +10,8 @@ export const Colors = {
 	red: "#F64F59",
 	purple: "#C471ED",
 	blue: "#12C2E9",
-
+	green:"#33CC00",
+	dark_blue:"#0099CC",
 	// Box-shadow colors
 	primary_shadow: "#005BB5",
 	primary_text_shadow: "#3A5FA1",

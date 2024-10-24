@@ -1,18 +1,11 @@
-import React, { useState, useEffect } from "react";
-import {
-	View,
-	Text,
-	SafeAreaView,
-	StyleSheet,
-	TextInput,
-	Image,
-	TouchableOpacity,
-} from "react-native";
-import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import { Word } from "@/components/form/word-form";
-import { useWordQuery } from "@/lib/features/api/api-search_word";
+import React, { useState,useEffect} from "react"
+import { View ,Text, SafeAreaView, ScrollView,StyleSheet, TextInput,Image, TouchableOpacity} from "react-native"
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+import {Word} from "@/components/form/word-form";
+import {useWordQuery } from "@/lib/features/api/api-search_word";
 import Toast from "react-native-toast-message";
 import LoadingIcon from "@/components/loadingicon";
+import {translate} from '@vitalets/google-translate-api'
 import { useTranslateToVieQuery } from "@/lib/features/api/api-slice";
 import { Vocab } from "@/data-types/vocabulary";
 
