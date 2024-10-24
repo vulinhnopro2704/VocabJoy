@@ -2,6 +2,7 @@ import { BACKEND_URL } from "@/constants/backend";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Lesson {
+	_id:string;
 	name: string;
 	description: string;
 	meaning: string;
@@ -22,7 +23,10 @@ export const apiLessonSlice = createApi({
 		getAllLessons: builder.query<ApiGetAllLessonsResponse, void>({
 			query: () => "/",
 		}),
+		getVocabLessons: builder.query({
+			query: (idLesson) => `/${idLesson}/randomVocab`,
+		}),
 	}),
 });
 
-export const { useGetAllLessonsQuery } = apiLessonSlice;
+export const { useGetAllLessonsQuery,useGetVocabLessonsQuery } = apiLessonSlice;
