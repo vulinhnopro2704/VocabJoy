@@ -64,174 +64,170 @@ export const saveWordForUserController = async (
 	}
 };
 
-export const getIdByTokenController = async (
-	req: Request,
-	res: Response,
-	next: NextFunction
-) => {
-	try {
-		const authenHeader: string = req.headers.authorization || "";
-		if (!authenHeader) return responseHandle.unauthorize(res);
-		const token: string = authenHeader.trim().split(" ")[1] || "";
-		if (!token) {
-			throw new HttpException(400, "Cannot save Word");
-		}
-		const payload: any = jwtDecode(token);
-		responseHandle.success(
-			res,
-			{ _id: payload.userId },
-			"Get user ID success"
-		);
-	} catch (error) {
-		next(error);
-	}
-};
+export const getIdByTokenController = async (req:Request,res:Response,next:NextFunction)=>{
+    try {
+        const authenHeader:string = req.headers.authorization || ""
+        if(!authenHeader)
+            return responseHandle.unauthorize(res)
+        const token:string = authenHeader.trim().split(" ")[1] || ""
+        if(!token)
+        {
+            throw new HttpException(400,"Cannot save Word")
+        }
+        const payload:any = jwtDecode(token)
+        responseHandle.success(res,{_id: payload.userId},"Get user ID success")
+        
+    } catch (error) {
+        next(error)
+    }
 
-export const getAllUser = async (req, res) => {
-	try {
-		const user = await User.find().select("name email phone vocabulary");
-		return responseHandle.success(res, user, "All User");
-	} catch (err) {
-		return responseHandle.badRequest(res, "Failed");
-	}
-};
+}
 
-export const getDiaryUser = async (req, res) => {
-	try {
-		const user = await User.findById(req.params.id);
-		if (user == null) {
-			return responseHandle.badRequest(res, "Can't find user");
-		}
+export const getAllUser =  async (req,res) => {
+    try{
+        const user = await User.find().select("name email phone vocabulary");
+        return responseHandle.success(res, user, "All User");
+    }catch(err){
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
 
-		let sortedVocab = user.vocabulary.sort((a, b) => a.count - b.count);
-		if (user.vocabulary.length > 20) {
-			const randomLimit = Math.floor(Math.random() * (20 - 15 + 1)) + 15;
-			sortedVocab = sortedVocab.slice(0, randomLimit);
-		}
+export const getDiaryUser = async(req,res) => {
+    try{
+        const user = await User.findById(req.params.id);
+        if(user == null)
+        {
+            return responseHandle.badRequest(res, "Can't find user");
+        }
 
-		praticeVocab = sortedVocab;
+        var sortedVocab = user.vocabulary.sort((a, b) => a.count - b.count);
+        if(user.vocabulary.length > 30)
+        {
+            const randomLimit = Math.floor(Math.random() * (30 - 20 + 1)) + 20;
+            sortedVocab = sortedVocab.slice(0, randomLimit)
+        }
 
-		let le1 = 0,
-			le2 = 0,
-			le3 = 0,
-			le4 = 0,
-			le5 = 0;
-		for (let i = 0; i < user.vocabulary.length; i++) {
-			switch (user.vocabulary[i].count) {
-				case 1:
-					le1++;
-					break;
-				case 2:
-					le2++;
-					break;
-				case 3:
-					le3++;
-					break;
-				case 4:
-					le4++;
-					break;
-				case 5:
-					le5++;
-					break;
-				default:
-					break;
-			}
-		}
-		const levels = {
-			level1: le1,
-			level2: le2,
-			level3: le3,
-			level4: le4,
-			level5: le5,
-		};
+        praticeVocab = sortedVocab;
 
-		const data = {
-			total: user.vocabulary.length,
-			levels: levels,
-			practice: sortedVocab.length,
-		};
+        var le1 = 0, le2 = 0, le3 = 0, le4 = 0, le5 = 0;
+        for(let i = 0; i < user.vocabulary.length; i++) {
+            switch (user.vocabulary[i].count) {
+                case 1:
+                    le1++;
+                    break;
+                case 2:
+                    le2++;
+                    break;
+                case 3:
+                    le3++;
+                    break;
+                case 4:
+                    le4++;
+                    break;
+                case 5:
+                    le5++;
+                    break;
+                default:
+                    break;
+            }
 
-		return responseHandle.success(res, data, "User");
-	} catch (err) {
-		return responseHandle.badRequest(res, "Failed");
-	}
-};
+        }
+        const levels = {
+            level1: le1,
+            level2: le2,
+            level3: le3,
+            level4: le4,
+            level5: le5,
+        };
 
-export const addVocabToUserDiary = async (req, res) => {
-	try {
-		const user = await User.findById(req.params.userId);
-		const vocab = await Vocab.findById(req.params.vocabId);
-		if (!user) {
-			return responseHandle.notFound(res, "Can't find user");
-		}
 
-		let vocabIndex = -1;
-		for (let i = 0; i < user.vocabulary.length; i++) {
-			if (user.vocabulary[i].vocab == req.params.vocabId) {
-				vocabIndex = i;
-				break;
-			}
-		}
-		if (vocabIndex !== -1) {
-			if (user.vocabulary[vocabIndex].count < 5) {
-				user.vocabulary[vocabIndex].count += 1;
-			} else {
-				return responseHandle.badRequest(
-					res,
-					"Vocab count cannot exceed 5"
-				);
-			}
-		} else {
-			user.vocabulary.push({
-				vocab: req.params.vocabId,
-				count: 1,
-			});
-		}
-		const saveUser = await user.save();
-		return responseHandle.success(
-			res,
-			saveUser,
-			"Add vocab to diary succesfully"
-		);
-	} catch (err) {
-		console.log(err);
-		return responseHandle.badRequest(res, "Failed");
-	}
-};
+        const data = {
+            total: user.vocabulary.length,
+            levels: levels,
+            practice: sortedVocab.length,
+        };
 
-export const getVocabToPractice = async (req, res) => {
-	try {
-		const mapPracticeVocab = await Promise.all(
-			praticeVocab.map(async (entry) => {
-				const vocabDetail = await f_getVocabById(entry.vocab);
 
-				if (vocabDetail) {
-					return {
-						_id: vocabDetail._id,
-						name: vocabDetail.name,
-						pronunciation: vocabDetail.pronunciation,
-						type: vocabDetail.type,
-						image_link: vocabDetail.image_link,
-						meaning: vocabDetail.meaning || "",
-						description: vocabDetail.description,
-						audio: vocabDetail.audio || "",
-						example: vocabDetail.example || "",
-						__v: vocabDetail.__v,
-					};
-				}
-				return null;
-			})
-		);
+        return responseHandle.success(res, data, "User");
+    }catch(err)
+    {
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
 
-		const filterVocab = mapPracticeVocab.filter((vocab) => vocab != null);
-		const data = {
-			praticeVocab: filterVocab,
-			count: filterVocab.length,
-		};
+export const addVocabToUserDiary =  async(req,res) => {
+    try{
+        const user = await User.findById(req.params.userId);
+        const vocab = await Vocab.findById(req.params.vocabId);
+        if(!user) {
+            return responseHandle.notFound(res, "Can't find user");
+        }
 
-		return responseHandle.success(res, data, "Practice vocab");
-	} catch (err) {
-		console.log(err);
-		return responseHandle.badRequest(res, "Failed");
-	}
-};
+        var vocabIndex = -1;
+        for(let i = 0; i < user.vocabulary.length; i++) {
+            if(user.vocabulary[i].vocab == req.params.vocabId) {
+                vocabIndex = i;
+                break;
+            }
+        }
+        if(vocabIndex !== -1){
+            if(user.vocabulary[vocabIndex].count < 5)
+            {
+                user.vocabulary[vocabIndex].count += 1;
+            }
+            else{
+                return responseHandle.badRequest(res, "Vocab count cannot exceed 5");
+            }
+        }else
+        {
+            user.vocabulary.push({
+                vocab: req.params.vocabId,
+                count : 1
+            });
+        }
+        const saveUser = await user.save();
+        return responseHandle.success(res, saveUser, "Add vocab to diary succesfully");
+
+    }catch(err)
+    {
+        console.log(err);
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+export const getVocabToPractice = async(req, res) => {
+    try {
+        const mapPracticeVocab = await Promise.all(
+            praticeVocab.map(async (entry) => {
+                const vocabDetail = await f_getVocabById(entry.vocab);
+                
+                if(vocabDetail) {
+                    return {
+                        _id: vocabDetail._id,
+                        name: vocabDetail.name,
+                        pronunciation: vocabDetail.pronunciation,
+                        type: vocabDetail.type,
+                        image_link: vocabDetail.image_link,
+                        meaning: vocabDetail.meaning || "",
+                        description: vocabDetail.description,
+                        audio: vocabDetail.audio || "",
+                        example: vocabDetail.example || "",
+                        __v: vocabDetail.__v
+                    }
+                }
+                return null;
+            })
+        )
+
+        const filterVocab = mapPracticeVocab.filter((vocab) => vocab!= null);
+        const data = {
+            praticeVocab : filterVocab,
+            count: filterVocab.length
+        }
+
+        return responseHandle.success(res, data, "Practice vocab");
+    }catch(err) {
+        console.log(err);
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
