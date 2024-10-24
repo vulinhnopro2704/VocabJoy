@@ -69,6 +69,11 @@ export const apiSlice = createApi({
 				url: `/vocabulary/get-mean?word=${word}`,
 			}),
 		}),
+		get10Vocabulary: builder.query({
+			query: () => ({
+				url: `/vocabulary`,
+			}),
+		}),
 	}),
 });
 
@@ -80,4 +85,5 @@ export const {
 	useGetUserIdQuery,
 	useSaveVocabForUserMutation,
 	useTranslateToVieQuery,
+	useGet10VocabularyQuery
 } = apiSlice;

@@ -85,8 +85,8 @@ export default function LoginForm() {
 							placeholder="Nhập mật khẩu của bạn"
 							secureTextEntry
 							onChangeText={handleChange("password")}
-							onBlur={handleBlur("password")}
 							value={values.password}
+							
 						/>
 						{errors.password && (
 							<Text style={styles.errorText}>

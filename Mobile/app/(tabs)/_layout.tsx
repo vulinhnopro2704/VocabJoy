@@ -2,7 +2,7 @@ import { Tabs } from "expo-router";
 import React from "react";
 
 import { TabBarIcon } from "@/components/navigation/tab-bar-icon";
-
+import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 export default function TabLayout() {
 	return (
 		<Tabs
@@ -20,6 +20,7 @@ export default function TabLayout() {
 							color={color}
 						/>
 					),
+					headerShown: false,
 				}}
 			/>
 
@@ -49,7 +50,7 @@ export default function TabLayout() {
 				}}
 			/>
 			<Tabs.Screen
-				name="search"
+				name="search-screen"
 				options={{
 					title: "Search",
 					tabBarIcon: ({ color, focused }) => (
