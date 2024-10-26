@@ -14,9 +14,11 @@ import HomeChart from "@/components/home-chart";
 import { useGetUserVocabsHomeQuery } from "@/lib/features/api/api-user-slice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
+import { router, useRouter } from "expo-router";
 
 export default function HomeScreen() {
 	const userId = useSelector((state: RootState) => state.auth.userId);
+	const route = useRouter();
 	const { data, isLoading, isError, error } = useGetUserVocabsHomeQuery(
 		userId!
 	);
@@ -50,7 +52,12 @@ export default function HomeScreen() {
 				<Text style={[{ fontSize: 18 }, styles.centerText]}>
 					Chuẩn bị ôn tập: {data?.data.practice} từ
 				</Text>
-				<Pressable style={styles.button}>
+				<Pressable
+					onPress={() => {
+						router.push("/test-screen");
+					}}
+					style={styles.button}
+				>
 					<Text
 						style={[
 							{ color: "#fff" },

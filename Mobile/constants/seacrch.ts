@@ -1,2 +1,2 @@
-
-export const SEARCH_URL:string = "https://api.dictionaryapi.dev/api/v2/entries/en"
+export const SEARCH_URL: string =
+	"https://api.dictionaryapi.dev/api/v2/entries/en";
