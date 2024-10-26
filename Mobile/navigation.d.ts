@@ -11,6 +11,7 @@ export type RootStackParamList = {
 	"(tabs)/home-screen": undefined;
 	"(tabs)/lesson-screen": undefined;
 	"login-screen": undefined;
+	"test-screen": undefined;
 };
 
 export type ProfileScreenProps = StackScreenProps<
@@ -31,4 +32,9 @@ export type LessonScreenProps = StackScreenProps<
 export type LoginScreenProps = StackScreenProps<
 	RootStackParamList,
 	"login-screen"
+>;
+
+export type TestScreenProps = StackScreenProps<
+	RootStackParamList,
+	"test-screen"
 >;
