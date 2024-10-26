@@ -39,7 +39,7 @@ export default function RootLayout() {
 
 	if (!loaded) {
 		return null;
-		}
+	}
 
 	return (
 		<StoreProvider>
@@ -57,6 +57,10 @@ export default function RootLayout() {
 				initialRouteName="index"
 			>
 				<Stack.Screen options={{ headerShown: false }} name="index" />
+				<Stack.Screen
+					name="test-screen"
+					options={{ headerShown: false }}
+				/>
 			</Stack>
 			<Toast />
 		</StoreProvider>

@@ -30,7 +30,6 @@ const authSlice = createSlice({
 		setToken: (state, action: PayloadAction<string>) => {
 			state.token = action.payload;
 			state.isAuthenticated = true;
-			alert(action.payload);
 			const decoded: DecodedToken = jwtDecode<DecodedToken>(
 				action.payload
 			);

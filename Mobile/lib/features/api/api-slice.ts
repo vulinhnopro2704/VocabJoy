@@ -1,7 +1,7 @@
 import { BACKEND_URL } from "@/constants/backend";
+import { Vocab } from "@/data-types/vocabulary";
 import { RootState } from "@/lib/store";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import {BaseQueryArg} from "@reduxjs/toolkit/src/query/baseQueryTypes";
 
 const baseQuery = fetchBaseQuery({
 	baseUrl: BACKEND_URL,
@@ -41,45 +41,43 @@ export const apiSlice = createApi({
 			}),
 		}),
 		saveVocabulary: builder.mutation({
-			query:(newVocab)=>({
-				url:"/vocabulary/create-vocabulary",
-				method:"POST",
-				body:newVocab
-
-			})
+			query: (newVocab: Vocab) => ({
+				url: "/vocabulary/create-vocabulary",
+				method: "POST",
+				body: newVocab,
+			}),
 		}),
 		saveVocabForUser: builder.mutation({
-			query:({userId,vocabId})=>({
-				url:`/user/save-word-for-user`,
-				method:"POST",
-				body:{userId,vocabId}
+			query: ({ userId, vocabId }) => ({
+				url: `/user/save-word-for-user`,
+				method: "POST",
+				body: { userId, vocabId },
 			}),
 		}),
 		getVocabulary: builder.query({
-			query:(word)=>({
-				url:`/vocabulary/find-vocabulary?word=${word}`,
+			query: (word) => ({
+				url: `/vocabulary/find-vocabulary?word=${word}`,
 			}),
 		}),
 		getUserId: builder.query({
-			query:()=>({
-				url:`/user/get-user-id`,
+			query: () => ({
+				url: `/user/get-user-id`,
 			}),
 		}),
 		translateToVie: builder.query({
-			query:(word)=>({
-				url:`/vocabulary/get-mean?word=${word}`
-			})
+			query: (word) => ({
+				url: `/vocabulary/get-mean?word=${word}`,
+			}),
 		}),
-
 	}),
 });
 
 export const {
 	useLoginMutation,
-	useSignUpMutation ,
+	useSignUpMutation,
 	useSaveVocabularyMutation,
 	useGetVocabularyQuery,
 	useGetUserIdQuery,
 	useSaveVocabForUserMutation,
-	useTranslateToVieQuery
+	useTranslateToVieQuery,
 } = apiSlice;

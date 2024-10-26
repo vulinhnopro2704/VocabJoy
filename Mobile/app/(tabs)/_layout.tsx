@@ -35,6 +35,7 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+
 			<Tabs.Screen
 				name="profile-screen"
 				options={{
@@ -47,7 +48,20 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="search"
+				options={{
+					title: "Search",
+					tabBarIcon: ({ color, focused }) => (
+						<TabBarIcon
+							name={focused ? "book" : "book-outline"}
+							color={color}
+						/>
+					),
+				}}
+			/>
 		</Tabs>
 	);
 }
+
 //https://www.google.com/search?q=Word+Wrap+when+Web+develop&oq=Word+Wrap+when+Web+develop&gs_lcrp=EgZjaHJvbWUyBggAEEUYOTIJCAEQIRgKGKABMgkIAhAhGAoYoAEyCQgDECEYChigATIHCAQQIRiPAtIBCTExNzM1ajBqNKgCALACAA&sourceid=chrome&ie=UTF-8
