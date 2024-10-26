@@ -8,6 +8,7 @@ interface Vocab{
     meaning:string,
     description:string,
     audio:string
+    example:string
 }
 
 
@@ -30,14 +31,19 @@ const vocabSchema: Schema<Vocab> =  new Schema({
         type:String,
         default:""
     },
+    meaning: {
+        type:String,
+    },
     description:{
         type:String,
         required:true
     },
     audio:{
         type:String
+    },
+    example: {
+        type:String
     }
-
 })
 
 
