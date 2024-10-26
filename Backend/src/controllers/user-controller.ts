@@ -5,7 +5,10 @@ import { HttpException } from "../handlers/http_exception-handler"
 import {jwtDecode} from "jwt-decode"
 import User from "../models/user";
 import Vocab from "../models/vocab";
+import { f_getVocabById } from "./vocab-controller";
 
+
+let praticeVocab;
 
 export const getAllUserController= async(req:Request,res:Response,next:NextFunction)=>{
     try {
@@ -92,6 +95,8 @@ export const getDiaryUser = async(req,res) => {
             sortedVocab = sortedVocab.slice(0, randomLimit)
         }
 
+        praticeVocab = sortedVocab;
+
         var le1 = 0, le2 = 0, le3 = 0, le4 = 0, le5 = 0;
         for(let i = 0; i < user.vocabulary.length; i++) {
             switch (user.vocabulary[i].count) {
@@ -173,6 +178,43 @@ export const addVocabToUserDiary =  async(req,res) => {
 
     }catch(err)
     {
+        console.log(err);
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+export const getVocabToPractice = async(req, res) => {
+    try {
+        const mapPracticeVocab = await Promise.all(
+            praticeVocab.map(async (entry) => {
+                const vocabDetail = await f_getVocabById(entry.vocab);
+                
+                if(vocabDetail) {
+                    return {
+                        _id: vocabDetail._id,
+                        name: vocabDetail.name,
+                        pronunciation: vocabDetail.pronunciation,
+                        type: vocabDetail.type,
+                        image_link: vocabDetail.image_link,
+                        meaning: vocabDetail.meaning || "",
+                        description: vocabDetail.description,
+                        audio: vocabDetail.audio || "",
+                        example: vocabDetail.example || "",
+                        __v: vocabDetail.__v
+                    }
+                }
+                return null;
+            })
+        )
+
+        const filterVocab = mapPracticeVocab.filter((vocab) => vocab!= null);
+        const data = {
+            praticeVocab : filterVocab,
+            count: filterVocab.length
+        }
+
+        return responseHandle.success(res, data, "Practice vocab");
+    }catch(err) {
         console.log(err);
         return responseHandle.badRequest(res, "Failed");
     }
