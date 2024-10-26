@@ -49,7 +49,15 @@ export const translateToVieController = async (req:Request,res:Response,next:Nex
 
 export const addVocab =  async(req,res) => {
     try{
-        const newVocab = new Vocab(req.body);
+        const {name, pronunciation, type}= req.body;
+        const existingVocab = await Vocab.findOne({name, pronunciation, type});
+
+        if(existingVocab)
+        {
+            return responseHandle.badRequest(res, "Vocab already exist");
+        }
+        
+        const newVocab = new Vocab(req.body);   
         const saveVocab = await newVocab.save();
         return responseHandle.success(res, saveVocab, "Success");
     }catch(err)
@@ -65,5 +73,34 @@ export const getAllVocab = async(req,res) => {
     }catch(err)
     {
         return responseHandle.badRequest(res, "Failed")
+    }
+}
+
+export async function f_getVocabById(vocabId) {
+    try {
+        const vocab = await Vocab.findById(vocabId);
+        if(!vocab)
+        {
+            return null;
+        }
+
+        return vocab;
+    }catch(err) {
+        console.log(err);
+    }
+}
+
+export const getVocabById = async(req, res) => {
+    try {
+        const vocab = await f_getVocabById(req.params.id);
+        if(!vocab)
+        {
+            return responseHandle.notFound(res, "Vocab not exist");
+        }
+
+        return responseHandle.success(res, vocab, "Success");
+
+    }catch(err) {
+        return responseHandle.badRequest(res, "Failed");
     }
 }

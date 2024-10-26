@@ -6,4 +6,5 @@ export default interface vocab{
     meaning:string,
     description:string,
     audio:string
+    example:string
 }
