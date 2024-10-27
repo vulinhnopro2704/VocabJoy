@@ -2,14 +2,14 @@ import React from "react";
 import { Text, View, StyleSheet } from "react-native";
 
 type Props = {
-	question: string;
+	question?: string;
 	content: string;
 	keyword: string;
 	variant: "variant1" | "variant2";
 };
 
 export default function Question({
-	question,
+	question = "Chọn từ thích hợp điền vào chỗ trống",
 	content,
 	keyword,
 	variant,

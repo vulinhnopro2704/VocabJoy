@@ -38,6 +38,7 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		justifyContent: "center",
 		width: "100%",
+		marginBottom: 10,
 	},
 	onPress: {
 		backgroundColor: "#007AFF",
