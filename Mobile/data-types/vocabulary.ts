@@ -1,12 +1,14 @@
 export type Vocab = {
-	name: string;
-	pronunciation: string;
-	type: string;
-	image_link: string;
-	meaning: string;
-	description: string;
-	audio: string;
-	example: string;
+	_id?: string;
+	name?: string;
+	pronunciation?: string;
+	type?: string;
+	image_link?: string;
+	meaning?: string;
+	description?: string;
+	audio?: string;
+	example?: string;
+	__v?: number;
 };
 
 // Define the type for the license object

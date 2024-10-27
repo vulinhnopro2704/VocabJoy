@@ -1,4 +1,5 @@
 import { BACKEND_URL } from "@/constants/backend";
+import { ApiResponseVocabForPractice } from "@/data-types/user";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Levels {
@@ -67,7 +68,18 @@ export const apiUserSlice = createApi({
 				params: { id: userId },
 			}),
 		}),
+		getVocabForPractice: builder.query<ApiResponseVocabForPractice, string>(
+			{
+				query: (userId) => ({
+					url: `${userId}/practice-vocab`,
+				}),
+			}
+		),
 	}),
 });
 
-export const { useGetUserVocabsHomeQuery } = apiUserSlice;
+export const {
+	useGetUserVocabsHomeQuery,
+	useGetUserInfoQuery,
+	useGetVocabForPracticeQuery,
+} = apiUserSlice;
