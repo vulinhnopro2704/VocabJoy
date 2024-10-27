@@ -2,8 +2,6 @@ import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { Audio } from "expo-av";
-import { useEffect, useState } from "react";
-import { Formik } from "formik";
 import {
 	useGetUserIdQuery,
 	useGetVocabularyQuery,
@@ -12,8 +10,8 @@ import {
 } from "@/lib/features/api/api-slice";
 import { Toast } from "react-native-toast-message/lib/src/Toast";
 import LoadingIcon from "../loadingicon";
-import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { Vocab } from "@/data-types/vocabulary";
+import { playSound } from "@/utils/play-sound";
 
 export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
 	var Sound: Audio.Sound;
@@ -35,11 +33,10 @@ export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
 		{ error: errorSaveVocabUser, isLoading: loadingSaveVocabUser },
 	] = useSaveVocabForUserMutation();
 
-	const playSound = async () => {
-		const { sound } = await Audio.Sound.createAsync({ uri: vocab.audio });
-		Sound = sound;
-		await sound.playAsync();
+	const handlePlaySound = async () => {
+		Sound = await playSound(vocab.audio!);
 	};
+
 	const saveVocab = async () => {
 		try {
 			refetch();
@@ -83,7 +80,7 @@ export const Word: React.FC<{ vocab: Vocab }> = ({ vocab }) => {
 				<Text style={{ color: "red", fontSize: 16 }}>US</Text>
 				<TouchableOpacity
 					onPress={() => {
-						if (vocab.audio) playSound();
+						if (vocab.audio) handlePlaySound();
 					}}
 				>
 					<View style={styles.button}>
