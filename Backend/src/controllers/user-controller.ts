@@ -223,7 +223,6 @@ export const getVocabToPractice = async(req, res) => {
 
 export const updateDiary = async(req, res) => {
     try {
-        console.log(req.params.id);
         const user = await User.findById(req.params.id);
 
         if(!user)
@@ -232,8 +231,6 @@ export const updateDiary = async(req, res) => {
         }
 
         const vocabData =  req.body;
-
-        console.log(vocabData);
 
         const vocabArray = vocabData.map(item => ({
             vocab: item.vocab,
@@ -257,4 +254,169 @@ export const updateDiary = async(req, res) => {
     }catch(err) {
         return responseHandle.badRequest(res, "Update Failed");
     } 
+}
+
+export const getDiary = async(req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if(!user) {
+            return responseHandle.notFound(res, "User not exist");
+        }
+
+        const diaryVocab = await Promise.all(
+            user.vocabulary.map(async (entry) => {
+                const vocabDetail = await f_getVocabById(entry.vocab);
+                
+                if(vocabDetail) {
+                    return {
+                        _id: vocabDetail._id,
+                        name: vocabDetail.name,
+                        pronunciation: vocabDetail.pronunciation,
+                        type: vocabDetail.type,
+                        image_link: vocabDetail.image_link,
+                        meaning: vocabDetail.meaning || "",
+                        description: vocabDetail.description,
+                        audio: vocabDetail.audio || "",
+                        example: vocabDetail.example || "",
+                        __v: vocabDetail.__v
+                    }
+                }
+                return null;
+            })
+        )
+
+        const filterVocab = diaryVocab.filter((vocab) => vocab!= null);
+        
+        const data = {
+            diary : filterVocab,
+            count: filterVocab.length
+        }
+
+        return responseHandle.success(res, data, "Success");
+
+    }catch(err) {
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+interface VocabularyEntry {
+    vocab: string;
+    count: number;
+    _id: string;
+}
+
+
+export const getVocabByLevel = async(req,res) => {
+    try {
+        const user = await User.findById(req.params.id);
+
+        if(!user) 
+        {
+            return responseHandle.notFound(res, "User not exist");
+        }
+
+        const groupVocab = user.vocabulary.reduce((acc : {[key: string]: VocabularyEntry[]} , item : VocabularyEntry) => {
+            const levelKey = `level ${item.count}`;
+            if(!acc[levelKey]) {
+                acc[levelKey] = [];
+            }
+            acc[levelKey].push(item);
+            return acc;
+        }, {});
+
+        const convertedVocab : { [level : string]: {count : number; vocabulary: any[]} } = {};
+
+        for(const [level, vocabArray] of Object.entries(groupVocab)) {
+            const vocabDetails = await Promise.all(
+                vocabArray.map(async (entry) => {
+                    const vocabDetail = await f_getVocabById(entry.vocab);
+                
+                    if(vocabDetail) {
+                        return {
+                            _id: vocabDetail._id,
+                            name: vocabDetail.name,
+                            pronunciation: vocabDetail.pronunciation,
+                            type: vocabDetail.type,
+                            image_link: vocabDetail.image_link,
+                            meaning: vocabDetail.meaning || "",
+                            description: vocabDetail.description,
+                            audio: vocabDetail.audio || "",
+                            example: vocabDetail.example || "",
+                            __v: vocabDetail.__v
+                        };
+                    }
+                    return null;
+                })
+            )
+            convertedVocab[level] = {
+                count: vocabDetails.filter((vocab) => vocab != null).length,
+                vocabulary: vocabDetails.filter((vocab) => vocab != null)
+            };
+        };
+
+        return responseHandle.success(res, convertedVocab, "Success");
+
+    }catch(err) {
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+export const getVocabByEachLevel = async (req,res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        
+        if(!user) {
+            return responseHandle.notFound(res, "User not exist");
+        }
+
+        const level = req.body.level;
+        
+        const listVocab = user.vocabulary.filter(x => x.count == level);
+        
+        let data;
+
+        if(!listVocab) 
+        {
+            data = {
+                count: 0,
+                vocabulary: listVocab
+            }
+            return responseHandle.success(res, data, "Success");
+        } 
+        
+        const convertedVocab = await Promise.all(
+            listVocab.map(async (entry) => {
+                const vocabDetail = await f_getVocabById(entry.vocab);
+                
+                if(vocabDetail) {
+                    return {
+                        _id: vocabDetail._id,
+                        name: vocabDetail.name,
+                        pronunciation: vocabDetail.pronunciation,
+                        type: vocabDetail.type,
+                        image_link: vocabDetail.image_link,
+                        meaning: vocabDetail.meaning || "",
+                        description: vocabDetail.description,
+                        audio: vocabDetail.audio || "",
+                        example: vocabDetail.example || "",
+                        __v: vocabDetail.__v
+                    }
+                }
+                return null;
+            })
+        )
+
+        const filterVocab = convertedVocab.filter((vocab) => vocab!= null);
+
+        data = {
+            count: filterVocab.length,
+            vocabulary: filterVocab
+        }
+
+        return responseHandle.success(res, data, "Success");
+
+    }catch(err) {
+        return responseHandle.badRequest(res, "Failed");
+    }
 }
