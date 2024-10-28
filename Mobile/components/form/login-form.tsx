@@ -85,6 +85,7 @@ export default function LoginForm() {
 							secureTextEntry
 							onChangeText={handleChange("password")}
 							value={values.password}
+							
 						/>
 						{errors.password && (
 							<Text style={styles.errorText}>
