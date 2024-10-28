@@ -143,6 +143,7 @@ export const getDiaryUser = async(req,res) => {
     }
 }
 
+
 export const addVocabToUserDiary =  async(req,res) => {
     try{
         const user = await User.findById(req.params.userId);
@@ -218,4 +219,42 @@ export const getVocabToPractice = async(req, res) => {
         console.log(err);
         return responseHandle.badRequest(res, "Failed");
     }
+}
+
+export const updateDiary = async(req, res) => {
+    try {
+        console.log(req.params.id);
+        const user = await User.findById(req.params.id);
+
+        if(!user)
+        {
+            return responseHandle.badRequest(res, "User not exist");
+        }
+
+        const vocabData =  req.body;
+
+        console.log(vocabData);
+
+        const vocabArray = vocabData.map(item => ({
+            vocab: item.vocab,
+            status: item.status
+        }));
+
+        console.log(vocabArray);
+
+        vocabArray.forEach(vocabItem => {
+            if(vocabItem.status) {
+                const userVocab = user.vocabulary.find(userItem => userItem.vocab == vocabItem.vocab);
+                if(userVocab) {
+                    userVocab.count = userVocab.count < 5 ? userVocab.count + 1 : 1;
+                }
+            }
+        });
+
+        const saveUser = await user.save();
+        
+        return responseHandle.success(res, saveUser, "Update success");
+    }catch(err) {
+        return responseHandle.badRequest(res, "Update Failed");
+    } 
 }
