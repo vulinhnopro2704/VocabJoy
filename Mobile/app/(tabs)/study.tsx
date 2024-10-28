@@ -1,6 +1,9 @@
-import GameForm from "@/components/form_game";
-import { useRef, useState } from "react";
-import { StyleSheet, View,Text, Image, Animated, TouchableOpacity } from "react-native";
+import GameForm from "@/components/form/form_game";
+import GameText from "@/components/form/form_text";
+import { useEffect, useRef, useState } from "react";
+import { StyleSheet, View,Text, Image, Animated, TouchableOpacity, TouchableHighlight, Button, Easing } from "react-native";
+import { Colors } from "../../constants/colors"
+import { Audio } from "expo-av";
 
 
 
@@ -10,18 +13,64 @@ import { StyleSheet, View,Text, Image, Animated, TouchableOpacity } from "react-
 export default function Study (){
     
     const yellowWidth = useRef(new Animated.Value(20)).current;
+    const rotateValue = useRef(new Animated.Value(0)).current;
     const[widthRoad,setWidthRoad] = useState(0)
-     
+    const [isFlipped, setIsFlipped] = useState(false);
+    const [components,SetComponents] = useState(true)
+    const rotateInterpolate = rotateValue.interpolate({
+        inputRange:[0,1],
+        outputRange:['0deg','180deg']
+    })
+    //bambutton
     function submit(){
         const x = (widthRoad/10) *10
         Animated.timing(yellowWidth, {
             toValue: x,
             duration: 500,
             useNativeDriver: false,
-          }).start();
+            easing:Easing.in(Easing.ease)
+          }).start()
 
-        
+
+
+        }
+        //phat am thanh lan dau vao
+    const [sound, setSound] = useState<Audio.Sound>();
+    const playSound = async(speed:number)=>{
+        console.log("ok")
+        const { sound } = await Audio.Sound.createAsync(
+          { uri:"https://api.dictionaryapi.dev/media/pronunciations/en/run-au.mp3"},
+        );
+        setSound(sound)
+        await sound.setRateAsync(speed, true);
+        await sound.playAsync();
+      }
+    useEffect(()=>{playSound(1)},[])
+
+    function rotate()
+
+    {
+        setIsFlipped(!isFlipped)
+        Animated.timing(rotateValue,{
+            toValue:isFlipped?0:1,
+            duration:1000,
+            useNativeDriver:true,
+        }).start(({ finished }) => {
+            console.log("zo")
+            rotateValue.addListener(({ value }) => {
+
+              if (value>0.5 )  SetComponents(false)
+              else if(value<0.5) SetComponents(true)
+
+            return
+            })
+        })
     }
+
+    const rotateStyle = {
+        transform: [{ rotateY: rotateInterpolate }],
+      };
+
     return (
         <View style={styles.container}>
             <View style={styles.header}>
@@ -45,17 +94,29 @@ export default function Study (){
                     </View>
                 </View>
             </View>
-            <View style={styles.body}>
-                      <GameForm></GameForm>
-            </View>
+
+            <TouchableOpacity style={{flex:6}}
+            onPress={rotate}>
+                <Animated.View style={[styles.body,rotateStyle]} >
+
+                        {components?<GameForm></GameForm>:<GameText></GameText>}
+
+                </Animated.View>
+            </TouchableOpacity>
+
             <View style={styles.button}>
                 <TouchableOpacity
                 onPress={submit}
                 >
                     <View style={styles.button_save}>   
-                        <Text style={{fontSize:14,color:"white",fontWeight:"600"}}>Save</Text>
+                        <Text style={{fontSize:14,color:"white",fontWeight:"600"}}>Tiếp tục</Text>
                     </View>
                 </TouchableOpacity>
+
+                <TouchableOpacity>
+                     <Text style={{color:"grey",textDecorationLine:"underline",fontWeight:600}}>Mình đã biết từ này</Text>
+                </TouchableOpacity>
+
             </View>
         </View>
     )
@@ -97,7 +158,8 @@ const styles= StyleSheet.create({
    
     button:{
         flex:1.5,
-        alignItems:"center"
+        alignItems:"center",
+        gap:20
     },
     header_road:{
         width:"80%",
@@ -132,17 +194,17 @@ const styles= StyleSheet.create({
     },
 
     button_save:{
-        width:200,
+        width:250,
         height:50,
         flexDirection:"row",
         alignItems:"center",
         justifyContent:"center",
         gap:2,
-        backgroundColor:"#2da23f",
+        backgroundColor:Colors.blue_shadow,
         borderRadius:20,
-        shadowColor: '#145a1d', 
-        shadowOffset: { width: 0, height: 4 }, 
-        shadowOpacity: 1, 
+        shadowColor: Colors.blue_shadow,
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.3,
         shadowRadius: 4, 
     },
 })
