@@ -22,7 +22,7 @@ export default function GameForm(){
             if(data=="a")
             {
                 console.log("adu")
-                return <Text style={styles.wordCore}>ahii </Text>
+                return <Text key={1} style={styles.wordCore}>ahii </Text>
             }return data+" "
         })
         
