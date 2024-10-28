@@ -228,12 +228,42 @@ export const getVocabToPractice = async(req, res) => {
             count: filterVocab.length
         }
 
-		return responseHandle.success(res, data, "Practice vocab");
-	} catch (err) {
-		console.log(err);
-		return responseHandle.badRequest(res, "Failed");
-	}
-};
+        return responseHandle.success(res, data, "Practice vocab");
+    }catch(err) {
+        console.log(err);
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+export const updateDiary = async(req, res) => {
+    try {
+        console.log(req.params.id);
+        const user = await User.findById(req.params.id);
+
+        if(!user)
+        {
+            return responseHandle.badRequest(res, "User not exist");
+        }
+
+        const vocabData =  req.body;
+
+        console.log(vocabData);
+
+        const vocabArray = vocabData.map(item => ({
+            vocab: item.vocab,
+            status: item.status
+        }));
+
+        console.log(vocabArray);
+
+        vocabArray.forEach(vocabItem => {
+            if(vocabItem.status) {
+                const userVocab = user.vocabulary.find(userItem => userItem.vocab == vocabItem.vocab);
+                if(userVocab) {
+                    userVocab.count = userVocab.count < 5 ? userVocab.count + 1 : 1;
+                }
+            }
+        });
 
 export const updateDiary = async (req, res) => {
 	try {
