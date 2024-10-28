@@ -64,33 +64,37 @@ export const saveWordForUserController = async (
 	}
 };
 
-export const getIdByTokenController = async (req:Request,res:Response,next:NextFunction)=>{
-    try {
-        const authenHeader:string = req.headers.authorization || ""
-        if(!authenHeader)
-            return responseHandle.unauthorize(res)
-        const token:string = authenHeader.trim().split(" ")[1] || ""
-        if(!token)
-        {
-            throw new HttpException(400,"Cannot save Word")
-        }
-        const payload:any = jwtDecode(token)
-        responseHandle.success(res,{_id: payload.userId},"Get user ID success")
-        
-    } catch (error) {
-        next(error)
-    }
+export const getIdByTokenController = async (
+	req: Request,
+	res: Response,
+	next: NextFunction
+) => {
+	try {
+		const authenHeader: string = req.headers.authorization || "";
+		if (!authenHeader) return responseHandle.unauthorize(res);
+		const token: string = authenHeader.trim().split(" ")[1] || "";
+		if (!token) {
+			throw new HttpException(400, "Cannot save Word");
+		}
+		const payload: any = jwtDecode(token);
+		responseHandle.success(
+			res,
+			{ _id: payload.userId },
+			"Get user ID success"
+		);
+	} catch (error) {
+		next(error);
+	}
+};
 
-}
-
-export const getAllUser =  async (req,res) => {
-    try{
-        const user = await User.find().select("name email phone vocabulary");
-        return responseHandle.success(res, user, "All User");
-    }catch(err){
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
+export const getAllUser = async (req, res) => {
+	try {
+		const user = await User.find().select("name email phone vocabulary");
+		return responseHandle.success(res, user, "All User");
+	} catch (err) {
+		return responseHandle.badRequest(res, "Failed");
+	}
+};
 
 export const getDiaryUser = async(req,res) => {
     try{
@@ -200,7 +204,7 @@ export const getVocabToPractice = async(req, res) => {
         const mapPracticeVocab = await Promise.all(
             praticeVocab.map(async (entry) => {
                 const vocabDetail = await f_getVocabById(entry.vocab);
-                
+
                 if(vocabDetail) {
                     return {
                         _id: vocabDetail._id,
@@ -229,5 +233,43 @@ export const getVocabToPractice = async(req, res) => {
     }catch(err) {
         console.log(err);
         return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+export const updateDiary = async(req, res) => {
+    try {
+        console.log(req.params.id);
+        const user = await User.findById(req.params.id);
+
+        if(!user)
+        {
+            return responseHandle.badRequest(res, "User not exist");
+        }
+
+        const vocabData =  req.body;
+
+        console.log(vocabData);
+
+        const vocabArray = vocabData.map(item => ({
+            vocab: item.vocab,
+            status: item.status
+        }));
+
+        console.log(vocabArray);
+
+        vocabArray.forEach(vocabItem => {
+            if(vocabItem.status) {
+                const userVocab = user.vocabulary.find(userItem => userItem.vocab == vocabItem.vocab);
+                if(userVocab) {
+                    userVocab.count = userVocab.count < 5 ? userVocab.count + 1 : 1;
+                }
+            }
+        });
+
+        const saveUser = await user.save();
+
+        return responseHandle.success(res, saveUser, "Update success");
+    }catch(err) {
+        return responseHandle.badRequest(res, "Update Failed");
     }
 }

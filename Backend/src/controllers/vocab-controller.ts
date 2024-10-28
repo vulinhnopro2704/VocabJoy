@@ -114,3 +114,4 @@ export const getVocabById = async(req, res) => {
         return responseHandle.badRequest(res, "Failed");
     }
 }
+
