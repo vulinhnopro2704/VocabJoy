@@ -37,7 +37,6 @@ export default function Study (){
         //phat am thanh lan dau vao
     const [sound, setSound] = useState<Audio.Sound>();
     const playSound = async(speed:number)=>{
-        console.log("ok")
         const { sound } = await Audio.Sound.createAsync(
           { uri:"https://api.dictionaryapi.dev/media/pronunciations/en/run-au.mp3"},
         );
