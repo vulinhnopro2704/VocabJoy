@@ -237,7 +237,7 @@ export const getVocabToPractice = async(req, res) => {
 
 export const updateDiary = async(req, res) => {
     try {
-        console.log(req.params.id);
+
         const user = await User.findById(req.params.id);
 
         if(!user)
@@ -247,7 +247,7 @@ export const updateDiary = async(req, res) => {
 
         const vocabData =  req.body;
 
-        console.log(vocabData);
+
 
         const vocabArray = vocabData.map(item => ({
             vocab: item.vocab,
