@@ -1,38 +1,36 @@
 import { Audio } from "expo-av";
-import { useEffect, useRef, useState } from "react";
-import { Image, StyleSheet, View ,Text, TouchableOpacity, Animated} from "react-native";
+import { useState } from "react";
+import { Image, StyleSheet, View ,Text, TouchableOpacity} from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Colors } from "@/constants/colors";
+import { Vocab } from "@/data-types/vocabulary";
 
-
-export default function GameText(){
+ const GameForm:React.FC<{ vocab: Vocab }>=({ vocab })=>{
     const [sound, setSound] = useState<Audio.Sound>();
     const playSound = async(speed:number)=>{
+        if(vocab.audio)
+        {
         const { sound } = await Audio.Sound.createAsync(
-          { uri:"https://api.dictionaryapi.dev/media/pronunciations/en/run-au.mp3"},
+          {uri:vocab.audio},
         );
         setSound(sound)
         await sound.setRateAsync(speed, true);
         await sound.playAsync();
       }
-    const rotateValue = useRef(new Animated.Value(0)).current;
-    const rotateInterpolate = rotateValue.interpolate({
-        inputRange:[0,1],
-        outputRange:['0deg','-180deg']
-    })
-    const rotateStyle = {
-        transform: [{ rotateY: rotateInterpolate }],
-      };
-    useEffect(()=>{
-        Animated.timing(rotateValue,{
-            toValue:1,
-            duration:0,
-            useNativeDriver:false,
-        }).start()
-    })
+    }
+    function descriptioninText(data:string){
+        const textArray:string[] = data.split(" ")
+        return textArray.map((data)=>{
+            if(data.includes(vocab.name||""))
+            {
+                return <Text key={1} style={styles.wordCore}>{data} </Text>
+            }
+            return data+" "
+        })
+    }
     return (
-    <Animated.View style={[styles.container,rotateStyle]}>
+    <View style={styles.container}>
         <View style={styles.button}>
             <TouchableOpacity
             onPress={()=>playSound(1)}>
@@ -43,12 +41,11 @@ export default function GameText(){
                <View style={styles.button_el}><MaterialCommunityIcons name="snail" size={24} color={Colors.blue} /></View>
             </TouchableOpacity>
         </View>
+        <Image style={styles.image_main} source={require("@/assets/images/gai.jpeg")}></Image>
         <View style={styles.text}>
-            <Text style={{fontSize:28,fontWeight:600,textAlign:"center"}}>Running</Text>
-            <Text style={{fontSize:24,fontWeight:200,textAlign:"center"}}>/asdWsdcaaa/</Text>
-            <Text style={{fontSize:20,fontWeight:400,textAlign:"center"}}>Chay Luon Di Ban Oi</Text>
+            <Text style={{fontSize:18,fontWeight:600,textAlign:"center"}}>{descriptioninText(vocab.example||"")}</Text>
         </View>
-    </Animated.View>
+    </View>
     )
 }
 
@@ -58,14 +55,13 @@ const styles = StyleSheet.create({
         alignItems:"center",
         position:"relative",
         width:"80%",
-        height:"85%",
         borderRadius:20,
         shadowColor: '#000', 
         shadowOffset: { width: 0, height: 3 }, 
         shadowOpacity: 0.3, 
         shadowRadius: 4, 
         backgroundColor:"white",
-        marginTop:30,
+        marginTop:30
     
     },
     button:{
@@ -89,13 +85,16 @@ const styles = StyleSheet.create({
      
         
     },
-    
+    image_main:{
+        marginTop:50,
+        width:"90%",
+        height:250
+    },
     text:{
-        marginTop:100,
+        marginTop:20,
         width:"85%",
         alignItems:"center",
-        marginBottom:20,
-        gap:20
+        marginBottom:20
     },
     wordCore:{
         color:Colors.blue,
@@ -103,3 +102,4 @@ const styles = StyleSheet.create({
     }
 
 })
+export default GameForm
