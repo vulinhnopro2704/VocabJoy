@@ -35,7 +35,7 @@ import { AUDIO_URL, IMAGE_URL } from "@/constants/backend";
         })
     }
 
-  
+
 
     return (
     <View style={styles.container}>
