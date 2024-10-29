@@ -428,7 +428,14 @@ export const getVocabByEachLevel = async (req,res) => {
         )
         const filterVocab = convertedVocab.filter((vocab) => vocab!= null);
 
-        filterVocab.sort((a,b) => a.name.localeCompare(b.name));
+        filterVocab.sort((a,b) => {
+            const nameCompare = a.name.localeCompare(b.name);
+            if(nameCompare != 0) {
+                return nameCompare;
+            } else {
+                return a.meaning.localeCompare(b.meaning);
+            }
+        });
 
         const subsetVocab = filterVocab.slice(size * offset, size + (offset*size));
         
