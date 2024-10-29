@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Pressable } from "react-native";
+import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Vocab } from "@/data-types/vocabulary";
 import { Volume2 } from "lucide-react-native";
@@ -67,9 +67,9 @@ export default function AnswerBar({ isCorrect, answer, onPress }: Props) {
 					</Text>
 				</View>
 			</View>
-			<Pressable style={styles.button} onPress={onPress}>
+			<TouchableOpacity style={styles.button} onPress={onPress}>
 				<Text style={styles.buttonText}>Tiếp tục</Text>
-			</Pressable>
+			</TouchableOpacity>
 		</View>
 	);
 }
@@ -90,6 +90,8 @@ const styles = StyleSheet.create({
 		elevation: 10,
 		flexDirection: "column",
 		flex: 1,
+		gap:10,
+		paddingTop:50
 	},
 	containerContent: {
 		flexDirection: "row",
@@ -103,13 +105,10 @@ const styles = StyleSheet.create({
 		height: 50,
 		backgroundColor: "white",
 		borderRadius: 60,
-		shadowColor: "#fff",
-		shadowOpacity: 0.3,
-		shadowRadius: 20,
-		shadowOffset: {
-			width: 0,
-			height: 5,
-		},
+		shadowColor: "white",
+        shadowOffset: { width: 0, height: 3 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5, 
 		elevation: 10,
 	},
 	vocabInfor: {
@@ -122,15 +121,24 @@ const styles = StyleSheet.create({
 	},
 	button: {
 		backgroundColor: "#fff",
+		width:"80%",
+		height:50,
 		color: "#141718",
-		padding: 20,
-		borderRadius: 15,
-		margin: 20,
+		borderRadius: 20,
+		margin:"auto",
+		marginTop:30,
+		marginBottom:50,
+		justifyContent:"center",
+		shadowColor: "grey",
+        shadowOffset: { width: 5, height: 5 },
+        shadowOpacity: 0.5,
+        shadowRadius: 5, 
 	},
 	buttonText: {
-		fontSize: 24,
+		fontSize: 18,
 		color: "#141718",
 		textAlign: "center",
+		fontWeight:"bold"
 	},
 	h1: {
 		fontSize: 24,
