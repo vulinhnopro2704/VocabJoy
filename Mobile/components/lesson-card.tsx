@@ -1,6 +1,8 @@
 import { View, StyleSheet, Text, Image, Pressable } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/colors";
+import { router } from "expo-router";
+
 
 type Lesson = {
     image?: string;
@@ -16,11 +18,12 @@ export default function LessonCard({
                                        hasOpenBefore = false,
                                    }: Lesson) {
     const [isPressed, setIsPressed] = useState(false);
-
+    
+    
+ 
     return (
         <Pressable
-            onPressIn={() => setIsPressed(true)}
-            onPressOut={() => setIsPressed(false)}
+            onPressIn={() => router.push("/study-screen")}
             style={[
                 hasOpenBefore ? styles.hasOpenBefore : styles.noOpenBefore,
                 styles.container,

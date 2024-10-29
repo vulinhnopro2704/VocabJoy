@@ -13,7 +13,7 @@ import Option from "./option";
 import { Colors } from "@/constants/colors";
 import { MultipleChoiceQuestion } from "@/utils/generateQuestion";
 import { useRouter } from "expo-router";
-import AnswerBar from "./answer_bar";
+import AnswerBar from "../answer_bar";
 import { Vocab } from "@/data-types/vocabulary";
 import { Audio } from "expo-av";
 import { playLocalSound } from "@/utils/play-sound";

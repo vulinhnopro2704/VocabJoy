@@ -1,50 +1,38 @@
-import GameForm from "@/components/form/form_game";
-import GameText from "@/components/form/form_text";
+import GameForm from "@/components/learn-english/Card/form_game";
+import GameText from "@/components/learn-english/Card/form_text";
 import { useEffect, useRef, useState } from "react";
 import { StyleSheet, View,Text, Image, Animated, TouchableOpacity, TouchableHighlight, Button, Easing } from "react-native";
 import { Colors } from "../../constants/colors"
 import { Audio } from "expo-av";
+import { Vocab } from "@/data-types/vocabulary";
 
 
 
 
 
 
-export default function Study (){
-    
-    const yellowWidth = useRef(new Animated.Value(20)).current;
+const FlashCard:React.FC<{ vocab: Vocab }>=({ vocab })=>{
     const rotateValue = useRef(new Animated.Value(0)).current;
-    const[widthRoad,setWidthRoad] = useState(0)
     const [isFlipped, setIsFlipped] = useState(false);
     const [components,SetComponents] = useState(true)
     const rotateInterpolate = rotateValue.interpolate({
         inputRange:[0,1],
         outputRange:['0deg','180deg']
     })
-    //bambutton
-    function submit(){
-        const x = (widthRoad/10) *10
-        Animated.timing(yellowWidth, {
-            toValue: x,
-            duration: 500,
-            useNativeDriver: false,
-            easing:Easing.in(Easing.ease)
-          }).start()
-
-
-
-        }
-        //phat am thanh lan dau vao
+     //phat am thanh lan dau vao
     const [sound, setSound] = useState<Audio.Sound>();
     const playSound = async(speed:number)=>{
+        if(vocab.audio)
+        {
         const { sound } = await Audio.Sound.createAsync(
-          { uri:"https://api.dictionaryapi.dev/media/pronunciations/en/run-au.mp3"},
+          { uri:vocab.audio},
         );
         setSound(sound)
         await sound.setRateAsync(speed, true);
         await sound.playAsync();
-      }
-    useEffect(()=>{playSound(1)},[])
+        }
+    }
+    useEffect(()=>{playSound(1)},[vocab.audio])
 
     function rotate()
 
@@ -55,7 +43,6 @@ export default function Study (){
             duration:1000,
             useNativeDriver:true,
         }).start(({ finished }) => {
-            console.log("zo")
             rotateValue.addListener(({ value }) => {
 
               if (value>0.5 )  SetComponents(false)
@@ -72,51 +59,14 @@ export default function Study (){
 
     return (
         <View style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.header_iconX}>X</Text>
-                <View style={styles.header_road}>
-                    <View style={styles.header_userRoad}
-                     onLayout={(event) => {
-                        const { width } = event.nativeEvent.layout;
-                        setWidthRoad(width)
-                      }}
-                    >
-                        <Animated.View style={[styles.header_yellowRoad,{width:yellowWidth}]}>
-                            <View style={styles.cricle}>
-                                <Image 	
-                                style={styles.iconBare}
-                                source={require("@/assets/images/bare.png")}
-                                resizeMode="cover"
-                                ></Image>
-                            </View>
-                        </Animated.View>
-                    </View>
-                </View>
-            </View>
-
             <TouchableOpacity style={{flex:6}}
             onPress={rotate}>
                 <Animated.View style={[styles.body,rotateStyle]} >
 
-                        {components?<GameForm></GameForm>:<GameText></GameText>}
+                        {components?<GameForm vocab={vocab}></GameForm>:<GameText vocab={vocab}></GameText>}
 
                 </Animated.View>
             </TouchableOpacity>
-
-            <View style={styles.button}>
-                <TouchableOpacity
-                onPress={submit}
-                >
-                    <View style={styles.button_save}>   
-                        <Text style={{fontSize:14,color:"white",fontWeight:"600"}}>Tiếp tục</Text>
-                    </View>
-                </TouchableOpacity>
-
-                <TouchableOpacity>
-                     <Text style={{color:"grey",textDecorationLine:"underline",fontWeight:600}}>Mình đã biết từ này</Text>
-                </TouchableOpacity>
-
-            </View>
         </View>
     )
 }
@@ -207,3 +157,5 @@ const styles= StyleSheet.create({
         shadowRadius: 4, 
     },
 })
+
+export default FlashCard;
