@@ -399,9 +399,9 @@ export const getVocabByEachLevel = async (req,res) => {
             return responseHandle.success(res, data, "Success");
         } 
 
-        if(offset > listVocab.length - 1)
+        if(offset * size > listVocab.length - 1)
         {
-            return responseHandle.badRequest(res, "Offset out of array lenght");
+            return responseHandle.badRequest(res, "Out of array lenght");
         }
         
         
