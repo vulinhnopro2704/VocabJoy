@@ -56,6 +56,7 @@ export const addVocab =  async(req,res) => {
         {
             return responseHandle.badRequest(res, "Vocab already exist");
         }
+
         
         const newVocab = new Vocab(req.body);   
         const saveVocab = await newVocab.save();

@@ -371,9 +371,23 @@ export const getVocabByEachLevel = async (req,res) => {
         }
 
         const level = req.body.level;
+        const size = req.body.size;
+        const offset = req.body.offset;
+        if(!Number.isFinite(level)) 
+        {
+            return responseHandle.badRequest(res, "Wrong format level");
+        }
+        if(!Number.isFinite(size)) 
+        {
+            return responseHandle.badRequest(res, "Wrong format size");
+        }
+        if(!Number.isFinite(offset)) 
+        {
+            return responseHandle.badRequest(res, "Wrong format offset");
+        }
         
         const listVocab = user.vocabulary.filter(x => x.count == level);
-        
+
         let data;
 
         if(!listVocab) 
@@ -384,6 +398,12 @@ export const getVocabByEachLevel = async (req,res) => {
             }
             return responseHandle.success(res, data, "Success");
         } 
+
+        if(offset > listVocab.length - 1)
+        {
+            return responseHandle.badRequest(res, "Offset out of array lenght");
+        }
+        
         
         const convertedVocab = await Promise.all(
             listVocab.map(async (entry) => {
@@ -406,12 +426,15 @@ export const getVocabByEachLevel = async (req,res) => {
                 return null;
             })
         )
-
         const filterVocab = convertedVocab.filter((vocab) => vocab!= null);
 
+        filterVocab.sort((a,b) => a.name.localeCompare(b.name));
+
+        const subsetVocab = filterVocab.slice(size * offset, size + (offset*size));
+        
         data = {
-            count: filterVocab.length,
-            vocabulary: filterVocab
+            count: subsetVocab.length,
+            vocabulary: subsetVocab
         }
 
         return responseHandle.success(res, data, "Success");
