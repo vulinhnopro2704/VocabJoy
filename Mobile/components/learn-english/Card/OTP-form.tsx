@@ -16,7 +16,8 @@ const OTPTextInput:React.FC<{ length:number,onChangeText:any}>=({ length,onChang
     if (text && index < length - 1) {
         inputs.current[index + 1]?.focus();
     }
-     if (text == "" && index > 0) {
+    else
+    if (text == "" && index > 0) {
         inputs.current[index - 1]?.focus(); 
     }
   
