@@ -14,6 +14,7 @@ import LoadingIcon from "@/components/loadingicon";
 import Toast from "react-native-toast-message";
 import { playSound, playLocalSound } from "@/utils/play-sound";
 import AnswerBar from "@/components/answer_bar";
+import { router } from "expo-router";
 
 
 
@@ -23,7 +24,7 @@ export default function StudyNewWord(){
 
     const yellowWidth = useRef(new Animated.Value(20)).current;
     const [isCorrect,setIsCorrect] = useState(true)
-    const [index,setIndex] = useState(5)
+    const [index,setIndex] = useState(0)
     const [screenLearn,setScreenLearn] = useState(1)
     const [sound, setSound] = useState<Audio.Sound>();
     const [widthRoad,setWidthRoad] = useState(0)
@@ -35,25 +36,33 @@ export default function StudyNewWord(){
    
     async function handlerSubmitAnswerBar()
     {
+     
         if(screenLearn==3)
         {
-            setIndex(index+1)
+            if(index==9)
+                {
+                   return router.back()
+                }
+            await setIndex(index+1)
+            const x = widthRoad *(index+1) +20
+       
+            Animated.timing(yellowWidth, {
+                toValue: x,
+                duration: 500,
+                useNativeDriver: false,
+                easing:Easing.in(Easing.ease)
+              }).start()
             setScreenLearn(1)
         }
         else setScreenLearn(screenLearn+1)
         await handleChooseCorrectAnswer()
-        const x = (widthRoad/30) *((index+1) + screenLearn)
-        Animated.timing(yellowWidth, {
-            toValue: x,
-            duration: 500,
-            useNativeDriver: false,
-            easing:Easing.in(Easing.ease)
-          }).start()
         hideAnwser()
+  
     }
     
     function handlerSubmit(){
         Keyboard.dismiss();
+       
         if(screenLearn==1){
             setScreenLearn(screenLearn+1)
             return
@@ -123,7 +132,8 @@ export default function StudyNewWord(){
                     <View style={styles.header_userRoad}
                      onLayout={(event) => {
                         const { width } = event.nativeEvent.layout;
-                        setWidthRoad(width)
+                        setWidthRoad(width/10)
+                        console.log(width)
                       }}
                     >
                         <Animated.View style={[styles.header_yellowRoad,{width:yellowWidth}]}>
@@ -202,7 +212,8 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         backgroundColor:"white",
-        borderColor:Colors.gray_500_shadow
+        borderColor:Colors.gray_500_shadow,
+    
       
     },
     header_iconX:{
@@ -242,7 +253,9 @@ const styles = StyleSheet.create({
         alignItems:"flex-end",
         justifyContent:"center",
         borderTopWidth:1,
-        borderBottomWidth:1
+        borderBottomWidth:1,
+        
+        
     },  
     body:{
         flex:4
