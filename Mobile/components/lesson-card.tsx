@@ -21,13 +21,13 @@ export default function LessonCard({    _id,
                                         hasOpenBefore = false,
                                    }: Lesson) {
     const [isPressed, setIsPressed] = useState(false);
-    
+
     const nameLesson:string[] =["Trường Học","Gia Đình","Vẻ Bề Ngoài","","@/assets/images/school.jpge"]
     const imglinks:any={
         0:require("@/assets/images/school.jpeg"),
         1:require("@/assets/images/family.jpeg"),
-        2:require("@/assets/images/appearance.jpeg"),      
-    }                        
+        2:require("@/assets/images/appearance.jpeg"),
+    }
     return (
         <Pressable
             onPressIn={() => router.push({pathname:"/study-screen",params:{_id}})}
