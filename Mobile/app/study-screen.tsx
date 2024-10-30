@@ -15,6 +15,8 @@ import Toast from "react-native-toast-message";
 import { playSound, playLocalSound } from "@/utils/play-sound";
 import AnswerBar from "@/components/answer_bar";
 import { router } from "expo-router";
+import VideoStudy from "@/components/video_study";
+import OutBar from "@/components/out-form";
 
 
 
@@ -29,11 +31,23 @@ export default function StudyNewWord(){
     const [sound, setSound] = useState<Audio.Sound>();
     const [widthRoad,setWidthRoad] = useState(0)
     const [text,setText] = useState("")
-    const [showBox,setShowBox] = useState(false)
+    const [showAnswerBar,setShowBox] = useState(false)
     const slideAnim = useRef(new Animated.Value(300)).current;
-
+    const [video,setVideo] = useState(true)
+    const [showOutBar,setOutBar] = useState(false)
     const correctSoundEffect = useRef<Audio.Sound | null>(null);
-   
+    const start = useRef(new Animated.Value(0)).current;
+
+    useEffect(()=>{
+        Animated.timing(start,{
+            toValue:1,
+            duration:2000,
+            useNativeDriver:false
+        }).start()
+    })
+    setTimeout(()=>setVideo(false),3000)
+
+
     async function handlerSubmitAnswerBar()
     {
      
@@ -112,22 +126,52 @@ export default function StudyNewWord(){
         setShowBox(true)
 		Animated.timing(slideAnim, {
 			toValue: 0,
-			duration: 300,
+			duration: 500,
 			useNativeDriver: true,
 		}).start();
 	};
     const hideAnwser = ()=>{
-        setTimeout(()=> setShowBox(false),300)
+        setTimeout(()=> setShowBox(false),500)
 		Animated.timing(slideAnim, {
 			toValue: 300,
-			duration: 300,
+			duration: 500,
 			useNativeDriver: true,
 		}).start();
     }
+
+    setTimeout(()=>setVideo(false),3000)
+    
+    function exit(){
+        setOutBar(true)
+        Animated.timing(slideAnim, {
+			toValue: 0,
+			duration: 500,
+			useNativeDriver: true,
+		}).start();
+    }
+
+    function continues(){
+        
+        setTimeout(()=> setOutBar(false),450)
+		Animated.timing(slideAnim, {
+			toValue: 300,
+			duration: 500,
+			useNativeDriver: true,
+		}).start();
+    }
+
+
     return (
-        <View style={{flex:1,backgroundColor:"white"}}>
-              <View style={styles.header}>
-                <Text style={styles.header_iconX}>X</Text>
+        video?
+        <VideoStudy></VideoStudy>:
+        <Animated.View style={{flex:1,backgroundColor:"white",opacity:start}}>
+        <View style={
+            {flex:1,backgroundColor:"white",opacity:(showAnswerBar||showOutBar)?0.3:1}
+        }>
+               <View style={styles.header}>
+                <TouchableOpacity onPress={exit}>
+                    <Text style={styles.header_iconX}>X</Text>
+                </TouchableOpacity>
                 <View style={styles.header_road}>
                     <View style={styles.header_userRoad}
                      onLayout={(event) => {
@@ -176,8 +220,9 @@ export default function StudyNewWord(){
                 }
             </View>
             </KeyboardAvoidingView>
+            </View>
             
-            {showBox&&
+            {showAnswerBar&&
             <Animated.View
 					style={[
 						styles.answerBox,
@@ -189,8 +234,24 @@ export default function StudyNewWord(){
 						onPress={handlerSubmitAnswerBar}
 						isCorrect={isCorrect}
 					/>
-				</Animated.View>}       
-        </View>
+				</Animated.View>
+            }    
+                      
+            {showOutBar&&
+                <Animated.View
+                        style={[
+                            styles.answerBox,
+                            { transform: [{ translateY: slideAnim }] },
+                        ]}
+                    >
+                        <OutBar
+                            onPress={continues}
+                        />
+                    </Animated.View>
+                }      
+          
+        </Animated.View>
+
     )
 }
 
@@ -267,12 +328,11 @@ const styles = StyleSheet.create({
         alignItems:"center",
         justifyContent:"center",
         gap:2,
-        backgroundColor:Colors.blue_shadow,
+        backgroundColor:Colors.blue,
         borderRadius:20,
-        shadowColor: Colors.blue_shadow,
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.3,
-        shadowRadius: 4, 
+        borderWidth:1,
+		borderColor:Colors.blue_shadow,
+		borderBottomWidth:3,
     },
     answerBox: {
 		position: "absolute",
