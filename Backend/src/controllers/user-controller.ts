@@ -401,7 +401,11 @@ export const getVocabByEachLevel = async (req,res) => {
 
         if(offset * size > listVocab.length - 1)
         {
-            return responseHandle.badRequest(res, "Out of array lenght");
+            data = {
+                count: 0,
+                vocabulary: [],
+            }
+            return responseHandle.success(res, data, "Success");
         }
         
         
@@ -447,6 +451,68 @@ export const getVocabByEachLevel = async (req,res) => {
         return responseHandle.success(res, data, "Success");
 
     }catch(err) {
+        return responseHandle.badRequest(res, "Failed");
+    }
+}
+
+export const seachByName = async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id);
+        if(!user) {
+            return responseHandle.badRequest(res, "User not exist");
+        }
+
+        const level = Number(req.body.level);
+        const name = req.body.name;
+        
+        if(!Number.isFinite(level))
+        {
+            return responseHandle.badRequest(res, "Wrong format level");
+        }
+
+        const listVocab = user.vocabulary.filter(x => x.count == level);
+
+        let data;
+
+        if(!listVocab) {
+            data = {
+                count: 0,
+                vocabulary: listVocab,
+            };
+            return responseHandle.success(res, data, "Success");
+        }
+
+        const convertedVocab = await Promise.all(
+            listVocab.map(async (entry) => {
+                const vocabDetail = await f_getVocabById(entry.vocab);
+                
+                if(vocabDetail) {
+                    return {
+                        _id: vocabDetail._id,
+                        name: vocabDetail.name,
+                        pronunciation: vocabDetail.pronunciation,
+                        type: vocabDetail.type,
+                        image_link: vocabDetail.image_link,
+                        meaning: vocabDetail.meaning || "",
+                        description: vocabDetail.description,
+                        audio: vocabDetail.audio || "",
+                        example: vocabDetail.example || "",
+                        __v: vocabDetail.__v
+                    }
+                }
+                return null;
+            })
+        )
+        const filterVocab = convertedVocab.filter((vocab) => vocab!= null).filter((vocab) => (vocab).name.includes(name));
+
+        data = {
+            count: filterVocab.length,
+            vocabulary: filterVocab
+        }
+
+        return responseHandle.success(res, data, "Success");
+
+    } catch(err) {
         return responseHandle.badRequest(res, "Failed");
     }
 }

@@ -12,6 +12,7 @@ import {
 	getVocabByLevel,
 	getDiary,
 	getVocabByEachLevel,
+	seachByName,
 } from "../controllers/user-controller";
 
 const user_route: Router = express.Router();
@@ -25,6 +26,7 @@ user_route.get("/:id/vocabs-home", getDiaryUser);
 user_route.get("/:id/get-diary", getDiary);
 user_route.get("/:id/get-vocab-each-level", getVocabByEachLevel);
 user_route.post("/:id/update-diary", updateDiary);
+user_route.post("/:id/search-by-name", seachByName);
 user_route.get("/:id/get-vocab-by-level", getVocabByLevel);
 user_route.post("/:vocabId/:userId", addVocabToUserDiary);
 user_route.get("/:id/practice-vocab", getVocabToPractice);
