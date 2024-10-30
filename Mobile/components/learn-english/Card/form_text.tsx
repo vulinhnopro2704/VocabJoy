@@ -5,6 +5,7 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Colors } from "@/constants/colors";
 import { Vocab } from "@/data-types/vocabulary";
+import { AUDIO_URL } from "@/constants/backend";
 
 
 const GameText:React.FC<{ vocab: Vocab }>=({ vocab })=>{
@@ -13,7 +14,7 @@ const GameText:React.FC<{ vocab: Vocab }>=({ vocab })=>{
         if(vocab.audio)
         {
         const { sound } = await Audio.Sound.createAsync(
-          { uri:vocab.audio},
+            {uri:AUDIO_URL+vocab.audio},
         );
         setSound(sound)
         await sound.setRateAsync(speed, true);
