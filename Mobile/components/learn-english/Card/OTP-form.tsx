@@ -16,11 +16,20 @@ const OTPTextInput:React.FC<{ length:number,onChangeText:any}>=({ length,onChang
     if (text && index < length - 1) {
         inputs.current[index + 1]?.focus();
     }
-    else
-    if (text == "" && index > 0) {
-        inputs.current[index - 1]?.focus(); 
-    }
+   
   
+  };
+
+  const handleDelete = (index:number) => {
+    if (Word[index] === '') {
+      if (index > 0) {
+        inputs.current[index - 1]?.focus();
+      }
+    } else {
+      const newValues = [...Word];
+      newValues[index] = '';
+      setWord(newValues);
+    }
   };
 
 
@@ -37,6 +46,12 @@ const OTPTextInput:React.FC<{ length:number,onChangeText:any}>=({ length,onChang
           value={value}
           ref={(input) => (inputs.current[index] = input)}
           onChangeText={(text) => handleChangeText(text, index)}
+          onKeyPress={({nativeEvent})=>{
+            if(nativeEvent.key == 'Backspace')
+            {
+              handleDelete(index);
+            }
+          }}
         />
       ))}
     <View style={{width:10}}></View>
