@@ -1,5 +1,9 @@
 import { BACKEND_URL } from "@/constants/backend";
-import { ApiResponseVocabForPractice } from "@/data-types/user";
+import {
+	ApiResponseVocabByEachLevel,
+	ApiResponseVocabForPractice,
+} from "@/data-types/user";
+import { Vocab } from "@/data-types/vocabulary";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 export interface Levels {
@@ -55,6 +59,23 @@ export interface ApiGetUserInfoResponse {
 	statusCode: number;
 }
 
+type ApiGetVocabByLevelBody = {
+	userId: string;
+	level: number;
+	offset: number;
+	size: number;
+};
+
+export type VocabWithStatus = {
+	vocab: Vocab;
+	status: boolean;
+};
+
+export type ApiUpdateDiaryBody = {
+	userId: string;
+	listVocab: VocabWithStatus[];
+};
+
 export const apiUserSlice = createApi({
 	reducerPath: "apiUser",
 	baseQuery: fetchBaseQuery({ baseUrl: BACKEND_URL + "/user" }),
@@ -75,6 +96,33 @@ export const apiUserSlice = createApi({
 				}),
 			}
 		),
+		getVocabByLevel: builder.mutation<
+			ApiResponseVocabByEachLevel,
+			ApiGetVocabByLevelBody
+		>({
+			query: (body) => ({
+				url: `${body.userId}/get-vocab-each-level`,
+				method: "POST",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+				},
+				body: new URLSearchParams({
+					level: body.level.toString(),
+					offset: body.offset.toString(),
+					size: body.size.toString(),
+				}).toString(),
+			}),
+		}),
+		updateDiary: builder.mutation<void, ApiUpdateDiaryBody>({
+			query: (body) => ({
+				url: `${body.userId}/update-diary`,
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: JSON.stringify({ listVocab: body.listVocab }),
+			}),
+		}),
 	}),
 });
 
@@ -82,4 +130,6 @@ export const {
 	useGetUserVocabsHomeQuery,
 	useGetUserInfoQuery,
 	useGetVocabForPracticeQuery,
+	useGetVocabByLevelMutation,
+	useUpdateDiaryMutation,
 } = apiUserSlice;
