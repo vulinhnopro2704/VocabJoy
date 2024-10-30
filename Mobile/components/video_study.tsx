@@ -1,19 +1,19 @@
 
 import { StyleSheet, View } from "react-native";
-import Video from 'react-native-video';
-
+import { Video } from 'expo-av';
 
 export default function VideoStudy (){
     return (
         <View style={styles.container}>
-             <Video
-                source={{ uri: require("@/asset/video/videoStudy") }} 
-                style={styles.video}
-                controls={false}
-                resizeMode="cover"
-                onBuffer={() => console.log('Buffering...')}
-                onError={(error) => console.log('Error:', error)}
-      />
+         <Video
+            source={require("@/assets/video/videoStudy.mp4") } // URL video
+            rate={1.0}
+            volume={1.0}
+            isMuted={false}
+            shouldPlay
+            isLooping
+            style={styles.video}
+        />
         </View>
     )
 } 

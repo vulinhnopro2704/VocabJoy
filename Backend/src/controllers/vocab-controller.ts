@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from "express";
-import { createVocabService, getVocabByNameService, translateToVie } from "../services/vocab-service";
+import { createVocabService,  getVocabByNameService, translateToVie } from "../services/vocab-service";
 import responseHandle from "../handlers/response-handler";
 import vocab from "../interface/vocab";
 import { HttpException } from "../handlers/http_exception-handler";
@@ -16,6 +16,14 @@ export const createVocabController = async (req:Request,res:Response,next:NextFu
     }
 }
 
+export const get10VocabController = async (req:Request,res:Response,next:NextFunction)=>{
+    try {
+        const result = await Vocab.find().limit(10)
+        responseHandle.success(res,{listVocab:result},"get successful")
+    } catch (error) {
+        next(error)
+    }
+}
 
 export const getVocabByNameController = async (req:Request,res:Response,next:NextFunction)=>{
     try {
@@ -69,13 +77,15 @@ export const addVocab =  async(req,res) => {
 
 export const getAllVocab = async(req,res) => {
     try{
-        const vocab = await Vocab.find();
+        const vocab = await Vocab.find().skip(20).limit(10);
         return responseHandle.success(res, vocab, "Success");
     }catch(err)
     {
         return responseHandle.badRequest(res, "Failed")
     }
 }
+
+
 
 export async function f_getVocabById(vocabId) {
     try {
