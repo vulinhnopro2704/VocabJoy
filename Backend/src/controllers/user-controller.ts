@@ -384,20 +384,19 @@ export const getVocabByEachLevel = async (req,res) => {
         if(!user) {
             return responseHandle.notFound(res, "User not exist");
         }
+        const level: number = Number(req.body.level);
+        const size : number = Number(req.body.size);
+        const offset: number = Number(req.body.offset);
 
-        const level = req.body.level;
-
-        const size = req.body.size;
-        const offset = req.body.offset;
-        if(!Number.isFinite(level)) 
+        if(!Number.isFinite(level))
         {
             return responseHandle.badRequest(res, "Wrong format level");
         }
-        if(!Number.isFinite(size)) 
+        if(!Number.isFinite(size))
         {
             return responseHandle.badRequest(res, "Wrong format size");
         }
-        if(!Number.isFinite(offset)) 
+        if(!Number.isFinite(offset))
         {
             return responseHandle.badRequest(res, "Wrong format offset");
         }
