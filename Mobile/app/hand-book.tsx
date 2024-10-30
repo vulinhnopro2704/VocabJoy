@@ -158,7 +158,6 @@ const styles = StyleSheet.create({
 		marginBottom: 20,
 	},
 	levelBox: {
-		flexGrow: 1,
 		alignItems: "center",
 		justifyContent: "center",
 		padding: 10,
@@ -169,7 +168,6 @@ const styles = StyleSheet.create({
 		},
 		shadowOpacity: 0.25,
 		elevation: 5,
-		marginHorizontal: 5,
 		borderRadius: 10,
 	},
 	levelBoxSelected: {

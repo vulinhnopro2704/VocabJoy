@@ -29,5 +29,4 @@ user_route.get("/:id/get-vocab-by-level", getVocabByLevel);
 user_route.post("/:vocabId/:userId", addVocabToUserDiary);
 user_route.get("/:id/practice-vocab", getVocabToPractice);
 
-
 export default user_route;
