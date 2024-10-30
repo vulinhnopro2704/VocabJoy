@@ -6,6 +6,7 @@ import {
 	Dimensions,
 	Image,
 	Animated,
+	ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import Question from "./question";
@@ -18,6 +19,11 @@ import { Vocab } from "@/data-types/vocabulary";
 import { Audio } from "expo-av";
 import { playLocalSound } from "@/utils/play-sound";
 import ResultScreen from "./result";
+import {
+	useUpdateDiaryMutation,
+	VocabWithStatus,
+} from "@/lib/features/api/api-user-slice";
+import { useAppSelector } from "@/lib/hook";
 
 type Props = {
 	questionList: MultipleChoiceQuestion[];
@@ -44,6 +50,10 @@ export default function ObjectiveTest({ questionList }: Props) {
 	const slideAnim = useRef(new Animated.Value(300)).current;
 	const incorrectVocabId = useRef<Vocab[]>([]);
 	const correctVocabId = useRef<Vocab[]>([]);
+	const userId = useAppSelector((state) => state.user._id);
+
+	const [updateDiary, { data, isLoading, isSuccess }] =
+		useUpdateDiaryMutation();
 
 	useEffect(() => {
 		return () => {
@@ -71,6 +81,13 @@ export default function ObjectiveTest({ questionList }: Props) {
 					)
 					.map((q) => q.originalVocab!);
 			}
+			const listVocabWithStatus: VocabWithStatus[] = questionList.map(
+				(q) => ({
+					vocab: q.originalVocab!,
+					status: correctVocabId.current.includes(q.originalVocab!),
+				})
+			);
+			updateDiary({ listVocab: listVocabWithStatus, userId });
 			setIsCompleted(true);
 			setTimeout(() => router.replace("/(tabs)/home-screen"), 10000);
 		}
@@ -178,7 +195,7 @@ export default function ObjectiveTest({ questionList }: Props) {
 	};
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			{isCompleted ? (
 				<ResultScreen
 					correctAnswers={correctVocabId.current}
@@ -245,15 +262,16 @@ export default function ObjectiveTest({ questionList }: Props) {
 					/>
 				</Animated.View>
 			)}
-		</View>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		paddingTop: 30,
+		paddingTop: 10,
 		backgroundColor: "#fff",
+		paddingHorizontal: 10,
 	},
 	progressBarContainer: {
 		height: 30,
@@ -266,7 +284,7 @@ const styles = StyleSheet.create({
 		width: 40,
 		height: 40,
 		position: "absolute",
-		right: -15,
+		right: -20,
 		top: -4,
 		zIndex: 10,
 	},

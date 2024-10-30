@@ -13,3 +13,13 @@ export interface ApiResponseVocabForPractice {
 	message: string;
 	statusCode: number;
 }
+
+export interface ApiResponseVocabByEachLevel {
+	success: boolean;
+	data: {
+		vocabulary: Vocab[];
+		count: number;
+	};
+	message: string;
+	statusCode: number;
+}

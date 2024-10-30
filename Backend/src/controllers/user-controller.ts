@@ -229,239 +229,243 @@ export const getVocabToPractice = async (req, res) => {
 			count: filterVocab.length,
 		};
 
-        return responseHandle.success(res, data, "Practice vocab");
-    }catch(err) {
-        console.log(err);
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
+		return responseHandle.success(res, data, "Practice vocab");
+	} catch (err) {
+		console.log(err);
+		return responseHandle.badRequest(res, "Failed");
+	}
+};
 
-export const updateDiary = async(req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
+export const updateDiary = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
 
-        if(!user)
-        {
-            return responseHandle.badRequest(res, "User not exist");
-        }
+		if (!user) {
+			return responseHandle.badRequest(res, "User not exist");
+		}
 
-        const vocabData =  req.body;
+		const vocabData = req.body.listVocab;
+		console.log("vocab data --> ", vocabData);
+		const vocabArray = vocabData.map((item) => ({
+			vocab: item.vocab,
+			status: item.status,
+		}));
 
-        const vocabArray = vocabData.map(item => ({
-            vocab: item.vocab,
-            status: item.status
-        }));
+		console.log(vocabArray);
 
-        console.log(vocabArray);
+		vocabArray.forEach((vocabItem) => {
+			if (vocabItem.status) {
+				const userVocab = user.vocabulary.find(
+					(userItem) => userItem.vocab == vocabItem.vocab
+				);
+				if (userVocab) {
+					userVocab.count =
+						userVocab.count < 5 ? userVocab.count + 1 : 1;
+				}
+			}
+		});
 
-        vocabArray.forEach(vocabItem => {
-            if(vocabItem.status) {
-                const userVocab = user.vocabulary.find(userItem => userItem.vocab == vocabItem.vocab);
-                if(userVocab) {
-                    userVocab.count = userVocab.count < 5 ? userVocab.count + 1 : 1;
-                }
-            }
-        });
+		const saveUser = await user.save();
 
-        const saveUser = await user.save();
+		return responseHandle.success(res, saveUser, "Update success");
+	} catch (err) {
+		return responseHandle.badRequest(res, "Update Failed");
+	}
+};
 
-        return responseHandle.success(res, saveUser, "Update success");
-    }catch(err) {
-        return responseHandle.badRequest(res, "Update Failed");
-    }
-}
+export const getDiary = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
 
-export const getDiary = async(req, res) => {
-    try {
-        const user = await User.findById(req.params.id);
+		if (!user) {
+			return responseHandle.notFound(res, "User not exist");
+		}
 
-        if(!user) {
-            return responseHandle.notFound(res, "User not exist");
-        }
+		const diaryVocab = await Promise.all(
+			user.vocabulary.map(async (entry) => {
+				const vocabDetail = await f_getVocabById(entry.vocab);
 
-        const diaryVocab = await Promise.all(
-            user.vocabulary.map(async (entry) => {
-                const vocabDetail = await f_getVocabById(entry.vocab);
+				if (vocabDetail) {
+					return {
+						_id: vocabDetail._id,
+						name: vocabDetail.name,
+						pronunciation: vocabDetail.pronunciation,
+						type: vocabDetail.type,
+						image_link: vocabDetail.image_link,
+						meaning: vocabDetail.meaning || "",
+						description: vocabDetail.description,
+						audio: vocabDetail.audio || "",
+						example: vocabDetail.example || "",
+						__v: vocabDetail.__v,
+					};
+				}
+				return null;
+			})
+		);
 
-                if(vocabDetail) {
-                    return {
-                        _id: vocabDetail._id,
-                        name: vocabDetail.name,
-                        pronunciation: vocabDetail.pronunciation,
-                        type: vocabDetail.type,
-                        image_link: vocabDetail.image_link,
-                        meaning: vocabDetail.meaning || "",
-                        description: vocabDetail.description,
-                        audio: vocabDetail.audio || "",
-                        example: vocabDetail.example || "",
-                        __v: vocabDetail.__v
-                    }
-                }
-                return null;
-            })
-        )
+		const filterVocab = diaryVocab.filter((vocab) => vocab != null);
 
-        const filterVocab = diaryVocab.filter((vocab) => vocab!= null);
+		const data = {
+			diary: filterVocab,
+			count: filterVocab.length,
+		};
 
-        const data = {
-            diary : filterVocab,
-            count: filterVocab.length
-        }
-
-        return responseHandle.success(res, data, "Success");
-
-    }catch(err) {
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
+		return responseHandle.success(res, data, "Success");
+	} catch (err) {
+		return responseHandle.badRequest(res, "Failed");
+	}
+};
 
 interface VocabularyEntry {
-    vocab: string;
-    count: number;
-    _id: string;
+	vocab: string;
+	count: number;
+	_id: string;
 }
 
+export const getVocabByLevel = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
 
-export const getVocabByLevel = async(req,res) => {
-    try {
-        const user = await User.findById(req.params.id);
+		if (!user) {
+			return responseHandle.notFound(res, "User not exist");
+		}
 
-        if(!user)
-        {
-            return responseHandle.notFound(res, "User not exist");
-        }
+		const groupVocab = user.vocabulary.reduce(
+			(
+				acc: { [key: string]: VocabularyEntry[] },
+				item: VocabularyEntry
+			) => {
+				const levelKey = `level ${item.count}`;
+				if (!acc[levelKey]) {
+					acc[levelKey] = [];
+				}
+				acc[levelKey].push(item);
+				return acc;
+			},
+			{}
+		);
 
-        const groupVocab = user.vocabulary.reduce((acc : {[key: string]: VocabularyEntry[]} , item : VocabularyEntry) => {
-            const levelKey = `level ${item.count}`;
-            if(!acc[levelKey]) {
-                acc[levelKey] = [];
-            }
-            acc[levelKey].push(item);
-            return acc;
-        }, {});
+		const convertedVocab: {
+			[level: string]: { count: number; vocabulary: any[] };
+		} = {};
 
-        const convertedVocab : { [level : string]: {count : number; vocabulary: any[]} } = {};
+		for (const [level, vocabArray] of Object.entries(groupVocab)) {
+			const vocabDetails = await Promise.all(
+				vocabArray.map(async (entry) => {
+					const vocabDetail = await f_getVocabById(entry.vocab);
 
-        for(const [level, vocabArray] of Object.entries(groupVocab)) {
-            const vocabDetails = await Promise.all(
-                vocabArray.map(async (entry) => {
-                    const vocabDetail = await f_getVocabById(entry.vocab);
+					if (vocabDetail) {
+						return {
+							_id: vocabDetail._id,
+							name: vocabDetail.name,
+							pronunciation: vocabDetail.pronunciation,
+							type: vocabDetail.type,
+							image_link: vocabDetail.image_link,
+							meaning: vocabDetail.meaning || "",
+							description: vocabDetail.description,
+							audio: vocabDetail.audio || "",
+							example: vocabDetail.example || "",
+							__v: vocabDetail.__v,
+						};
+					}
+					return null;
+				})
+			);
+			convertedVocab[level] = {
+				count: vocabDetails.filter((vocab) => vocab != null).length,
+				vocabulary: vocabDetails.filter((vocab) => vocab != null),
+			};
+		}
 
-                    if(vocabDetail) {
-                        return {
-                            _id: vocabDetail._id,
-                            name: vocabDetail.name,
-                            pronunciation: vocabDetail.pronunciation,
-                            type: vocabDetail.type,
-                            image_link: vocabDetail.image_link,
-                            meaning: vocabDetail.meaning || "",
-                            description: vocabDetail.description,
-                            audio: vocabDetail.audio || "",
-                            example: vocabDetail.example || "",
-                            __v: vocabDetail.__v
-                        };
-                    }
-                    return null;
-                })
-            )
-            convertedVocab[level] = {
-                count: vocabDetails.filter((vocab) => vocab != null).length,
-                vocabulary: vocabDetails.filter((vocab) => vocab != null)
-            };
-        };
+		return responseHandle.success(res, convertedVocab, "Success");
+	} catch (err) {
+		return responseHandle.badRequest(res, "Failed");
+	}
+};
 
-        return responseHandle.success(res, convertedVocab, "Success");
+export const getVocabByEachLevel = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.id);
+		console.log("user--> ", user);
 
-    }catch(err) {
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
+		if (!user) {
+			return responseHandle.notFound(res, "User not exist");
+		}
+		const level: number = Number(req.body.level);
+		const size: number = Number(req.body.size);
+		const offset: number = Number(req.body.offset);
+		console.log(req.body);
 
-export const getVocabByEachLevel = async (req,res) => {
-    try {
-        const user = await User.findById(req.params.id);
+		if (!Number.isFinite(level)) {
+			return responseHandle.badRequest(res, "Wrong format level");
+		}
+		if (!Number.isFinite(size)) {
+			return responseHandle.badRequest(res, "Wrong format size");
+		}
+		if (!Number.isFinite(offset)) {
+			return responseHandle.badRequest(res, "Wrong format offset");
+		}
 
-        if(!user) {
-            return responseHandle.notFound(res, "User not exist");
-        }
-        const level: number = Number(req.body.level);
-        const size : number = Number(req.body.size);
-        const offset: number = Number(req.body.offset);
+		const listVocab = user.vocabulary.filter((x) => x.count == level);
 
-        if(!Number.isFinite(level))
-        {
-            return responseHandle.badRequest(res, "Wrong format level");
-        }
-        if(!Number.isFinite(size))
-        {
-            return responseHandle.badRequest(res, "Wrong format size");
-        }
-        if(!Number.isFinite(offset))
-        {
-            return responseHandle.badRequest(res, "Wrong format offset");
-        }
-        
-        const listVocab = user.vocabulary.filter(x => x.count == level);
+		let data;
 
-        let data;
+		if (!listVocab) {
+			data = {
+				count: 0,
+				vocabulary: listVocab,
+			};
+			return responseHandle.success(res, data, "Success");
+		}
 
-        if(!listVocab)
-        {
-            data = {
-                count: 0,
-                vocabulary: listVocab
-            }
-            return responseHandle.success(res, data, "Success");
-        } 
+		if (offset * size > listVocab.length - 1) {
+			return responseHandle.badRequest(res, "Out of array lenght");
+		}
 
-        if(offset * size > listVocab.length - 1)
-        {
-            return responseHandle.badRequest(res, "Out of array lenght");
-        }
-        
-        
-        const convertedVocab = await Promise.all(
-            listVocab.map(async (entry) => {
-                const vocabDetail = await f_getVocabById(entry.vocab);
+		const convertedVocab = await Promise.all(
+			listVocab.map(async (entry) => {
+				const vocabDetail = await f_getVocabById(entry.vocab);
 
-                if(vocabDetail) {
-                    return {
-                        _id: vocabDetail._id,
-                        name: vocabDetail.name,
-                        pronunciation: vocabDetail.pronunciation,
-                        type: vocabDetail.type,
-                        image_link: vocabDetail.image_link,
-                        meaning: vocabDetail.meaning || "",
-                        description: vocabDetail.description,
-                        audio: vocabDetail.audio || "",
-                        example: vocabDetail.example || "",
-                        __v: vocabDetail.__v
-                    }
-                }
-                return null;
-            })
-        )
-        const filterVocab = convertedVocab.filter((vocab) => vocab!= null);
+				if (vocabDetail) {
+					return {
+						_id: vocabDetail._id,
+						name: vocabDetail.name,
+						pronunciation: vocabDetail.pronunciation,
+						type: vocabDetail.type,
+						image_link: vocabDetail.image_link,
+						meaning: vocabDetail.meaning || "",
+						description: vocabDetail.description,
+						audio: vocabDetail.audio || "",
+						example: vocabDetail.example || "",
+						__v: vocabDetail.__v,
+					};
+				}
+				return null;
+			})
+		);
+		const filterVocab = convertedVocab.filter((vocab) => vocab != null);
 
-        filterVocab.sort((a,b) => {
-            const nameCompare = a.name.localeCompare(b.name);
-            if(nameCompare != 0) {
-                return nameCompare;
-            } else {
-                return a.meaning.localeCompare(b.meaning);
-            }
-        });
+		filterVocab.sort((a, b) => {
+			const nameCompare = a.name.localeCompare(b.name);
+			if (nameCompare != 0) {
+				return nameCompare;
+			} else {
+				return a.meaning.localeCompare(b.meaning);
+			}
+		});
 
-        const subsetVocab = filterVocab.slice(size * offset, size + (offset*size));
+		const subsetVocab = filterVocab.slice(
+			size * offset,
+			size + offset * size
+		);
 
-        data = {
-            count: subsetVocab.length,
-            vocabulary: subsetVocab
-        }
+		data = {
+			count: subsetVocab.length,
+			vocabulary: subsetVocab,
+		};
 
-        return responseHandle.success(res, data, "Success");
-
-    }catch(err) {
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
+		return responseHandle.success(res, data, "Success");
+	} catch (err) {
+		return responseHandle.badRequest(res, "Failed");
+	}
+};
