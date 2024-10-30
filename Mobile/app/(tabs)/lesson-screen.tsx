@@ -30,6 +30,7 @@ export default function LessonScreen() {
 			keyExtractor={(item, index) => index.toString()}
 			renderItem={({ item, index }) => (
 				<LessonCard
+					_id={item._id}
 					title={item.name}
 					description={item.name}
 					image={item.image}
