@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Notebook } from "lucide-react-native";
 import {
 	View,
@@ -14,14 +14,26 @@ import HomeChart from "@/components/home-chart";
 import { useGetUserVocabsHomeQuery } from "@/lib/features/api/api-user-slice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { router, useRouter } from "expo-router";
+import { router, useFocusEffect, useRouter } from "expo-router";
 
 export default function HomeScreen() {
+	const [refreshKey, setRefreshKey] = useState(0);
 	const userId = useSelector((state: RootState) => state.auth.userId);
 	const route = useRouter();
-	const { data, isLoading, isError, error } = useGetUserVocabsHomeQuery(
-		userId!
+	const { data, isLoading, isError, error, refetch } =
+		useGetUserVocabsHomeQuery(userId!);
+	useFocusEffect(
+		useCallback(() => {
+			setRefreshKey((prevKey) => prevKey + 1);
+		}, [])
 	);
+
+	useFocusEffect(
+		useCallback(() => {
+			setRefreshKey((prevKey) => prevKey + 1);
+		}, [])
+	);
+
 	if (isLoading) {
 		return (
 			<View style={styles.container}>
@@ -32,21 +44,27 @@ export default function HomeScreen() {
 	if (isError) {
 		return <Text>Error: {error + ""}</Text>;
 	}
+
 	return (
-		<SafeAreaView style={styles.container}>
+		<SafeAreaView key={refreshKey} style={styles.container}>
 			<Image
 				source={require("@/assets/images/Pattern.png")}
 				style={styles.pattern}
 				resizeMode="cover"
 			/>
-			<View style={styles.noteContainer}>
+			<Pressable
+				onPress={() => {
+					route.push("/hand-book");
+				}}
+				style={styles.noteContainer}
+			>
 				<View style={styles.note}>
 					<Notebook color={"#fff"} />
 				</View>
 				<Text style={styles.noteText}>
 					Sổ tay đã có {data?.data.total} từ
 				</Text>
-			</View>
+			</Pressable>
 			<HomeChart data={data?.data.levels} />
 			<View style={styles.centerColumn}>
 				<Text style={[{ fontSize: 18 }, styles.centerText]}>

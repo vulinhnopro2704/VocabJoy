@@ -1,18 +1,34 @@
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Alert, TouchableOpacity } from "react-native";
 import React from "react";
 import ObjectiveTest from "@/components/objective-test/objective-test";
 import { useGetVocabForPracticeQuery } from "@/lib/features/api/api-user-slice";
-import { useSelector } from "react-redux";
 import { useAppSelector } from "@/lib/hook";
 import { generateQuestions } from "@/utils/generateQuestion";
+import { useRouter } from "expo-router";
+import { X } from "lucide-react-native";
 
 export default function TestScreen() {
+	const router = useRouter();
+
 	const {
 		data: result,
 		isLoading,
-		isSuccess,
 		isError,
 	} = useGetVocabForPracticeQuery(useAppSelector((state) => state.user._id));
+
+	const handleExit = () => {
+		Alert.alert("Xác nhận", "Bạn có chắc chắn muốn thoát không?", [
+			{
+				text: "Hủy",
+				style: "cancel",
+			},
+			{
+				text: "Thoát",
+				onPress: () => router.back(),
+				style: "destructive",
+			},
+		]);
+	};
 
 	if (isLoading) {
 		return <Text>Loading...</Text>;
@@ -24,6 +40,18 @@ export default function TestScreen() {
 
 	return (
 		<View style={styles.container}>
+			{/* Top Bar */}
+			<View style={styles.topBar}>
+				<Text style={styles.title}>Ôn tập</Text>
+				<TouchableOpacity
+					onPress={handleExit}
+					style={styles.exitButton}
+				>
+					<X size={24} color="red" />
+				</TouchableOpacity>
+			</View>
+
+			{/* Objective Test */}
 			<ObjectiveTest
 				questionList={generateQuestions(result?.data.praticeVocab!)}
 			/>
@@ -36,5 +64,27 @@ const styles = StyleSheet.create({
 		paddingVertical: 30,
 		flex: 1,
 		backgroundColor: "#fff",
+	},
+	topBar: {
+		flexDirection: "row",
+		justifyContent: "space-between",
+		alignItems: "center",
+		paddingHorizontal: 20,
+		paddingVertical: 10,
+		backgroundColor: "#fff",
+		borderBottomWidth: 1,
+		borderBottomColor: "#ddd",
+	},
+	title: {
+		fontSize: 20,
+		fontWeight: "medium",
+	},
+	exitButton: {
+		paddingHorizontal: 10,
+		paddingVertical: 5,
+	},
+	exitText: {
+		color: "red",
+		fontSize: 16,
 	},
 });
