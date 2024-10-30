@@ -9,9 +9,11 @@ type Lesson = {
     title: string;
     description: string;
     hasOpenBefore?: boolean;
+    index:number;
 };
 
 export default function LessonCard({
+                                        index,
                                        image,
                                        description,
                                        title,
@@ -19,8 +21,12 @@ export default function LessonCard({
                                    }: Lesson) {
     const [isPressed, setIsPressed] = useState(false);
     
-    
- 
+    const nameLesson:string[] =["Trường Học","Gia Đình","Vẻ Bề Ngoài","@/assets/images/school.jpeg","@/assets/images/school.jpge"]
+    const imglinks:any={
+        0:require("@/assets/images/school.jpeg"),
+        1:require("@/assets/images/family.jpeg"),
+        2:require("@/assets/images/appearance.jpeg"),      
+    }                        
     return (
         <Pressable
             onPressIn={() => router.push("/study-screen")}
@@ -31,7 +37,7 @@ export default function LessonCard({
             ]}
         >
             <Image
-                source={require("../assets/images/logo.png")}
+                source={imglinks[`${index}`]}
                 style={styles.image}
             />
             <View style={styles.infor}>
@@ -49,7 +55,7 @@ export default function LessonCard({
                         styles.description,
                     ]}
                 >
-                    {description}
+                    {""+(index+1)+". "+nameLesson[index]}
                 </Text>
             </View>
         </Pressable>
@@ -64,13 +70,10 @@ const styles = StyleSheet.create({
         alignItems: "center",
         padding: 20,
         borderRadius: 10,
-        shadowOffset: {
-            width: 0,
-            height: 4,
-        },
-        shadowOpacity: 0.3,
-        shadowRadius: 5,
-        elevation: 10,
+        borderWidth:1,
+        borderColor:"#DDDDDD",
+        borderBottomWidth:5,
+        backgroundColor:"white"
     },
     hasOpenBefore: {
         backgroundColor: Colors.primary,
@@ -81,9 +84,9 @@ const styles = StyleSheet.create({
         shadowColor: Colors.gray_300_shadow,
     },
     image: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: 70,
+        height: 70,
+        borderRadius: 35,
     },
     infor: {
         flexDirection: "column",

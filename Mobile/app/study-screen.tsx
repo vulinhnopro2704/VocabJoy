@@ -92,7 +92,7 @@ export default function StudyNewWord(){
         showAnswer()
     }
     const handleChooseCorrectAnswer = async () => {
-		const audioFile = require("@/assets/sound-effect/correct-156911.mp3");
+		const audioFile = require("@/assets/sound-effect/level-up-191997.mp3");
 		const sound = await playLocalSound(audioFile);
 		correctSoundEffect.current = sound;
 		setSound(sound);
