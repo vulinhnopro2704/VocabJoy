@@ -405,7 +405,7 @@ export const getVocabByEachLevel = async (req,res) => {
         {
             return responseHandle.badRequest(res, "Wrong format offset");
         }
-        
+
         const listVocab = user.vocabulary.filter(x => x.count == level);
 
         let data;
@@ -417,14 +417,14 @@ export const getVocabByEachLevel = async (req,res) => {
                 vocabulary: listVocab
             }
             return responseHandle.success(res, data, "Success");
-        } 
+        }
 
         if(offset * size > listVocab.length - 1)
         {
             return responseHandle.badRequest(res, "Out of array lenght");
         }
-        
-        
+
+
         const convertedVocab = await Promise.all(
             listVocab.map(async (entry) => {
                 const vocabDetail = await f_getVocabById(entry.vocab);
