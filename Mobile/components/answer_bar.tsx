@@ -43,7 +43,7 @@ export default function AnswerBar({ isCorrect, answer, onPress }: Props) {
 			style={[
 				styles.container,
 				isCorrect
-					? { backgroundColor: Colors.primary }
+					? { backgroundColor: "#00BB00" }
 					: { backgroundColor: Colors.red },
 			]}
 		>
@@ -101,15 +101,14 @@ const styles = StyleSheet.create({
 	volume: {
 		alignItems: "center",
 		justifyContent: "center",
-		width: 50,
-		height: 50,
+		width: 60,
+		height: 60,
 		backgroundColor: "white",
 		borderRadius: 60,
-		shadowColor: "white",
-        shadowOffset: { width: 0, height: 3 },
-        shadowOpacity: 0.5,
-        shadowRadius: 5, 
 		elevation: 10,
+		borderWidth:1,
+		borderColor:Colors.gray_500,
+		borderBottomWidth:4
 	},
 	vocabInfor: {
 		gap: 10,
@@ -129,10 +128,9 @@ const styles = StyleSheet.create({
 		marginTop:30,
 		marginBottom:50,
 		justifyContent:"center",
-		shadowColor: "grey",
-        shadowOffset: { width: 5, height: 5 },
-        shadowOpacity: 0.5,
-        shadowRadius: 5, 
+		borderWidth:1,
+		borderColor:Colors.gray_500,
+		borderBottomWidth:4
 	},
 	buttonText: {
 		fontSize: 18,
