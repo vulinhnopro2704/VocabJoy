@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, Pressable, TouchableOpacity,Image } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Vocab } from "@/data-types/vocabulary";
 import { Volume2 } from "lucide-react-native";
 import { Colors } from "@/constants/colors";
-import { playSound } from "@/utils/play-sound";
+import { playLocalSound, playSound } from "@/utils/play-sound";
 import { Audio, ResizeMode } from "expo-av";
 import { router } from "expo-router";
 
@@ -12,8 +12,18 @@ type Props = {
 };
 
 export default function OutBar({ onPress }: Props) {
-	
-
+	const [sound, setSound] = useState<Audio.Sound | null>(null);
+	const correctSoundEffect = useRef<Audio.Sound | null>(null);
+	const playSound = async(speed:number)=>{
+		const audioFile =require("@/assets/sound-effect/correct-156911.mp3")
+		const sound = await playLocalSound(audioFile);
+		correctSoundEffect.current = sound;
+		setSound(sound);
+		await sound.playAsync();
+    }
+	useEffect(()=>{
+		playSound(1)
+	},[])
 	return (
 		<View
 			style={[styles.container,{ backgroundColor: "white" }]}

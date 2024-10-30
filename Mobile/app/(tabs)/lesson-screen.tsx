@@ -31,10 +31,11 @@ export default function LessonScreen() {
 			renderItem={({ item, index }) => (
 				<LessonCard
 					title={item.name}
-					description={item.description}
+					description={item.name}
 					image={item.image}
 					key={index}
 					hasOpenBefore={false}
+					index={index}
 				/>
 			)}
 			ItemSeparatorComponent={() => <View style={styles.separator} />}
