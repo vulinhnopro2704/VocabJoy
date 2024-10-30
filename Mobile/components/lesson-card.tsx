@@ -10,14 +10,15 @@ type Lesson = {
     description: string;
     hasOpenBefore?: boolean;
     index:number;
+    _id:string;
 };
 
-export default function LessonCard({
+export default function LessonCard({    _id,
                                         index,
-                                       image,
-                                       description,
-                                       title,
-                                       hasOpenBefore = false,
+                                        image,
+                                        description,
+                                        title,
+                                        hasOpenBefore = false,
                                    }: Lesson) {
     const [isPressed, setIsPressed] = useState(false);
     
@@ -29,7 +30,7 @@ export default function LessonCard({
     }                        
     return (
         <Pressable
-            onPressIn={() => router.push("/study-screen")}
+            onPressIn={() => router.push({pathname:"/study-screen",params:{_id}})}
             style={[
                 hasOpenBefore ? styles.hasOpenBefore : styles.noOpenBefore,
                 styles.container,

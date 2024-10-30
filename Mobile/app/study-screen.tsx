@@ -14,16 +14,18 @@ import LoadingIcon from "@/components/loadingicon";
 import Toast from "react-native-toast-message";
 import { playSound, playLocalSound } from "@/utils/play-sound";
 import AnswerBar from "@/components/answer_bar";
-import { router } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import VideoStudy from "@/components/video_study";
 import OutBar from "@/components/out-form";
+import { useGetVocabLessonsQuery } from "@/lib/features/api/api-lesson-slice";
 
 
 
 
-export default function StudyNewWord(){
-    const {data:res,error,isLoading} = useGet10VocabularyQuery("")
-
+export default function StudyNewWord({}){
+    const {_id} = useLocalSearchParams()
+    const idLesson =  Array.isArray(_id) ? _id[0] : _id;
+    const {data:res,error,isLoading} = useGetVocabLessonsQuery(idLesson)
     const yellowWidth = useRef(new Animated.Value(20)).current;
     const [isCorrect,setIsCorrect] = useState(true)
     const [index,setIndex] = useState(0)
@@ -81,11 +83,11 @@ export default function StudyNewWord(){
             setScreenLearn(screenLearn+1)
             return
         }
-        else if(res.data[index].name==text.trim())
+        else if(res?.data.listvocab[index]?.name==text.trim())
         {
             setIsCorrect(true)
         }
-        else if(res.data[index].name!=text.trim())
+        else if(res.data.listvocab[index]?.name!=text.trim())
         {
             setIsCorrect(false)
         }
@@ -109,11 +111,11 @@ export default function StudyNewWord(){
     function selectScreen(){
         switch (screenLearn) {
             case 1:
-                return <FlashCard vocab={res.data[index]}></FlashCard>
+                return <FlashCard vocab={res.data.listvocab[index]}></FlashCard>
             case 2:
-                return <SoundFillWord setTextParent={setTextParent} vocab={res.data[index]}></SoundFillWord >
+                return <SoundFillWord setTextParent={setTextParent} vocab={res.data.listvocab[index]}></SoundFillWord >
             case 3:
-                return <OTPFillWord setTextParent={setTextParent} vocab={res.data[index]}></OTPFillWord>
+                return <OTPFillWord setTextParent={setTextParent} vocab={res.data.listvocab[index]}></OTPFillWord>
         }
     }
 
@@ -164,6 +166,7 @@ export default function StudyNewWord(){
     return (
         video?
         <VideoStudy></VideoStudy>:
+        (!isLoading&&
         <Animated.View style={{flex:1,backgroundColor:"white",opacity:start}}>
         <View style={
             {flex:1,backgroundColor:"white",opacity:(showAnswerBar||showOutBar)?0.3:1}
@@ -230,7 +233,7 @@ export default function StudyNewWord(){
 					]}
 				>
 					<AnswerBar
-						answer={res.data[index]}
+						answer={res.data.listvocab[index]}
 						onPress={handlerSubmitAnswerBar}
 						isCorrect={isCorrect}
 					/>
@@ -252,7 +255,7 @@ export default function StudyNewWord(){
           
         </Animated.View>
 
-    )
+    ))
 }
 
 const styles = StyleSheet.create({

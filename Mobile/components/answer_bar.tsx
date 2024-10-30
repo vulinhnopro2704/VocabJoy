@@ -5,6 +5,7 @@ import { Volume2 } from "lucide-react-native";
 import { Colors } from "@/constants/colors";
 import { playLocalSound, playSound } from "@/utils/play-sound";
 import { Audio } from "expo-av";
+import { AUDIO_URL } from "@/constants/backend";
 
 type Props = {
 	answer: Vocab;
@@ -29,7 +30,7 @@ export default function AnswerBar({ isCorrect, answer, onPress }: Props) {
 	const handlePressVolume= async()=>{
      
         const { sound } = await Audio.Sound.createAsync(
-          {uri:answer.audio||""},
+          { uri:AUDIO_URL+answer.audio||""},
         )
 
 	setSound(sound)
