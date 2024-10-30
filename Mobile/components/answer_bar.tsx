@@ -1,9 +1,9 @@
 import { View, Text, StyleSheet, Pressable, TouchableOpacity } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Vocab } from "@/data-types/vocabulary";
 import { Volume2 } from "lucide-react-native";
 import { Colors } from "@/constants/colors";
-import { playSound } from "@/utils/play-sound";
+import { playLocalSound, playSound } from "@/utils/play-sound";
 import { Audio } from "expo-av";
 
 type Props = {
@@ -14,30 +14,28 @@ type Props = {
 
 export default function AnswerBar({ isCorrect, answer, onPress }: Props) {
 	const [sound, setSound] = useState<Audio.Sound | null>(null);
+	const correctSoundEffect = useRef<Audio.Sound | null>(null);
+	const playSound = async(speed:number)=>{
+		const audioFile =isCorrect?require("@/assets/sound-effect/correct-156911.mp3"):require("@/assets/sound-effect/wrong-answer-129254.mp3")
+		const sound = await playLocalSound(audioFile);
+		correctSoundEffect.current = sound;
+		setSound(sound);
+		await sound.playAsync();
+    }
+	
+	useEffect(()=>{
+		playSound(1)
+	  },[])
+	const handlePressVolume= async()=>{
+     
+        const { sound } = await Audio.Sound.createAsync(
+          {uri:answer.audio||""},
+        )
 
-	useEffect(() => {
-		const initialSound = async () => {
-			if (answer.audio) {
-				const { sound } = await playSound(answer.audio);
-				setSound(sound);
-			}
-		};
-
-		initialSound();
-
-		return () => {
-			if (sound) {
-				sound.unloadAsync();
-			}
-		};
-	}, [answer.audio]);
-
-	const handlePressVolume = () => {
-		if (sound) {
-			sound.playAsync();
-		}
-	};
-
+	setSound(sound)
+	await sound.setRateAsync(1, true);
+	await sound.playAsync();
+    }
 	return (
 		<View
 			style={[
