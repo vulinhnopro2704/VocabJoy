@@ -5,7 +5,10 @@ import { StyleSheet, View,Text, Image, Animated, TouchableOpacity, TouchableHigh
 import { Colors } from "../../constants/colors"
 import { Audio } from "expo-av";
 import { Vocab } from "@/data-types/vocabulary";
+<<<<<<< HEAD
 import { AUDIO_URL } from "@/constants/backend";
+=======
+>>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
 
 
 
@@ -26,7 +29,11 @@ const FlashCard:React.FC<{ vocab: Vocab }>=({ vocab })=>{
         if(vocab.audio)
         {
         const { sound } = await Audio.Sound.createAsync(
+<<<<<<< HEAD
             {uri:AUDIO_URL+vocab.audio},
+=======
+          { uri:vocab.audio},
+>>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
         );
         setSound(sound)
         await sound.setRateAsync(speed, true);

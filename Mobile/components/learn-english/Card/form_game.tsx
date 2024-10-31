@@ -5,7 +5,10 @@ import AntDesign from '@expo/vector-icons/AntDesign';
 import MaterialCommunityIcons from '@expo/vector-icons/MaterialCommunityIcons';
 import { Colors } from "@/constants/colors";
 import { Vocab } from "@/data-types/vocabulary";
+<<<<<<< HEAD
 import { AUDIO_URL, IMAGE_URL } from "@/constants/backend";
+=======
+>>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
 
  const GameForm:React.FC<{ vocab: Vocab }>=({ vocab })=>{
     const [sound, setSound] = useState<Audio.Sound>();
@@ -13,7 +16,11 @@ import { AUDIO_URL, IMAGE_URL } from "@/constants/backend";
         if(vocab.audio)
         {
         const { sound } = await Audio.Sound.createAsync(
+<<<<<<< HEAD
           {uri:AUDIO_URL+vocab.audio},
+=======
+          {uri:vocab.audio},
+>>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
         );
         setSound(sound)
         await sound.setRateAsync(speed, true);
@@ -30,7 +37,10 @@ import { AUDIO_URL, IMAGE_URL } from "@/constants/backend";
             return data+" "
         })
     }
+<<<<<<< HEAD
     console.log(IMAGE_URL+vocab.image_link)
+=======
+>>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
     return (
     <View style={styles.container}>
         <View style={styles.button}>
@@ -43,7 +53,11 @@ import { AUDIO_URL, IMAGE_URL } from "@/constants/backend";
                <View style={styles.button_el}><MaterialCommunityIcons name="snail" size={24} color={Colors.blue} /></View>
             </TouchableOpacity>
         </View>
+<<<<<<< HEAD
         <Image style={styles.image_main} source={vocab.image_link?{uri:IMAGE_URL+vocab.image_link}:require("@/assets/images/gai.jpeg")}></Image>
+=======
+        <Image style={styles.image_main} source={require("@/assets/images/gai.jpeg")}></Image>
+>>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
         <View style={styles.text}>
             <Text style={{fontSize:18,fontWeight:600,textAlign:"center"}}>{descriptioninText(vocab.example||"")}</Text>
         </View>
