@@ -10,7 +10,6 @@ type Lesson = {
     description: string;
     hasOpenBefore?: boolean;
     index:number;
-<<<<<<< HEAD
     _id:string;
 };
 
@@ -20,20 +19,10 @@ export default function LessonCard({    _id,
                                         description,
                                         title,
                                         hasOpenBefore = false,
-=======
-};
-
-export default function LessonCard({
-                                        index,
-                                       image,
-                                       description,
-                                       title,
-                                       hasOpenBefore = false,
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
                                    }: Lesson) {
     const [isPressed, setIsPressed] = useState(false);
     
-    const nameLesson:string[] =["Trường Học","Gia Đình","Vẻ Bề Ngoài","@/assets/images/school.jpeg","@/assets/images/school.jpge"]
+    const nameLesson:string[] =["Trường Học","Gia Đình","Vẻ Bề Ngoài","","@/assets/images/school.jpge"]
     const imglinks:any={
         0:require("@/assets/images/school.jpeg"),
         1:require("@/assets/images/family.jpeg"),
@@ -41,11 +30,8 @@ export default function LessonCard({
     }                        
     return (
         <Pressable
-<<<<<<< HEAD
             onPressIn={() => router.push({pathname:"/study-screen",params:{_id}})}
-=======
-            onPressIn={() => router.push("/study-screen")}
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
             style={[
                 hasOpenBefore ? styles.hasOpenBefore : styles.noOpenBefore,
                 styles.container,
