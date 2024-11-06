@@ -8,10 +8,8 @@ import { Audio } from "expo-av";
 import AnswerBar from "../answer_bar";
 import AnswerBox from "./Card/answerBox";
 import Toast from "react-native-toast-message";
-<<<<<<< HEAD
 import { AUDIO_URL } from "@/constants/backend";
-=======
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
 
 
 
@@ -25,11 +23,7 @@ const SoundFillWord:React.FC<{ vocab: Vocab,setTextParent:any }>=({ vocab,setTex
         if(vocab.audio)
         {
         const { sound } = await Audio.Sound.createAsync(
-<<<<<<< HEAD
             {uri:AUDIO_URL+vocab.audio},
-=======
-          {uri:vocab.audio},
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
         );
         setSound(sound)
         await sound.setRateAsync(speed, true);

@@ -30,11 +30,9 @@ export default function AnswerBar({ isCorrect, answer, onPress }: Props) {
 	const handlePressVolume= async()=>{
      
         const { sound } = await Audio.Sound.createAsync(
-<<<<<<< HEAD
+
           { uri:AUDIO_URL+answer.audio||""},
-=======
-          {uri:answer.audio||""},
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
         )
 
 	setSound(sound)

@@ -14,30 +14,20 @@ import LoadingIcon from "@/components/loadingicon";
 import Toast from "react-native-toast-message";
 import { playSound, playLocalSound } from "@/utils/play-sound";
 import AnswerBar from "@/components/answer_bar";
-<<<<<<< HEAD
 import { router, useLocalSearchParams } from "expo-router";
 import VideoStudy from "@/components/video_study";
 import OutBar from "@/components/out-form";
 import { useGetVocabLessonsQuery } from "@/lib/features/api/api-lesson-slice";
-=======
-import { router } from "expo-router";
-import VideoStudy from "@/components/video_study";
-import OutBar from "@/components/out-form";
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
 
 
 
 
-<<<<<<< HEAD
+
 export default function StudyNewWord({}){
     const {_id} = useLocalSearchParams()
     const idLesson =  Array.isArray(_id) ? _id[0] : _id;
     const {data:res,error,isLoading} = useGetVocabLessonsQuery(idLesson)
-=======
-export default function StudyNewWord(){
-    const {data:res,error,isLoading} = useGet10VocabularyQuery("")
 
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
     const yellowWidth = useRef(new Animated.Value(20)).current;
     const [isCorrect,setIsCorrect] = useState(true)
     const [index,setIndex] = useState(0)
@@ -95,19 +85,13 @@ export default function StudyNewWord(){
             setScreenLearn(screenLearn+1)
             return
         }
-<<<<<<< HEAD
+
         else if(res?.data.listvocab[index]?.name==text.trim())
         {
             setIsCorrect(true)
         }
         else if(res.data.listvocab[index]?.name!=text.trim())
-=======
-        else if(res.data[index].name==text.trim())
-        {
-            setIsCorrect(true)
-        }
-        else if(res.data[index].name!=text.trim())
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
         {
             setIsCorrect(false)
         }
@@ -131,19 +115,13 @@ export default function StudyNewWord(){
     function selectScreen(){
         switch (screenLearn) {
             case 1:
-<<<<<<< HEAD
+
                 return <FlashCard vocab={res.data.listvocab[index]}></FlashCard>
             case 2:
                 return <SoundFillWord setTextParent={setTextParent} vocab={res.data.listvocab[index]}></SoundFillWord >
             case 3:
                 return <OTPFillWord setTextParent={setTextParent} vocab={res.data.listvocab[index]}></OTPFillWord>
-=======
-                return <FlashCard vocab={res.data[index]}></FlashCard>
-            case 2:
-                return <SoundFillWord setTextParent={setTextParent} vocab={res.data[index]}></SoundFillWord >
-            case 3:
-                return <OTPFillWord setTextParent={setTextParent} vocab={res.data[index]}></OTPFillWord>
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
         }
     }
 
@@ -194,10 +172,9 @@ export default function StudyNewWord(){
     return (
         video?
         <VideoStudy></VideoStudy>:
-<<<<<<< HEAD
+
         (!isLoading&&
-=======
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
         <Animated.View style={{flex:1,backgroundColor:"white",opacity:start}}>
         <View style={
             {flex:1,backgroundColor:"white",opacity:(showAnswerBar||showOutBar)?0.3:1}
@@ -264,11 +241,7 @@ export default function StudyNewWord(){
 					]}
 				>
 					<AnswerBar
-<<<<<<< HEAD
 						answer={res.data.listvocab[index]}
-=======
-						answer={res.data[index]}
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
 						onPress={handlerSubmitAnswerBar}
 						isCorrect={isCorrect}
 					/>
@@ -290,11 +263,9 @@ export default function StudyNewWord(){
           
         </Animated.View>
 
-<<<<<<< HEAD
+
     ))
-=======
-    )
->>>>>>> 99308b2a38ec2757c7fba71e2cdef9b8b383cfa9
+
 }
 
 const styles = StyleSheet.create({
