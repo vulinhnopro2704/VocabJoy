@@ -6,7 +6,7 @@ import morgan from "morgan";
 import cors from "cors";
 import { errorHandler } from "./handlers/error-handler";
 import { HttpException } from "./handlers/http_exception-handler";
-
+import path from "path"
 //chay database mongoose
 connectDb();
 
@@ -30,8 +30,9 @@ app.use(
 
 
 
-
-
+app.use("/audio",express.static(path.join(__dirname, '/upload/audio')));
+app.use("/images",express.static(path.join(__dirname, '/upload/images')));
+console.log(path.join(__dirname, '/upload/audio'))
 app.use("/api", main_route);
 
 app.get("/", (req: Request, res: Response) => {

@@ -19,7 +19,7 @@ export const addLesson = async (req, res) => {
 //GET ALL LESSONS
 export const getAllLessons = async (req, res) => {
     try {
-        const lessons = await Lesson.find();
+        const lessons = await Lesson.find().limit(3);
         return responseHandle.success(res, lessons, "Get All Lessons");
     } catch (error) {
         return responseHandle.badRequest(res, "Get lessons failed");
