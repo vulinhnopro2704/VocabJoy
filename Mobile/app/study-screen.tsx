@@ -86,11 +86,11 @@ export default function StudyNewWord({}){
             return
         }
 
-        else if(res?.data.listvocab[index]?.name==text.trim())
+        else if(res?.data.listvocab[index]?.name==text.trim().toLowerCase())
         {
             setIsCorrect(true)
         }
-        else if(res.data.listvocab[index]?.name!=text.trim())
+        else if(res.data.listvocab[index]?.name!=text.trim().toLowerCase())
 
         {
             setIsCorrect(false)
@@ -140,6 +140,7 @@ export default function StudyNewWord({}){
 	};
     const hideAnwser = ()=>{
         setTimeout(()=> setShowBox(false),500)
+        setText("")
 		Animated.timing(slideAnim, {
 			toValue: 300,
 			duration: 500,
