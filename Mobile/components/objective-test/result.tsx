@@ -10,16 +10,16 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import { Vocab } from "@/data-types/vocabulary";
-import { Circle } from "lucide-react-native";
-import { Colors } from "@/constants/colors";
 import { useRouter } from "expo-router";
 
 type Props = {
+	text: string;
 	correctAnswers: Vocab[];
 	incorrectAnswers: Vocab[];
 };
 
 export default function ResultScreen({
+	text,
 	correctAnswers,
 	incorrectAnswers,
 }: Props) {
@@ -51,10 +51,7 @@ export default function ResultScreen({
 			</View>
 
 			{/* Result Text */}
-			<Text style={styles.resultText}>
-				Bạn đã trả lời đúng {correctAnswers.length}/
-				{correctAnswers.length + incorrectAnswers.length} từ vựng
-			</Text>
+			<Text style={styles.resultText}>{text}</Text>
 
 			{/* Vocabulary List */}
 			<ScrollView style={styles.vocabList}>

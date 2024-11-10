@@ -24,6 +24,7 @@ import {
 	VocabWithStatus,
 } from "@/lib/features/api/api-user-slice";
 import { useAppSelector } from "@/lib/hook";
+import ProcessBar from "../process-bar";
 
 type Props = {
 	questionList: MultipleChoiceQuestion[];
@@ -33,7 +34,7 @@ export default function ObjectiveTest({ questionList }: Props) {
 	const [selected, setSelected] = useState<number>(-1);
 	const [answeredCount, setAnsweredCount] = useState<number>(0);
 	const [unansweredQuestions, setUnansweredQuestions] =
-		useState(questionList);
+		useState<MultipleChoiceQuestion[]>(questionList);
 	const [incorrectlyAnsweredQuestions, setIncorrectlyAnsweredQuestions] =
 		useState<MultipleChoiceQuestion[]>([]);
 	const [currentQuestion, setCurrentQuestion] =
@@ -139,9 +140,6 @@ export default function ObjectiveTest({ questionList }: Props) {
 		}
 	};
 
-	const progressWidth =
-		(answeredCount / questionList.length) * Dimensions.get("window").width;
-
 	const handShowAnswerBoxPress = () => {
 		if (!isCompleted) {
 			Animated.timing(slideAnim, {
@@ -198,24 +196,21 @@ export default function ObjectiveTest({ questionList }: Props) {
 		<ScrollView style={styles.container}>
 			{isCompleted ? (
 				<ResultScreen
+					text={`Bạn đã trả lời đúng ${
+						correctVocabId.current.length
+					}/${
+						correctVocabId.current.length +
+						incorrectVocabId.current.length
+					} từ vựng`}
 					correctAnswers={correctVocabId.current}
 					incorrectAnswers={incorrectVocabId.current}
 				/>
 			) : (
 				<>
-					<View style={styles.progressBarContainer}>
-						<View
-							style={[
-								styles.progressBar,
-								{ width: progressWidth },
-							]}
-						>
-							<Image
-								source={require("@/assets/images/shiba-inu-icon.png")}
-								style={styles.icon}
-							/>
-						</View>
-					</View>
+					<ProcessBar
+						total={questionList.length}
+						answeredCount={answeredCount}
+					/>
 					{currentQuestion && (
 						<>
 							<Question
@@ -272,26 +267,6 @@ const styles = StyleSheet.create({
 		paddingTop: 10,
 		backgroundColor: "#fff",
 		paddingHorizontal: 10,
-	},
-	progressBarContainer: {
-		height: 30,
-		backgroundColor: "#e0e0e0",
-		borderRadius: 15,
-		marginBottom: 20,
-		marginHorizontal: 20,
-	},
-	icon: {
-		width: 40,
-		height: 40,
-		position: "absolute",
-		right: -20,
-		top: -4,
-		zIndex: 10,
-	},
-	progressBar: {
-		height: "100%",
-		backgroundColor: Colors.primary,
-		borderRadius: 15,
 	},
 	listOption: {
 		padding: 20,
