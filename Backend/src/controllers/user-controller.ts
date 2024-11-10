@@ -106,7 +106,7 @@ export const getDiaryUser = async (req, res) => {
         var sortedVocab = user.vocabulary.sort((a, b) => a.count - b.count);
         if(user.vocabulary.length > 30)
         {
-            const randomLimit = Math.floor(Math.random() * (30 - 20 + 1)) + 20;
+            const randomLimit = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
             sortedVocab = sortedVocab.slice(0, randomLimit)
         }
 
