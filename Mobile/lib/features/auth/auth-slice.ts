@@ -33,7 +33,6 @@ const authSlice = createSlice({
 			const decoded: DecodedToken = jwtDecode<DecodedToken>(
 				action.payload
 			);
-			console.log(decoded);
 			state.userId = decoded.userId;
 		},
 		removeToken: (state) => {
