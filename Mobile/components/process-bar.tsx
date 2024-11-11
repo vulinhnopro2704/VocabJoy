@@ -8,8 +8,17 @@ type Props = {
 };
 
 export default function ProcessBar({ total, answeredCount }: Props) {
+	// Validate parameters
+	const validTotal = Number.isFinite(total) && total > 0 ? total : 1;
+	const validAnsweredCount =
+		Number.isFinite(answeredCount) && answeredCount >= 0
+			? answeredCount
+			: 0;
+
+	// Calculate progress width
 	const progressWidth =
-		(answeredCount / total) * Dimensions.get("window").width;
+		(validAnsweredCount / validTotal) * Dimensions.get("window").width;
+
 	return (
 		<View style={styles.progressBarContainer}>
 			<View style={[styles.progressBar, { width: progressWidth }]}>
