@@ -3,15 +3,12 @@ import {
 	Text,
 	StyleSheet,
 	Pressable,
-	Dimensions,
-	Image,
 	Animated,
 	ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import Question from "./question";
 import Option from "./option";
-import { Colors } from "@/constants/colors";
 import { MultipleChoiceQuestion } from "@/utils/generateQuestion";
 import { useRouter } from "expo-router";
 import AnswerBar from "../answer_bar";
@@ -118,10 +115,10 @@ export default function ObjectiveTest({ questionList }: Props) {
 		setPrevAnswer(currentQuestion?.originalVocab ?? null);
 		setShowAnswerBox(true);
 
-		// Slide-up animation for AnswerBox
+		// Cập nhật slideAnim để AnswerBox trượt từ dưới lên
 		Animated.timing(slideAnim, {
-			toValue: 0,
-			duration: 300,
+			toValue: 0, // Dịch chuyển AnswerBox lên từ dưới màn hình
+			duration: 200,
 			useNativeDriver: true,
 		}).start();
 	};
@@ -144,7 +141,7 @@ export default function ObjectiveTest({ questionList }: Props) {
 		if (!isCompleted) {
 			Animated.timing(slideAnim, {
 				toValue: 300,
-				duration: 300,
+				duration: 200,
 				useNativeDriver: true,
 			}).start(() => setShowAnswerBox(false));
 		}
@@ -193,7 +190,7 @@ export default function ObjectiveTest({ questionList }: Props) {
 	};
 
 	return (
-		<ScrollView style={styles.container}>
+		<View style={styles.container}>
 			{isCompleted ? (
 				<ResultScreen
 					text={`Bạn đã trả lời đúng ${
@@ -257,7 +254,7 @@ export default function ObjectiveTest({ questionList }: Props) {
 					/>
 				</Animated.View>
 			)}
-		</ScrollView>
+		</View>
 	);
 }
 
@@ -265,11 +262,11 @@ const styles = StyleSheet.create({
 	container: {
 		flex: 1,
 		paddingTop: 10,
-		backgroundColor: "#fff",
-		paddingHorizontal: 10,
+		position: "relative",
 	},
 	listOption: {
 		padding: 20,
+		flexGrow: 1,
 	},
 	button: {
 		backgroundColor: "#007AFF",
@@ -284,6 +281,7 @@ const styles = StyleSheet.create({
 	},
 	answerBox: {
 		position: "absolute",
+		flex: 1,
 		bottom: 0,
 		left: 0,
 		right: 0,

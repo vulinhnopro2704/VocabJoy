@@ -246,11 +246,11 @@ export const updateDiary = async (req, res) => {
 		const vocabData = req.body.listVocab;
 		console.log("vocab data --> ", vocabData);
 		const vocabArray = vocabData.map((item) => ({
-			vocab: item.vocab,
+			vocab: item.vocab._id,
 			status: item.status,
 		}));
 
-		console.log(vocabArray);
+		console.log("vocab array: -->", vocabArray);
 
 		vocabArray.forEach((vocabItem) => {
 			if (vocabItem.status) {

@@ -7,6 +7,8 @@ import cors from "cors";
 import { errorHandler } from "./handlers/error-handler";
 import { HttpException } from "./handlers/http_exception-handler";
 import path from "path";
+import User from "./models/user";
+import Vocab from "./models/vocab";
 //chay database mongoose
 connectDb();
 
