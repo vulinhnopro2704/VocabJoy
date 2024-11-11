@@ -1,11 +1,20 @@
-import React, { useState,useEffect} from "react"
-import { View ,Text, SafeAreaView, ScrollView,StyleSheet, TextInput,Image, TouchableOpacity} from "react-native"
-import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
-import {Word} from "@/components/form/word-form";
-import {useWordQuery } from "@/lib/features/api/api-search_word";
+import React, { useState, useEffect } from "react";
+import {
+	View,
+	Text,
+	SafeAreaView,
+	ScrollView,
+	StyleSheet,
+	TextInput,
+	Image,
+	TouchableOpacity,
+} from "react-native";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import { Word } from "@/components/form/word-form";
+import { useWordQuery } from "@/lib/features/api/api-search_word";
 import Toast from "react-native-toast-message";
 import LoadingIcon from "@/components/loadingicon";
-import {translate} from '@vitalets/google-translate-api'
+import { translate } from "@vitalets/google-translate-api";
 import { useTranslateToVieQuery } from "@/lib/features/api/api-slice";
 import { Vocab } from "@/data-types/vocabulary";
 
@@ -70,11 +79,20 @@ const Search = () => {
 				if (example !== "") break; // Exit once an example is found
 			}
 
+			// Get the audio link from the phonetics
+			let audioLink = "";
+			for (const item of wordData?.phonetics || []) {
+				if (item.audio && item.audio.startsWith("https")) {
+					audioLink = item.audio;
+					break;
+				}
+			}
+
 			const dataWord: Vocab = {
 				name: wordData!.word || "",
 				pronunciation: wordData!.phonetics[1]?.text || "",
 				type: wordData!.meanings[0]?.partOfSpeech.toUpperCase() || "",
-				audio: wordData!.phonetics[0]?.audio || "",
+				audio: audioLink || "",
 				description:
 					wordData!.meanings[0]?.definitions[0]?.definition || "",
 				meaning: meanRes.data.mean || "",

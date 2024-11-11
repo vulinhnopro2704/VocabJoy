@@ -3,8 +3,8 @@ import fs from "fs";
 import path from "path";
 import Vocab from "../models/vocab";
 
-const downloadAudio = async (url: string, filename: string) => {
-	const filePath = path.resolve(__dirname, "upload", "audio", filename);
+export const downloadAudio = async (url: string, filename: string) => {
+	const filePath = path.resolve(__dirname, "../upload/audio", filename);
 	const writer = fs.createWriteStream(filePath);
 
 	const response = await axios({
@@ -21,7 +21,7 @@ const downloadAudio = async (url: string, filename: string) => {
 	});
 };
 
-const processVocabularies = async () => {
+export const processVocabularies = async () => {
 	try {
 		// Fetch all vocabularies from MongoDB
 		const vocabularies = await Vocab.find().exec();
@@ -43,5 +43,3 @@ const processVocabularies = async () => {
 		console.error("Error processing vocabularies:", error);
 	}
 };
-
-processVocabularies();
