@@ -53,7 +53,9 @@ export default function TestScreen() {
 
 			{/* Objective Test */}
 			<ObjectiveTest
-				questionList={generateQuestions(result?.data.praticeVocab!)}
+				questionList={generateQuestions(
+					result?.data.praticeVocab ?? []
+				)}
 			/>
 		</View>
 	);
@@ -63,6 +65,7 @@ const styles = StyleSheet.create({
 	container: {
 		paddingVertical: 30,
 		flex: 1,
+		flexGrow: 1,
 		backgroundColor: "#fff",
 	},
 	topBar: {

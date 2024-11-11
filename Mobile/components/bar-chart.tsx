@@ -9,12 +9,31 @@ type BarChartProps = {
 };
 
 export const BarChart = ({ data, labels, height }: BarChartProps) => {
-	const maxValue = Math.max(...data);
+	// Kiểm tra tính hợp lệ của các tham số
+	const isValidData =
+		Array.isArray(data) &&
+		data.every((val) => typeof val === "number" && !isNaN(val));
+	const isValidLabels =
+		Array.isArray(labels) && labels.length === data.length;
+	const isValidHeight =
+		typeof height === "number" && height > 0 && !isNaN(height);
+
+	// Nếu bất kỳ tham số nào không hợp lệ, trả về một view rỗng hoặc thông báo lỗi
+	if (!isValidData || !isValidLabels || !isValidHeight) {
+		return (
+			<View style={styles.errorContainer}>
+				<Text style={styles.errorText}>Invalid data provided</Text>
+			</View>
+		);
+	}
+
+	const maxValue = Math.max(...data) || 1; // Đặt giá trị mặc định là 1 để tránh phép chia cho 0
 	const fillColors = ["#3498db", "#e74c3c", "#f1c40f", "#2ecc71", "#9b59b6"];
 	const screenWidth = Dimensions.get("window").width;
+	const ChartHeight = height;
 
 	return (
-		<SafeAreaView style={[styles.chartContainer, { height }]}>
+		<SafeAreaView style={[styles.chartContainer, { height: ChartHeight }]}>
 			{data.map((value, index) => (
 				<View key={index} style={styles.barContainer}>
 					<Text style={styles.valueLabel}>{value} từ</Text>
@@ -83,6 +102,15 @@ const styles = StyleSheet.create({
 		marginTop: 5,
 		color: Colors.primary_text,
 		fontSize: 20,
+		fontWeight: "bold",
+	},
+	errorContainer: {
+		alignItems: "center",
+		justifyContent: "center",
+		padding: 20,
+	},
+	errorText: {
+		color: "red",
 		fontWeight: "bold",
 	},
 });
