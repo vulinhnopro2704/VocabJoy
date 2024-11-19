@@ -1,8 +1,6 @@
 import { View, Text, Pressable, Image, StyleSheet } from "react-native";
 import React from "react";
 import { ArrowLeft } from "lucide-react-native";
-import { useNavigation, NavigationProp } from "@react-navigation/native";
-import { RootStackParamList } from "../navigation";
 import { useRouter } from "expo-router";
 
 export default function Header() {
