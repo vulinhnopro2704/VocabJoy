@@ -31,7 +31,6 @@ export default function RootLayout() {
 	return (
 		<StoreProvider>
 			<Stack
-			
 				screenOptions={{
 					header: () => <Header />,
 					headerStyle: {
