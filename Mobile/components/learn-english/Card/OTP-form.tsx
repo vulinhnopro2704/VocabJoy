@@ -22,15 +22,17 @@ const OTPTextInput: React.FC<{ length: number; onChangeText: any }> = ({
 	};
 
 	const handleDelete = (index: number) => {
+		const newValues = [...Word];
 		if (Word[index] === "") {
 			if (index > 0) {
 				inputs.current[index - 1]?.focus();
+				newValues[index-1] = "";
+				setWord(newValues);
 			}
 		} else {
-			const newValues = [...Word];
 			newValues[index] = "";
 			setWord(newValues);
-			inputs.current[index - 1]?.focus();
+			
 		}
 	};
 
