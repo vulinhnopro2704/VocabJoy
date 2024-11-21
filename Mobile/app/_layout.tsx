@@ -53,6 +53,10 @@ export default function RootLayout() {
 					name="study-screen"
 					options={{ headerShown: false }}
 				/>
+						<Stack.Screen
+					name="forgot-password-screen"
+					options={{ headerShown: false }}
+				/>
 			</Stack>
 			<Toast />
 		</StoreProvider>
