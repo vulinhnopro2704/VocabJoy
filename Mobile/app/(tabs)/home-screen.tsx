@@ -14,7 +14,7 @@ import HomeChart from "@/components/home-chart";
 import { useGetUserVocabsHomeQuery } from "@/lib/features/api/api-user-slice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
-import { useFocusEffect, useRouter } from "expo-router";
+import { router, useFocusEffect, useRouter } from "expo-router";
 
 export default function HomeScreen() {
 	const [refreshKey, setRefreshKey] = useState(0);
@@ -22,16 +22,17 @@ export default function HomeScreen() {
 	const route = useRouter();
 	const { data, isLoading, isError, error, refetch } =
 		useGetUserVocabsHomeQuery(userId!);
-
 	useFocusEffect(
 		useCallback(() => {
 			setRefreshKey((prevKey) => prevKey + 1);
 		}, [])
 	);
 
-	useEffect(() => {
-		refetch();
-	}, [refreshKey]);
+	useFocusEffect(
+		useCallback(() => {
+			setRefreshKey((prevKey) => prevKey + 1);
+		}, [])
+	);
 
 	if (isLoading) {
 		return (
@@ -71,11 +72,7 @@ export default function HomeScreen() {
 				</Text>
 				<Pressable
 					onPress={() => {
-						if (data?.data.practice! > 0) {
-							route.push("/test-screen");
-						} else {
-							alert("Không có từ nào để ôn tập");
-						}
+						router.push("/test-screen");
 					}}
 					style={styles.button}
 				>

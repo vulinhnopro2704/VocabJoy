@@ -42,7 +42,7 @@ export const apiSlice = createApi({
 		}),
 		saveVocabulary: builder.mutation({
 			query: (newVocab: Vocab) => ({
-				url: "/vocabulary",
+				url: "/vocabulary/create-vocabulary",
 				method: "POST",
 				body: newVocab,
 			}),
@@ -85,5 +85,5 @@ export const {
 	useGetUserIdQuery,
 	useSaveVocabForUserMutation,
 	useTranslateToVieQuery,
-	useGet10VocabularyQuery,
+	useGet10VocabularyQuery
 } = apiSlice;

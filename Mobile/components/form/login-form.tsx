@@ -38,7 +38,7 @@ export default function LoginForm() {
 						const result: ApiLoginResponse = await login(
 							values
 						).unwrap(); // Gọi API'
-			
+
 						if (isSuccessfullStatus(result.statusCode)) {
 							dispatch(loginUser(result.data.token));
 							Toast.show({
@@ -80,7 +80,6 @@ export default function LoginForm() {
 						)}
 						<Text style={styles.labelText}>Mật khẩu</Text>
 						<TextInput
-							
 							style={styles.input}
 							placeholder="Nhập mật khẩu của bạn"
 							secureTextEntry

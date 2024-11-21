@@ -3,12 +3,15 @@ import {
 	Text,
 	StyleSheet,
 	Pressable,
+	Dimensions,
+	Image,
 	Animated,
 	ScrollView,
 } from "react-native";
 import React, { useState, useEffect, useRef } from "react";
 import Question from "./question";
 import Option from "./option";
+import { Colors } from "@/constants/colors";
 import { MultipleChoiceQuestion } from "@/utils/generateQuestion";
 import { useRouter } from "expo-router";
 import AnswerBar from "../answer_bar";
@@ -21,7 +24,6 @@ import {
 	VocabWithStatus,
 } from "@/lib/features/api/api-user-slice";
 import { useAppSelector } from "@/lib/hook";
-import ProcessBar from "../process-bar";
 
 type Props = {
 	questionList: MultipleChoiceQuestion[];
@@ -137,6 +139,9 @@ export default function ObjectiveTest({ questionList }: Props) {
 		}
 	};
 
+	const progressWidth =
+		(answeredCount / questionList.length) * Dimensions.get("window").width;
+
 	const handShowAnswerBoxPress = () => {
 		if (!isCompleted) {
 			Animated.timing(slideAnim, {
@@ -190,7 +195,7 @@ export default function ObjectiveTest({ questionList }: Props) {
 	};
 
 	return (
-		<View style={styles.container}>
+		<ScrollView style={styles.container}>
 			{isCompleted ? (
 				<ResultScreen
 					text={`Bạn đã trả lời đúng ${
@@ -254,13 +259,36 @@ export default function ObjectiveTest({ questionList }: Props) {
 					/>
 				</Animated.View>
 			)}
-		</View>
+		</ScrollView>
 	);
 }
 
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
+		paddingTop: 10,
+		backgroundColor: "#fff",
+		paddingHorizontal: 10,
+	},
+	progressBarContainer: {
+		height: 30,
+		backgroundColor: "#e0e0e0",
+		borderRadius: 15,
+		marginBottom: 20,
+		marginHorizontal: 20,
+	},
+	icon: {
+		width: 40,
+		height: 40,
+		position: "absolute",
+		right: -20,
+		top: -4,
+		zIndex: 10,
+	},
+	progressBar: {
+		height: "100%",
+		backgroundColor: Colors.primary,
+		borderRadius: 15,
 		paddingTop: 10,
 		position: "relative",
 	},
