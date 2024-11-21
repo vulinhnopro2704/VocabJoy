@@ -30,6 +30,7 @@ const OTPTextInput: React.FC<{ length: number; onChangeText: any }> = ({
 			const newValues = [...Word];
 			newValues[index] = "";
 			setWord(newValues);
+			inputs.current[index - 1]?.focus();
 		}
 	};
 

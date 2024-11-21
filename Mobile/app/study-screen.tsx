@@ -109,7 +109,7 @@ export default function StudyNewWord({}) {
 				return (
 					<SoundFillWord
 						setTextParent={setTextParent}
-						vocab={res.data.listvocab[index]}
+						vocab={res.data.listvocab[index]} 
 					></SoundFillWord>
 				);
 			case 3:
@@ -167,6 +167,7 @@ export default function StudyNewWord({}) {
 	if (video) {
 		return <VideoStudy />;
 	} else if (isComplete) {
+		
 		return (
 			<ResultScreen
 				text="Bạn đã hoàn thành bài học"
