@@ -61,6 +61,18 @@ export default function TabLayout() {
 					),
 				}}
 			/>
+			<Tabs.Screen
+				name="forgot-password-screen"
+				options={{
+					title: "fw",
+					tabBarIcon: ({ color, focused }) => (
+						<TabBarIcon
+							name={focused ? "book" : "book-outline"}
+							color={color}
+						/>
+					),
+				}}
+			/>
 		</Tabs>
 	);
 }

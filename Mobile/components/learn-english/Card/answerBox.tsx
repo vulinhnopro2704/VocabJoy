@@ -5,7 +5,7 @@ import { StyleSheet, View } from "react-native"
 const AnswerBox:React.FC<{ vocab: Vocab,result:boolean }>=({ vocab,result })=>{
     return (
         <View style={[styles.container,{backgroundColor:(result?"green":"red")}]}>
-
+            
         </View>
     )
 }

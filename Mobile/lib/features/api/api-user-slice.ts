@@ -75,7 +75,10 @@ export type ApiUpdateDiaryBody = {
 	userId: string;
 	listVocab: VocabWithStatus[];
 };
-
+interface updatePasword {
+	email:string,
+	password:string
+}
 export const apiUserSlice = createApi({
 	reducerPath: "apiUser",
 	baseQuery: fetchBaseQuery({ baseUrl: BACKEND_URL + "/user" }),
@@ -123,6 +126,16 @@ export const apiUserSlice = createApi({
 				body: JSON.stringify({ listVocab: body.listVocab }),
 			}),
 		}),
+		updatePassword: builder.mutation({
+			query: (data:updatePasword) => ({
+				url: `/update-password`,
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+				},
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -132,4 +145,5 @@ export const {
 	useGetVocabForPracticeQuery,
 	useGetVocabByLevelMutation,
 	useUpdateDiaryMutation,
+	useUpdatePasswordMutation
 } = apiUserSlice;
