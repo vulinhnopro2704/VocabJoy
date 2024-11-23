@@ -2,7 +2,10 @@ import { BACKEND_URL } from "@/constants/backend";
 import { Vocab } from "@/data-types/vocabulary";
 import { RootState } from "@/lib/store";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-
+interface Data {
+	email:string,
+	otp:string
+}
 const baseQuery = fetchBaseQuery({
 	baseUrl: BACKEND_URL,
 	prepareHeaders: (headers, { getState }) => {
@@ -74,6 +77,20 @@ export const apiSlice = createApi({
 				url: `/vocabulary`,
 			}),
 		}),
+		SendOtp: builder.mutation({
+			query: (email:string) => ({
+				url: "/auth/sendOTP",
+				method: "POST",
+				body: {email},
+			}),
+		}),
+		ConfirmOtp: builder.mutation({
+			query: (data:Data) => ({
+				url: "/auth/confirmOTP",
+				method: "POST",
+				body: data,
+			}),
+		}),
 	}),
 });
 
@@ -86,4 +103,6 @@ export const {
 	useSaveVocabForUserMutation,
 	useTranslateToVieQuery,
 	useGet10VocabularyQuery,
+	useSendOtpMutation,
+	useConfirmOtpMutation
 } = apiSlice;
