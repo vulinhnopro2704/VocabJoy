@@ -1,4 +1,4 @@
-import { View, Text, TextInput, StyleSheet, Pressable } from "react-native";
+import { View, Text, TextInput, StyleSheet, Pressable, TouchableOpacity } from "react-native";
 import React, { useEffect } from "react";
 import { Formik } from "formik";
 import { validationSchema } from "@/schemas/login";
@@ -8,7 +8,7 @@ import { useLoginMutation } from "@/lib/features/api/api-slice";
 import { isSuccessfullStatus } from "@/utils/utils";
 import { useAppDispatch, useAppSelector } from "@/lib/hook";
 import { loginUser } from "@/lib/features/auth/auth-slice";
-import { useRouter } from "expo-router";
+import { router, useRouter } from "expo-router";
 
 // Define the structure of the data object
 interface Data {
@@ -96,8 +96,16 @@ export default function LoginForm() {
 							onPress={() => handleSubmit()}
 							disabled={isLoading} // Disable button when loading
 						>
-							<Text style={styles.buttonText}>Đăng Nhập</Text>
+							
+						
+								<Text style={styles.buttonText}>Đăng Nhập</Text>
+							
 						</Pressable>
+						<TouchableOpacity onPress={()=>{
+									router.push({pathname:"/forgot-password-screen"})
+						}}>
+						<Text style={styles.QMK}>Quen Mat Khau</Text>
+						</TouchableOpacity>
 						{error && (
 							<Text style={styles.errorText}>
 								{error && (
@@ -116,6 +124,14 @@ export default function LoginForm() {
 }
 
 const styles = StyleSheet.create({
+	QMK:{
+		color:Colors.blue_shadow,
+		textDecorationLine:"underline",
+		textDecorationColor:Colors.blue_shadow,
+		marginTop:20,
+		fontWeight:"600",
+		margin: "auto"
+	},
 	container: {
 		flex: 1,
 		justifyContent: "center",

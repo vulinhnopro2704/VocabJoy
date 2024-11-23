@@ -43,7 +43,10 @@ export default function RootLayout() {
 				}}
 				initialRouteName="index"
 			>
-				<Stack.Screen options={{ headerShown: false }} name="index" />
+				<Stack.Screen 
+					name="index" 
+					options={{ headerShown: false }} 
+				/>
 				<Stack.Screen
 					name="test-screen"
 					options={{ headerShown: false }}
@@ -52,9 +55,17 @@ export default function RootLayout() {
 					name="study-screen"
 					options={{ headerShown: false }}
 				/>
-						<Stack.Screen
+				<Stack.Screen
 					name="forgot-password-screen"
-					options={{ headerShown: false }}
+				
+				/>
+				<Stack.Screen
+					name="new-password-screen"
+				
+				/>
+					<Stack.Screen
+					name="fill-otp-screen"
+					
 				/>
 			</Stack>
 			<Toast />
