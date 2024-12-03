@@ -72,7 +72,11 @@ export default function HomeScreen() {
 				</Text>
 				<Pressable
 					onPress={() => {
-						router.push("/test-screen");
+						if (data?.data.practice! > 0) {
+							route.push("/test-screen");
+						} else {
+							alert("Không có từ nào để ôn tập");
+						}
 					}}
 					style={styles.button}
 				>

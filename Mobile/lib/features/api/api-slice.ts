@@ -45,7 +45,7 @@ export const apiSlice = createApi({
 		}),
 		saveVocabulary: builder.mutation({
 			query: (newVocab: Vocab) => ({
-				url: "/vocabulary/create-vocabulary",
+				url: "/vocabulary",
 				method: "POST",
 				body: newVocab,
 			}),
