@@ -14,7 +14,9 @@ interface user {
     vocabulary: {
       vocab: String
       count: number
-    }[]
+    }[],
+    streak: number,
+    lastActiveDate
   }
   
   const userSchema: Schema<user> = new Schema({
@@ -62,6 +64,14 @@ interface user {
           ],
           default: [],
         },
+    streak: {
+      type: Number,
+      default: 0
+    },
+    lastActiveDate: {
+      type: Date,
+      default: null
+    }
   });
 
 const User:Model<user> = model<user>('user',userSchema)
