@@ -1,4 +1,5 @@
 import { HttpException } from "../handlers/http_exception-handler";
+import { hashPassword } from "../helpers/hash-password";
 import User from "../models/user";
 
 export const getAllUserService = async () => {
@@ -42,3 +43,17 @@ export const saveWordForUserService = async (
 		throw new HttpException(400, "Tu da ton tai");
 	}
 };
+
+export const updatePasswordService = async (email:string,password:string)=>{	
+	if(!email||!password){
+		throw new HttpException(400, "Missing email or password")
+	}
+	const user = await User.findOne({email:email})
+	if(!user){
+		throw new HttpException(400, "User not found")
+	}
+	const Password:string = await hashPassword(password)
+	user.account.password = Password
+	user.save()
+	return user
+}
