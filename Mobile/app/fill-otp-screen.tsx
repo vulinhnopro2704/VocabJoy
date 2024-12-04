@@ -17,7 +17,6 @@ type FillOTPParams = {
   };
 const FillOTP: React.FC<Props> = ({ route })=>{
     const email = useSearchParams().get("email")||""
-    console.log(email)
     const [confirmOTP,{isLoading,error}] = useConfirmOtpMutation()
     const [otp,setOTP] =useState<string>("")
     async function onPressButton(){
@@ -44,8 +43,10 @@ const FillOTP: React.FC<Props> = ({ route })=>{
                 }
             }
         } catch (error) {
+            console.log(error)
             Toast.show({
-                text1: "OTP Không hợp lệ",
+              
+                text1: "OTP Không hợp lệ" +error,
                 position: "top",
             });
         }

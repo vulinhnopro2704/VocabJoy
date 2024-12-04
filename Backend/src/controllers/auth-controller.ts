@@ -4,6 +4,10 @@ import { createNewUser, getUserByEmail } from "../services/auth-service";
 import { generateToken } from "../helpers/jwt-token";
 import user from "../interface/user";
 import bcrypt from "bcryptjs";
+import { genOTP } from "../helpers/genOTP";
+import { userDataBase } from "../models/mail";
+import { sendOtpEmail } from "../helpers/sendOtpEmail";
+import { getNextDate } from "../helpers/getDate";
 
 export const login = async (req: Request, res: Response) => {
 	console.log("Call login");
@@ -64,3 +68,61 @@ export const signUp = async (req: Request, res: Response) => {
 		return responseHandle.badRequest(res, "Cant create User" + error);
 	}
 };
+
+export const sendOTP = async (req: Request, res: Response) => {
+	const { email } = req.body as {
+		email: string;
+	};
+	if (!email) {
+		return responseHandle.badRequest(res, "Email is null");
+	}
+	try {
+		const user = await getUserByEmail(email);
+		if (!user) {
+			return responseHandle.notFound(res, "User Not Found");
+		} else {
+			let OTP = genOTP().toString()
+			const userSend:userDataBase={
+				name:user.name,
+				email:user.email,
+				otp:OTP
+			} 
+			const send = await sendOtpEmail(userSend)
+			if(send) {
+			user.account.otp = OTP;
+			user.save()
+			return responseHandle.success(res, user, "Send OTP successful");
+			}
+		 	return responseHandle.badRequest(res, "Send OTP fail");
+
+		}
+	} catch (error) {
+		return responseHandle.badRequest(res, "Send OTP fail");
+	}
+};
+
+export const confirmOTP = async (req: Request, res: Response) => {
+	const { email, otp } = req.body as {
+		email: string;
+		otp: string;
+	};
+	if (!email || !otp) {
+		return responseHandle.badRequest(res, "Email or OTP is null");
+	}
+	try {
+		const user = await getUserByEmail(email);
+		if (!user) {
+			return responseHandle.notFound(res, "User Not Found");
+		} else {
+			if (user.account.otp == otp) {
+				user.account.otp = null;
+				user.save();
+				return responseHandle.success(res, user, "Confirm OTP successful");
+			} else {
+				return responseHandle.badRequest(res, "OTP is not correct");
+			}
+		}
+	} catch (error) {
+		return responseHandle.badRequest(res, "Confirm OTP fail");
+	}
+};confirmOTP

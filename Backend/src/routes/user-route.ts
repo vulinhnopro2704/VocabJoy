@@ -12,6 +12,7 @@ import {
 	getVocabByLevel,
 	getDiary,
 	getVocabByEachLevel,
+	updatePassword,
 } from "../controllers/user-controller";
 
 const user_route: Router = express.Router();
@@ -28,5 +29,5 @@ user_route.post("/:id/update-diary", updateDiary);
 user_route.get("/:id/get-vocab-by-level", getVocabByLevel);
 user_route.post("/:vocabId/:userId", addVocabToUserDiary);
 user_route.get("/:id/practice-vocab", getVocabToPractice);
-
+user_route.post("/update-password",updatePassword);
 export default user_route;
