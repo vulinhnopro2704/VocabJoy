@@ -43,10 +43,10 @@ const FillOTP: React.FC<Props> = ({ route })=>{
                 }
             }
         } catch (error) {
-            console.log(error)
+
             Toast.show({
               
-                text1: "OTP Không hợp lệ" +error,
+                text1: "OTP Không hợp lệ",
                 position: "top",
             });
         }
