@@ -7,21 +7,26 @@ import { Audio } from "expo-av";
 import { Vocab } from "@/data-types/vocabulary";
 
 import { AUDIO_URL } from "@/constants/backend";
-
-
-
-
-
-
+import { useGetUserIdQuery, useSaveVocabForUserMutation } from "@/lib/features/api/api-slice";
 
 const FlashCard:React.FC<{ vocab: Vocab }>=({ vocab })=>{
     const rotateValue = useRef(new Animated.Value(0)).current;
     const [isFlipped, setIsFlipped] = useState(false);
     const [components,SetComponents] = useState(true)
+    const [saveVocabForUser,{ error: errorSaveVocabUser, isLoading: loadingSaveVocabUser },] = useSaveVocabForUserMutation();
+	const {data: userId,error: errorGetUserId,isLoading: loadingGetUserId} = useGetUserIdQuery("")
     const rotateInterpolate = rotateValue.interpolate({
         inputRange:[0,1],
         outputRange:['0deg','180deg']
     })
+    async function saveWord(){
+        
+		const vocabId:string = vocab._id as string
+		const result = await saveVocabForUser({
+			vocabId,
+			userId: userId.data._id,
+		}).unwrap();
+	}
      //phat am thanh lan dau vao
     const [sound, setSound] = useState<Audio.Sound>();
     const playSound = async(speed:number)=>{

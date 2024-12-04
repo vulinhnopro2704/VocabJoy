@@ -28,7 +28,6 @@ export default function ResultScreen({
 	const percentage =
 		correctAnswers.length /
 		Math.max(correctAnswers.length + incorrectAnswers.length, 1);
-
 	return (
 		<View style={styles.container}>
 			{/* Close Button */}

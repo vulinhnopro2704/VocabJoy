@@ -27,6 +27,8 @@ import OutBar from "@/components/out-form";
 import { useGetVocabLessonsQuery } from "@/lib/features/api/api-lesson-slice";
 import ProcessBar from "@/components/process-bar";
 import ResultScreen from "@/components/objective-test/result";
+import { Vocab } from "@/data-types/vocabulary";
+import { useGetUserIdQuery, useSaveVocabForUserMutation } from "@/lib/features/api/api-slice";
 
 export default function StudyNewWord({}) {
 	const { _id } = useLocalSearchParams();
@@ -46,6 +48,9 @@ export default function StudyNewWord({}) {
 	const [isComplete, setIsComplete] = useState(false);
 	const correctSoundEffect = useRef<Audio.Sound | null>(null);
 	const start = useRef(new Animated.Value(0)).current;
+	const [incorrectAnswers,setInCorrectAnswers] = useState<Vocab[]>([])
+	const [correctAnswers,setCorrectAnswers] = useState<Vocab[]>([])
+
 
 	useEffect(() => {
 		Animated.timing(start, {
@@ -55,14 +60,15 @@ export default function StudyNewWord({}) {
 		}).start();
 	});
 	setTimeout(() => setVideo(false), 3000);
-
+	
 	async function handlerSubmitAnswerBar() {
 		if (screenLearn == 3) {
-			if (index == 5) {
+			if (index == 9) {
 				await setIsComplete(true);
 				return;
 			}
-			await setIndex(index + 1);
+			
+			await setIndex(index + 1);			
 			const x = widthRoad * (index + 1) + 20;
 			setScreenLearn(1);
 		} else setScreenLearn(screenLearn + 1);
@@ -80,10 +86,21 @@ export default function StudyNewWord({}) {
 			res?.data.listvocab[index]?.name == text.trim().toLowerCase()
 		) {
 			setIsCorrect(true);
+			if(!correctAnswers.includes(res.data.listvocab[index])&&!incorrectAnswers.includes(res.data.listvocab[index])){
+				const newList = [...correctAnswers]
+				newList.push(res.data.listvocab[index])
+				setCorrectAnswers(newList)
+			}
 		} else if (
 			res.data.listvocab[index]?.name != text.trim().toLowerCase()
 		) {
 			setIsCorrect(false);
+			if(!correctAnswers.includes(res.data.listvocab[index])&&!incorrectAnswers.includes(res.data.listvocab[index])){
+				const newList = [...incorrectAnswers] 
+				newList.push(res.data.listvocab[index])
+				setInCorrectAnswers(newList)
+			}
+		
 		}
 		showAnswer();
 	}
@@ -123,6 +140,9 @@ export default function StudyNewWord({}) {
 	}
 
 	function nextWord() {
+		if(index ==9)
+			setIsComplete(true);
+		else
 		setIndex(index + 1);
 	}
 
@@ -167,12 +187,12 @@ export default function StudyNewWord({}) {
 	if (video) {
 		return <VideoStudy />;
 	} else if (isComplete) {
-		
+	
 		return (
 			<ResultScreen
 				text="Bạn đã hoàn thành bài học"
-				correctAnswers={res.data.listvocab}
-				incorrectAnswers={[]}
+				correctAnswers={correctAnswers}
+				incorrectAnswers={incorrectAnswers}
 			/>
 		);
 	}
@@ -197,7 +217,7 @@ export default function StudyNewWord({}) {
 						<Text style={styles.header_iconX}>X</Text>
 					</TouchableOpacity>
 					<View style={styles.header}>
-						<ProcessBar total={10} answeredCount={index} />
+						<ProcessBar total={11} answeredCount={index} />
 					</View>
 					<View style={styles.body}>
 						{isLoading ? (
