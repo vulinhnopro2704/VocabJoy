@@ -4,6 +4,7 @@ import {
 	getAllUserService,
 	getUserByIdService,
 	saveWordForUserService,
+	updatePasswordService,
 } from "../services/user-service";
 import { HttpException } from "../handlers/http_exception-handler";
 import { jwtDecode } from "jwt-decode";
@@ -235,36 +236,6 @@ export const getVocabToPractice = async(req, res) => {
 	}
 };
 
-export const updateDiary = async(req, res) => {
-    try {
-
-        const user = await User.findById(req.params.id);
-
-		if (!user) {
-			return responseHandle.badRequest(res, "User not exist");
-		}
-
-        const vocabData =  req.body;
-
-
-
-        const vocabArray = vocabData.map(item => ({
-            vocab: item.vocab,
-            status: item.status
-        }));
-
-
-		vocabArray.forEach((vocabItem) => {
-			if (vocabItem.status) {
-				const userVocab = user.vocabulary.find(
-					(userItem) => userItem.vocab == vocabItem.vocab
-				);
-				if (userVocab) {
-					userVocab.count =
-						userVocab.count < 5 ? userVocab.count + 1 : 1;
-				}
-			}
-		});
 
 export const updateDiary = async (req, res) => {
 	try {
@@ -497,5 +468,26 @@ export const getVocabByEachLevel = async (req, res) => {
 		return responseHandle.success(res, data, "Success");
 	} catch (err) {
 		return responseHandle.badRequest(res, "Failed");
+	}
+};
+
+export const updatePassword = async (req: Request, res: Response) => {
+	const { email, password } = req.body as {
+		email: string;
+		password: string;
+	};
+	if (!email || !password) {
+		return responseHandle.badRequest(res, "Email or password is null");
+	}
+	try {
+	
+			const user = await updatePasswordService(email, password);
+			if (!user) {
+				return responseHandle.notFound(res, "User Not Found");
+			}
+			return responseHandle.success(res, user, "Update password successful");
+
+	} catch (error) {
+		return responseHandle.badRequest(res, "Update password fail");
 	}
 };
