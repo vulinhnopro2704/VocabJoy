@@ -46,7 +46,6 @@ const NewPassword: React.FC<Props> = ({route})=>{
                 email,
                 password
             }
-            console.log(data)
             const result = await updatePassword(data).unwrap()
             if(result.statusCode==200) 
             {
