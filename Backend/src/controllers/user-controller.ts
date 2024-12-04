@@ -480,7 +480,7 @@ export const updatePassword = async (req: Request, res: Response) => {
 		return responseHandle.badRequest(res, "Email or password is null");
 	}
 	try {
-	
+
 			const user = await updatePasswordService(email, password);
 			if (!user) {
 				return responseHandle.notFound(res, "User Not Found");
@@ -491,3 +491,21 @@ export const updatePassword = async (req: Request, res: Response) => {
 		return responseHandle.badRequest(res, "Update password fail");
 	}
 };
+
+export const getStreak = async (req, res) => {
+
+}
+
+export const updateStreak = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.userId);
+
+		if (!user) {
+			return responseHandle.notFound(res, "User not exist");
+		}
+
+
+	} catch (error) {
+		return responseHandle.badRequest(res, "Internal server error");
+	}
+}
