@@ -13,10 +13,10 @@ const OTPFillWord:React.FC<{ vocab: Vocab,setTextParent:any }>=({ vocab,setTextP
     return (
         <View style={styles.container}>
             <Text style={{fontSize:30,fontWeight:"600"}}>
-                {vocab.meaning}
+                {vocab.meaning||""}
             </Text>
             <Text style={{fontSize:20,fontWeight:"400",color:Colors.gray_500}}>
-                {"( "+vocab.type+" )"}
+                {"( "+vocab.type+" )"||""}
             </Text>
             <OTPTextInput onChangeText={(value:string)=>{setTextParent(value)}} length={vocab.name?vocab.name.length:0}></OTPTextInput>
         </View>
