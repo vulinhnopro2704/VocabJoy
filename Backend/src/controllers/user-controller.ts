@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response } from "express";
+import { json, NextFunction, Request, Response } from "express";
 import responseHandle from "../handlers/response-handler";
 import {
 	getAllUserService,
@@ -493,18 +493,56 @@ export const updatePassword = async (req: Request, res: Response) => {
 };
 
 export const getStreak = async (req, res) => {
-
-}
-
-export const updateStreak = async (req, res) => {
 	try {
 		const user = await User.findById(req.params.userId);
 
 		if (!user) {
 			return responseHandle.notFound(res, "User not exist");
 		}
+		console.log(user.lastActiveDate);
+		const data = {
+			streak: user.streak,
+			lastActiveDate: user.lastActiveDate
+		}
 
+		return responseHandle.success(res, data, "Get streak succesful");
+	} catch (error) {
+		return responseHandle.badRequest(res, "Internal server error");
+	}
+} 
 
+export const updateStreak = async (req, res) => {
+	try {
+		console.log(req.params.userId);
+		const user = await User.findById(req.params.userId);
+
+		if (!user) {
+			return responseHandle.notFound(res, "User not exist");
+		}
+
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+
+		if (user.lastActiveDate) {
+			const lastActiveDate = new Date(user.lastActiveDate);
+			lastActiveDate.setHours(0, 0, 0, 0);
+			if (today.getTime() - lastActiveDate.getTime() ) {
+				user.streak = 0;
+			} else {
+				user.streak += 1;
+			}
+		} else {
+			user.streak = 1;
+		  }
+
+		user.lastActiveDate = today;
+		await user.save();
+
+		const data = {
+			streak: user.streak
+		}
+
+		return responseHandle.success(res, data,  "Streak updated successfully")
 	} catch (error) {
 		return responseHandle.badRequest(res, "Internal server error");
 	}
