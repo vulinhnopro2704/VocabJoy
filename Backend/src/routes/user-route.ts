@@ -13,6 +13,8 @@ import {
 	getDiary,
 	getVocabByEachLevel,
 	updatePassword,
+	getStreak,
+	updateStreak,
 } from "../controllers/user-controller";
 
 const user_route: Router = express.Router();
@@ -29,5 +31,8 @@ user_route.post("/:id/update-diary", updateDiary);
 user_route.get("/:id/get-vocab-by-level", getVocabByLevel);
 user_route.post("/:vocabId/:userId", addVocabToUserDiary);
 user_route.get("/:id/practice-vocab", getVocabToPractice);
+user_route.get("/get-streak/:userId", getStreak);
+user_route.put("/update-streak/:userId", updateStreak);
 user_route.post("/update-password",updatePassword);
+
 export default user_route;
