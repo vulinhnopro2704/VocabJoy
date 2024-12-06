@@ -71,11 +71,11 @@ const styles = StyleSheet.create({
 		gap: 5,
 	},
 	h1: {
-		fontSize: 22,
+		fontSize: 18,
 		fontWeight: "bold",
 	},
 	h2: {
-		fontSize: 18,
+		fontSize: 16,
 		fontWeight: "500",
 	},
 	h3: {
