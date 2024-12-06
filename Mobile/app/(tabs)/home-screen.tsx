@@ -11,7 +11,9 @@ import {
 } from "react-native";
 import { Colors } from "@/constants/colors";
 import HomeChart from "@/components/home-chart";
-import { useGetUserVocabsHomeQuery } from "@/lib/features/api/api-user-slice";
+import {
+	useGetUserVocabsHomeQuery,
+} from "@/lib/features/api/api-user-slice";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import { useFocusEffect, useRouter } from "expo-router";
