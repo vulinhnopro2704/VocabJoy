@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
 	View,
 	Text,
@@ -11,6 +11,8 @@ import { Ionicons } from "@expo/vector-icons";
 import * as Progress from "react-native-progress";
 import { Vocab } from "@/data-types/vocabulary";
 import { useRouter } from "expo-router";
+import { useUpdateStreakMutation } from "@/lib/features/api/api-user-slice";
+import { useAppSelector } from "@/lib/hook";
 
 type Props = {
 	text: string;
@@ -25,13 +27,30 @@ export default function ResultScreen({
 }: Props) {
 	// Calculate the percentage of correct answers
 	const route = useRouter();
+	const userId = useAppSelector((state) => state.user._id);
 	const percentage =
 		correctAnswers.length /
 		Math.max(correctAnswers.length + incorrectAnswers.length, 1);
+	const [updateStreak, { isError, error }] =
+		useUpdateStreakMutation();
+
+	useEffect(() => {
+		updateStreak(userId);
+	}, []);
+
+	useEffect(() => {
+		if (isError) {
+			alert(("Error when updating streak: " + error) as string);
+		}
+	}, [isError, error]);
+
 	return (
 		<View style={styles.container}>
 			{/* Close Button */}
-			<TouchableOpacity style={styles.closeButton}>
+			<TouchableOpacity
+				style={styles.closeButton}
+				onPress={() => route.back()}
+			>
 				<Ionicons name="close" size={24} color="black" />
 			</TouchableOpacity>
 

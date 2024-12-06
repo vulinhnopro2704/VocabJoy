@@ -76,9 +76,29 @@ export type ApiUpdateDiaryBody = {
 	listVocab: VocabWithStatus[];
 };
 interface updatePasword {
-	email:string,
-	password:string
+	email: string;
+	password: string;
 }
+
+export type ApiStreakResponse = {
+	success: boolean;
+	data: {
+		streak: number;
+		lastActiveDate: Date;
+	};
+	message: string;
+	statusCode: number;
+};
+
+export type ApiUpdateStreakResponse = {
+	success: boolean;
+	data: {
+		streak: number;
+	};
+	message: string;
+	statusCode: number;
+};
+
 export const apiUserSlice = createApi({
 	reducerPath: "apiUser",
 	baseQuery: fetchBaseQuery({ baseUrl: BACKEND_URL + "/user" }),
@@ -127,13 +147,24 @@ export const apiUserSlice = createApi({
 			}),
 		}),
 		updatePassword: builder.mutation({
-			query: (data:updatePasword) => ({
+			query: (data: updatePasword) => ({
 				url: `/update-password`,
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: data,
+			}),
+		}),
+		getCurrentStreak: builder.query<ApiStreakResponse, String>({
+			query: (userId: string) => ({
+				url: `/get-streak/${userId}`,
+			}),
+		}),
+		updateStreak: builder.mutation<ApiUpdateStreakResponse, String>({
+			query: (userId: string) => ({
+				url: `/update-streak/${userId}`,
+				method: "PUT",
 			}),
 		}),
 	}),
@@ -145,5 +176,7 @@ export const {
 	useGetVocabForPracticeQuery,
 	useGetVocabByLevelMutation,
 	useUpdateDiaryMutation,
-	useUpdatePasswordMutation
+	useUpdatePasswordMutation,
+	useGetCurrentStreakQuery,
+	useUpdateStreakMutation,
 } = apiUserSlice;

@@ -1,4 +1,4 @@
-import { json, NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import responseHandle from "../handlers/response-handler";
 import {
 	getAllUserService,
@@ -104,14 +104,13 @@ export const getDiaryUser = async (req, res) => {
 			return responseHandle.badRequest(res, "Can't find user");
 		}
 
-        var sortedVocab = user.vocabulary.sort((a, b) => a.count - b.count);
-        if(user.vocabulary.length > 30)
-        {
-            const randomLimit = Math.floor(Math.random() * (30 - 20 + 1)) + 20;
-            sortedVocab = sortedVocab.slice(0, randomLimit)
-        }
+		var sortedVocab = user.vocabulary.sort((a, b) => a.count - b.count);
+		if (user.vocabulary.length > 15) {
+			const randomLimit = Math.floor(Math.random() * (15 - 10 + 1)) + 10;
+			sortedVocab = sortedVocab.slice(0, randomLimit);
+		}
 
-        praticeVocab = sortedVocab;
+		praticeVocab = sortedVocab;
 
 		let le1 = 0,
 			le2 = 0,
@@ -159,75 +158,77 @@ export const getDiaryUser = async (req, res) => {
 	}
 };
 
-export const addVocabToUserDiary =  async(req,res) => {
-    try{
-        const user = await User.findById(req.params.userId);
-        const vocab = await Vocab.findById(req.params.vocabId);
-        if(!user) {
-            return responseHandle.notFound(res, "Can't find user");
-        }
+export const addVocabToUserDiary = async (req, res) => {
+	try {
+		const user = await User.findById(req.params.userId);
+		const vocab = await Vocab.findById(req.params.vocabId);
+		if (!user) {
+			return responseHandle.notFound(res, "Can't find user");
+		}
 
-        var vocabIndex = -1;
-        for(let i = 0; i < user.vocabulary.length; i++) {
-            if(user.vocabulary[i].vocab == req.params.vocabId) {
-                vocabIndex = i;
-                break;
-            }
-        }
-        if(vocabIndex !== -1){
-            if(user.vocabulary[vocabIndex].count < 5)
-            {
-                user.vocabulary[vocabIndex].count += 1;
-            }
-            else{
-                return responseHandle.badRequest(res, "Vocab count cannot exceed 5");
-            }
-        }else
-        {
-            user.vocabulary.push({
-                vocab: req.params.vocabId,
-                count : 1
-            });
-        }
-        const saveUser = await user.save();
-        return responseHandle.success(res, saveUser, "Add vocab to diary succesfully");
+		var vocabIndex = -1;
+		for (let i = 0; i < user.vocabulary.length; i++) {
+			if (user.vocabulary[i].vocab == req.params.vocabId) {
+				vocabIndex = i;
+				break;
+			}
+		}
+		if (vocabIndex !== -1) {
+			if (user.vocabulary[vocabIndex].count < 5) {
+				user.vocabulary[vocabIndex].count += 1;
+			} else {
+				return responseHandle.badRequest(
+					res,
+					"Vocab count cannot exceed 5"
+				);
+			}
+		} else {
+			user.vocabulary.push({
+				vocab: req.params.vocabId,
+				count: 1,
+			});
+		}
+		const saveUser = await user.save();
+		return responseHandle.success(
+			res,
+			saveUser,
+			"Add vocab to diary succesfully"
+		);
+	} catch (err) {
+		console.log(err);
+		return responseHandle.badRequest(res, "Failed");
+	}
+};
 
-    }catch(err)
-    {
-        console.log(err);
-        return responseHandle.badRequest(res, "Failed");
-    }
-}
+export const getVocabToPractice = async (req, res) => {
+	try {
+		const mapPracticeVocab = await Promise.all(
+			praticeVocab.map(async (entry) => {
+				const vocabDetail = await f_getVocabById(entry.vocab);
 
-export const getVocabToPractice = async(req, res) => {
-    try {
-        const mapPracticeVocab = await Promise.all(
-            praticeVocab.map(async (entry) => {
-                const vocabDetail = await f_getVocabById(entry.vocab);
+				if (vocabDetail) {
+					return {
+						_id: vocabDetail._id,
+						name: vocabDetail.name,
+						pronunciation: vocabDetail.pronunciation,
+						type: vocabDetail.type,
+						image_link: vocabDetail.image_link,
+						meaning: vocabDetail.meaning || "",
+						description: vocabDetail.description,
+						audio: vocabDetail.audio || "",
+						example: vocabDetail.example || "",
+						__v: vocabDetail.__v,
+					};
+				}
+				return null;
+			})
+		);
 
-                if(vocabDetail) {
-                    return {
-                        _id: vocabDetail._id,
-                        name: vocabDetail.name,
-                        pronunciation: vocabDetail.pronunciation,
-                        type: vocabDetail.type,
-                        image_link: vocabDetail.image_link,
-                        meaning: vocabDetail.meaning || "",
-                        description: vocabDetail.description,
-                        audio: vocabDetail.audio || "",
-                        example: vocabDetail.example || "",
-                        __v: vocabDetail.__v
-                    }
-                }
-                return null;
-            })
-        )
-
-        const filterVocab = mapPracticeVocab.filter((vocab) => vocab!= null);
-        const data = {
-            praticeVocab : filterVocab,
-            count: filterVocab.length
-        }
+		const filterVocab = mapPracticeVocab.filter((vocab) => vocab != null);
+		const data = {
+			praticeVocab: filterVocab,
+			count: filterVocab.length,
+		};
 
 		return responseHandle.success(res, data, "Practice vocab");
 	} catch (err) {
@@ -235,7 +236,6 @@ export const getVocabToPractice = async(req, res) => {
 		return responseHandle.badRequest(res, "Failed");
 	}
 };
-
 
 export const updateDiary = async (req, res) => {
 	try {
@@ -480,13 +480,11 @@ export const updatePassword = async (req: Request, res: Response) => {
 		return responseHandle.badRequest(res, "Email or password is null");
 	}
 	try {
-
-			const user = await updatePasswordService(email, password);
-			if (!user) {
-				return responseHandle.notFound(res, "User Not Found");
-			}
-			return responseHandle.success(res, user, "Update password successful");
-
+		const user = await updatePasswordService(email, password);
+		if (!user) {
+			return responseHandle.notFound(res, "User Not Found");
+		}
+		return responseHandle.success(res, user, "Update password successful");
 	} catch (error) {
 		return responseHandle.badRequest(res, "Update password fail");
 	}
@@ -502,14 +500,14 @@ export const getStreak = async (req, res) => {
 		console.log(user.lastActiveDate);
 		const data = {
 			streak: user.streak,
-			lastActiveDate: user.lastActiveDate
-		}
+			lastActiveDate: user.lastActiveDate,
+		};
 
 		return responseHandle.success(res, data, "Get streak succesful");
 	} catch (error) {
 		return responseHandle.badRequest(res, "Internal server error");
 	}
-} 
+};
 
 export const updateStreak = async (req, res) => {
 	try {
@@ -526,24 +524,24 @@ export const updateStreak = async (req, res) => {
 		if (user.lastActiveDate) {
 			const lastActiveDate = new Date(user.lastActiveDate);
 			lastActiveDate.setHours(0, 0, 0, 0);
-			if (today.getTime() - lastActiveDate.getTime() ) {
+			if (today.getTime() - lastActiveDate.getTime()) {
 				user.streak = 0;
 			} else {
 				user.streak += 1;
 			}
 		} else {
 			user.streak = 1;
-		  }
+		}
 
 		user.lastActiveDate = today;
 		await user.save();
 
 		const data = {
-			streak: user.streak
-		}
+			streak: user.streak,
+		};
 
-		return responseHandle.success(res, data,  "Streak updated successfully")
+		return responseHandle.success(res, data, "Streak updated successfully");
 	} catch (error) {
 		return responseHandle.badRequest(res, "Internal server error");
 	}
-}
+};
