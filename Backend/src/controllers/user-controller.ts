@@ -522,12 +522,16 @@ export const updateStreak = async (req, res) => {
 		today.setHours(0, 0, 0, 0);
 
 		if (user.lastActiveDate) {
-			const lastActiveDate = new Date(user.lastActiveDate);
+			let lastActiveDate = new Date(user.lastActiveDate);
 			lastActiveDate.setHours(0, 0, 0, 0);
-			if (today.getTime() - lastActiveDate.getTime()) {
-				user.streak = 0;
-			} else {
+			const differenceInDays = (today.getTime() - lastActiveDate.getTime()) / (1000 * 60 * 60 * 24);
+
+			if (differenceInDays === 0) {
+				console.log("LastActiveDate is today. Streak remains the same.");
+			} else if (differenceInDays === 1) {
 				user.streak += 1;
+			} else if (differenceInDays > 1) {
+				user.streak = 1;
 			}
 		} else {
 			user.streak = 1;
