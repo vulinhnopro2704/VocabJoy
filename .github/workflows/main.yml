@@ -16,28 +16,24 @@ jobs:
     - name: Set up Node.js environment for Backend
       working-directory: ./Backend
       run: |
-        apt-get update && apt-get install -y curl
-        curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-        apt-get install -y nodejs
-
+        sudo apt-get update && sudo apt-get install -y curl
+        sudo curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
+        sudo apt-get install -y nodejs -y
     - name: Install dependencies and build Backend
       working-directory: ./Backend
       run: |
         npm install
         npm run build
-
     - name: Build Docker image for Backend
       working-directory: ./Backend
       run: |
         docker build -t my-backend-image .
-
     - name: Set up Node.js environment for Mobile
       working-directory: ./Mobile
       run: |
         apt-get update && apt-get install -y curl
         curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         apt-get install -y nodejs
-
     - name: Install dependencies and build Mobile
       working-directory: ./Mobile
       run: |
