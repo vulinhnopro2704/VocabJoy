@@ -11,31 +11,10 @@ type Props = {
 };
 
 export default function VocabListItem({ vocabulary }: Props) {
-	const [sound, setSound] = useState<Audio.Sound | null>(null);
-
-	useEffect(() => {
-		return () => {
-			// Unload the sound when the component unmounts
-			if (sound) {
-				sound.unloadAsync();
-			}
-		};
-	}, [sound]);
-
-	const handlePress = async () => {
-		if (vocabulary.audio) {
-			const { sound: newSound } = await playSound(vocabulary.audio);
-			setSound(newSound);
-			await newSound.playAsync();
-		}
-	};
 
 	return (
-		<Pressable onPress={handlePress} style={styles.container}>
+		<Pressable style={styles.container}>
 			<View style={styles.col1}>
-				<Pressable onPress={handlePress}>
-					<Volume2 size={24} color={Colors.primary} />
-				</Pressable>
 				<View style={styles.vocabName}>
 					<Text style={styles.h1}>{vocabulary.name}</Text>
 					<Text style={styles.h3}>{vocabulary.type}</Text>
@@ -71,15 +50,15 @@ const styles = StyleSheet.create({
 		gap: 5,
 	},
 	h1: {
-		fontSize: 18,
+		fontSize: 15,
 		fontWeight: "bold",
 	},
 	h2: {
-		fontSize: 16,
+		fontSize: 13,
 		fontWeight: "500",
 	},
 	h3: {
-		fontSize: 14,
+		fontSize: 12,
 		fontWeight: "400",
 	},
 });
