@@ -115,15 +115,6 @@ export default function HandBook() {
 					contentContainerStyle={styles.levelWrap}
 				/>
 			</View>
-			<View style={styles.searchContainer}>
-				<TextInput
-					value={search}
-					onChangeText={handleSearch}
-					placeholder="Gõ vào đây từ muốn tìm"
-					style={styles.searchInput}
-				/>
-				<Search />
-			</View>
 			{vocabList.length > 0 && (
 				<FlatList
 					data={vocabList}
