@@ -11,7 +11,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
 
     - name: Set up Node.js environment for Backend
       working-directory: ./Backend
@@ -19,21 +20,34 @@ jobs:
         sudo apt-get update && sudo apt-get install -y curl
         sudo curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         sudo apt-get install -y nodejs -y
+
     - name: Install dependencies and build Backend
       working-directory: ./Backend
       run: |
         npm install
         npm run build
+
     - name: Build Docker image for Backend
       working-directory: ./Backend
       run: |
-        docker build -t my-backend-image .
+        docker build -t node-backend:latest .
+
+    - name: Log in to Docker Hub
+      run: |
+        echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+    - name: Push Docker image to Docker Hub
+      run: |
+        docker tag node-backend:latest ${{ secrets.DOCKER_USERNAME }}/node-backend:latest
+        docker push ${{ secrets.DOCKER_USERNAME }}/node-backend:latest
+
     - name: Set up Node.js environment for Mobile
       working-directory: ./Mobile
       run: |
         sudo apt-get update && sudo apt-get install -y curl
         sudo curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
         sudo apt-get install -y nodejs
+
     - name: Install dependencies and build Mobile
       working-directory: ./Mobile
       run: |
