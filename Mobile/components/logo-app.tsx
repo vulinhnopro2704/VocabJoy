@@ -1,15 +1,20 @@
-import { View, Image, StyleSheet } from "react-native";
+import {View, Image, StyleSheet, Pressable} from "react-native";
 import React from "react";
+import {useRouter} from "expo-router";
 
 export default function LogoApp() {
+	const router = useRouter();
+
 	return (
-		<View style={styles.container}>
+		<Pressable onPress={() => {
+			router.replace("/(tabs)/home-screen");
+		}} style={styles.container}>
 			<Image
 				source={require("@/assets/images/app-logo.png")}
 				style={styles.logo}
 				resizeMode="contain"
 			/>
-		</View>
+		</Pressable>
 	);
 }
 
