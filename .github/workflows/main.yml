@@ -70,12 +70,12 @@ jobs:
         echo "docker ps -q --filter ancestor=$DOCKER_USERNAME/node-backend:latest | xargs -r docker stop" >> deploy.sh
         echo "docker ps -aq --filter ancestor=$DOCKER_USERNAME/node-backend:latest | xargs -r docker rm" >> deploy.sh
         echo "docker run -d -p 8686:8080 --name node-backend $DOCKER_USERNAME/node-backend:latest" >> deploy.sh
-
+    
         # Copy script lên server
-        sshpass -p "$USER_PASSWORD" scp -P $SSH_PORT deploy.sh $SERVER_USERNAME@$IP_SERVER:/tmp/deploy.sh
-
+        sshpass -p "$USER_PASSWORD" scp -o StrictHostKeyChecking=no -P $SSH_PORT deploy.sh $SERVER_USERNAME@$IP_SERVER:/tmp/deploy.sh
+    
         # SSH vào server và thực thi script
-        sshpass -p "$USER_PASSWORD" ssh -p $SSH_PORT $SERVER_USERNAME@$IP_SERVER << EOF
+        sshpass -p "$USER_PASSWORD" ssh -o StrictHostKeyChecking=no -p $SSH_PORT $SERVER_USERNAME@$IP_SERVER << EOF
           chmod +x /tmp/deploy.sh
           /tmp/deploy.sh
           rm -f /tmp/deploy.sh
