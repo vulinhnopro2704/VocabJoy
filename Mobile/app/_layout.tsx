@@ -56,14 +56,26 @@ export default function RootLayout() {
 					options={{ headerShown: false }}
 				/>
 				<Stack.Screen
+					 options={{
+						headerShown: true, // Hiển thị header mặc định
+						header: undefined, // Loại bỏ header custom
+					  }}
 					name="forgot-password-screen"
 				
 				/>
 				<Stack.Screen
+				 options={{
+					headerShown: true, // Hiển thị header mặc định
+					header: undefined, 
+				  }}
 					name="new-password-screen"
 				
 				/>
 					<Stack.Screen
+					 options={{
+						headerShown: true, // Hiển thị header mặc định
+						header: undefined, 
+					  }}
 					name="fill-otp-screen"
 					
 				/>

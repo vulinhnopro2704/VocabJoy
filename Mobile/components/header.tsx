@@ -3,10 +3,14 @@ import React from "react";
 import { useRouter } from "expo-router";
 import StreakFire from "./streak-fire";
 import LogoApp from "./logo-app";
+import { useAppSelector } from "@/lib/hook";
 
 export default function Header() {
 	const router = useRouter();
-
+	const user = useAppSelector((state)=>{
+		return state.user
+	});
+	
 	return (
 		<View style={styles.header}>
 			<StreakFire />
