@@ -15,19 +15,33 @@ jobs:
         node-version: [20.x]
 
     steps:
-    - name: Install and build Backend
-      working-directory: ./Backend
-      run: |
-        npm ci
-        npm run build
+    - name: Check out repository
+      uses: actions/checkout@v4
 
-    - name: Build Docker image
-      working-directory: ./Backend
-      run: |
-        docker build -t my-backend-image .
+    - name: Set up Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
 
-    - name: Install and build Mobile
+    # Backend steps
+    - name: Install dependencies for Backend
+      working-directory: ./Backend
+      run: npm ci
+
+    - name: Build Backend
+      working-directory: ./Backend
+      run: npm run build
+
+    - name: Build Docker image for Backend
+      working-directory: ./Backend
+      run: docker build -t my-backend-image .
+
+    # Mobile steps
+    - name: Install dependencies for Mobile
       working-directory: ./Mobile
-      run: |
-        npm ci
-        npm run build
+      run: npm ci
+
+    - name: Build Mobile
+      working-directory: ./Mobile
+      run: npm run build
