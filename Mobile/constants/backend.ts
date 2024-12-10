@@ -1,4 +1,4 @@
-const IPLOCAL = "192.168.1.61";
+const IPLOCAL = "course4u.one";
 
 export const BACKEND_URL: string = `http://${IPLOCAL}:3000/api`;
 export const AUDIO_URL: string = `http://${IPLOCAL}:3000/audio/`;

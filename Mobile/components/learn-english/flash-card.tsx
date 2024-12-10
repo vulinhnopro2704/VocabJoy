@@ -27,6 +27,9 @@ const FlashCard:React.FC<{ vocab: Vocab }>=({ vocab })=>{
 			userId: userId.data._id,
 		}).unwrap();
 	}
+    useEffect(()=>{
+        saveWord()
+    },[vocab.name])
      //phat am thanh lan dau vao
     const [sound, setSound] = useState<Audio.Sound>();
     const playSound = async(speed:number)=>{
