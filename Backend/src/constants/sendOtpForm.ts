@@ -83,7 +83,7 @@ export const getMailOption = ( userData : userDataBase ) : mailOptionType => {
             <div class="line"></div>
             <div class="Text">
                 <div class="Text_header">
-                    ${userData.name} rất đẹp zai
+                    ${userData.name} 
                 </div>
                 <div class="Text_header2">
                     Your OTP
