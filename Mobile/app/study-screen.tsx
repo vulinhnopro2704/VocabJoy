@@ -67,7 +67,6 @@ export default function StudyNewWord({}) {
 				await setIsComplete(true);
 				return;
 			}
-			
 			await setIndex(index + 1);			
 			const x = widthRoad * (index + 1) + 20;
 			setScreenLearn(1);
