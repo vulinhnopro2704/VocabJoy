@@ -1,4 +1,5 @@
 import Button from "@/components/button";
+import LoadingIcon from "@/components/loadingicon";
 import { Colors } from "@/constants/colors";
 import { useSendOtpMutation } from "@/lib/features/api/api-slice";
 import { router } from "expo-router";
@@ -11,6 +12,7 @@ import Toast from "react-native-toast-message";
 const ForgotPassword = ()=>{
     const [sendOTP,{isLoading,error}] = useSendOtpMutation();
     const [email,setEmail] = useState<string>("")
+    const [loading,setLoading] = useState<boolean>(false)
     const onPressNext=async ()=>{
         try {
             const result = await sendOTP(email.trim()).unwrap()
@@ -33,10 +35,15 @@ const ForgotPassword = ()=>{
         const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
         return emailRegex.test(email);
     }
+
+    
     return (
         <View style={styles.container}>
             <View style={styles.rectangle}>
                 <Image style={styles.logo} resizeMode="contain" source={require("@/assets/images/logo-with-name.png")}></Image>
+                {
+                    isLoading ? <View style={{marginBottom:300}}><LoadingIcon></LoadingIcon></View>
+                :
                 <View style={styles.main}>
                     <Text style={{fontSize:16,fontWeight:500,marginBottom:10}}>Nhập email của bạn</Text>
                     <TextInput 
@@ -66,6 +73,7 @@ const ForgotPassword = ()=>{
                     </TouchableOpacity>
                   
                 </View>
+}
             </View>
         </View>
     );    

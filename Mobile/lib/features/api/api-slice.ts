@@ -6,7 +6,7 @@ interface Data {
 	email: string;
 	otp: string;
 }
-const baseQuery = fetchBaseQuery({
+export const baseQuery = fetchBaseQuery({
 	baseUrl: BACKEND_URL,
 	prepareHeaders: (headers, { getState }) => {
 		const token = (getState() as RootState).auth.token;
